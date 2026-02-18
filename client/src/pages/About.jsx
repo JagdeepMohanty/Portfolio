@@ -62,8 +62,8 @@ const About = () => {
             <h2 className="education-heading">Education</h2>
             <div className="education-card card">
               <h3 className="education-degree">Bachelor of Technology in Computer Science</h3>
-              <p className="education-school">University Name</p>
-              <p className="education-year">2018 - 2022</p>
+              <p className="education-school">Rai University Ahmedabad</p>
+              <p className="education-year">2023 - 2027</p>
             </div>
           </div>
         </motion.div>

@@ -20,7 +20,7 @@ const Navbar = () => {
       <div className="container">
         <div className="nav-content">
           <Link to="/" className="logo">
-            <span className="logo-text">Portfolio</span>
+            <span className="logo-text">Jagdeep Mohanty </span>
           </Link>
 
           <div className={`nav-links ${isOpen ? 'active' : ''}`}>

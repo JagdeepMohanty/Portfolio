@@ -13,7 +13,7 @@ const Home = () => {
           transition={{ duration: 0.8 }}
         >
           <h1 className="hero-title">
-            Hi, I'm <span className="highlight">Your Name</span>
+            Hi, I'm <span className="highlight">Jagdeep Mohanty</span>
           </h1>
           <h2 className="hero-subtitle">Full Stack Developer</h2>
           <p className="hero-description">
@@ -24,7 +24,7 @@ const Home = () => {
             <a href="/resume.pdf" download className="btn-primary">
               <FaDownload /> Download Resume
             </a>
-            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="btn-secondary">
+            <a href="https://github.com/JagdeepMohanty" target="_blank" rel="noopener noreferrer" className="btn-secondary">
               <FaGithub /> GitHub Profile
             </a>
           </div>
