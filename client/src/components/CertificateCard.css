@@ -1,0 +1,39 @@
+.certificate-card {
+  text-align: center;
+  overflow: hidden;
+}
+
+.certificate-image {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.certificate-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.certificate-card:hover .certificate-image img {
+  transform: scale(1.1);
+}
+
+.certificate-title {
+  font-size: 1.25rem;
+  color: var(--gold-primary);
+  margin-bottom: 8px;
+}
+
+.certificate-issuer {
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.certificate-date {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
