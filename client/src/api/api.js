@@ -1,32 +1,50 @@
-import axios from 'axios';
+// API service for the portfolio
+// Now using static data instead of backend API calls
+// No backend required - fully frontend-only
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { projects } from '../data/projects';
+import { certificates } from '../data/certificates';
 
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
+// Get all projects (returns static data)
 export const getProjects = async () => {
-  const response = await api.get('/projects');
-  return response.data;
+  // Simulate async behavior for consistency with previous API
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(projects);
+    }, 100);
+  });
 };
 
+// Get all certificates (returns static data)
 export const getCertificates = async () => {
-  const response = await api.get('/certificates');
-  return response.data;
+  // Simulate async behavior for consistency with previous API
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(certificates);
+    }, 100);
+  });
 };
 
+// Contact form submission - handled by Netlify Forms
+// This function is kept for backwards compatibility but doesn't do anything
+// The form submission is handled by Netlify's built-in form handling
 export const submitContact = async (data) => {
-  const response = await api.post('/contact', data);
-  return response.data;
+  // Netlify Forms handle the submission automatically
+  // This function is a placeholder for backwards compatibility
+  console.log('Contact form submitted:', data);
+  return { success: true, message: 'Form submission handled by Netlify' };
 };
 
+// Get GitHub repositories - placeholder for future implementation
+// Could be implemented using GitHub API directly from frontend
 export const getGithubRepos = async () => {
-  const response = await api.get('/github/repos');
-  return response.data;
+  // Placeholder - can be implemented with GitHub API if needed
+  return [];
 };
 
-export default api;
+export default {
+  getProjects,
+  getCertificates,
+  submitContact,
+  getGithubRepos
+};

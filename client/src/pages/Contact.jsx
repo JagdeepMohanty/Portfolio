@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { submitContact } from '../api/api';
 import './Contact.css';
 
 const Contact = () => {
@@ -10,7 +9,6 @@ const Contact = () => {
     message: '',
   });
   const [status, setStatus] = useState({ type: '', message: '' });
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -19,20 +17,13 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setStatus({ type: '', message: '' });
-
-    try {
-      await submitContact(formData);
-      setStatus({ type: 'success', message: 'Message sent successfully!' });
-      setFormData({ name: '', email: '', message: '' });
-    } catch (err) {
-      setStatus({ type: 'error', message: 'Failed to send message. Please try again.' });
-    } finally {
-      setLoading(false);
-    }
+  // Netlify Forms handle submission automatically
+  // The form uses data-netlify="true" attribute
+  // Status will be handled by Netlify's form submission
+  const handleSubmit = (e) => {
+    // Let Netlify Forms handle the submission
+    // The page will reload or show Netlify's success message
+    setStatus({ type: 'success', message: 'Redirecting to Netlify form submission...' });
   };
 
   return (
@@ -47,7 +38,16 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
         >
           <div className="contact-card card">
-            <form onSubmit={handleSubmit} className="contact-form">
+            {/* Netlify Forms - hidden input for form name */}
+            <form 
+              name="contact" 
+              method="POST" 
+              data-netlify="true" 
+              onSubmit={handleSubmit}
+              className="contact-form"
+            >
+              <input type="hidden" name="form-name" value="contact" />
+              
               <div className="form-group">
                 <label htmlFor="name">Name</label>
                 <input
@@ -87,8 +87,8 @@ const Contact = () => {
                 />
               </div>
 
-              <button type="submit" className="btn-primary" disabled={loading}>
-                {loading ? 'Sending...' : 'Send Message'}
+              <button type="submit" className="btn-primary">
+                Send Message
               </button>
 
               {status.message && (
@@ -97,6 +97,10 @@ const Contact = () => {
                 </p>
               )}
             </form>
+            
+            <p className="form-note">
+              Your message will be sent via Netlify Forms. I'll get back to you as soon as possible!
+            </p>
           </div>
         </motion.div>
       </div>
