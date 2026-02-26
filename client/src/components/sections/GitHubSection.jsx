@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaStar, FaCodeBranch, FaExternalLinkAlt } from 'react-icons/fa';
-import GitHubCalendar from 'react-github-calendar';
+import { FaGithub, FaStar, FaCodeBranch } from 'react-icons/fa';
+import * as GitHubCalendarModule from 'react-github-calendar';
 import RepoCard from '../RepoCard';
 import './GitHubSection.css';
+
+const GitHubCalendar = GitHubCalendarModule.default ?? GitHubCalendarModule;
 
 const GitHubSection = () => {
   const [profile, setProfile] = useState(null);
