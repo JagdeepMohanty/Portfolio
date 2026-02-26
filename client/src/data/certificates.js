@@ -4,31 +4,31 @@
 export const technicalCertificates = [
   {
     id: 1,
-    title: "AWS Certified Solutions Architect",
-    issuer: "Amazon Web Services",
-    date: "January 2024",
-    image_url: "https://images.unsplash.com/photo-1589330694653-ded6df03f754?w=800"
+    title: "NEW INDIA VIBRANT HACKATHON-2023",
+    issuer: "SSIP GUJARAT",
+    date: "4th November 2023",
+    image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098318/SSIP_HACKATHON_pitmbe.jpg"
   },
   {
     id: 2,
-    title: "Full Stack Web Development",
-    issuer: "Coursera",
-    date: "December 2023",
-    image_url: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800"
+    title: "3-days Long National Level Hackathon ",
+    issuer: "Gateway Education And ImaginXP collegeDekho",
+    date: "25th April 2025",
+    image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098317/Gateway_hackathon_dkbgns.jpg"
   },
   {
     id: 3,
-    title: "Python for Data Science",
-    issuer: "DataCamp",
-    date: "November 2023",
-    image_url: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800"
+    title: "TechHack State Level Hackathon",
+    issuer: "Rai University Ahmedabad",
+    date: "9th October 2025",
+    image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098317/RAI_HACKATHON_sc8jmx.jpg"
   },
   {
     id: 4,
-    title: "React - The Complete Guide",
-    issuer: "Udemy",
-    date: "October 2023",
-    image_url: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800"
+    title: "Data Analysis With Power BI",
+    issuer: "Rai School Of Engineering ",
+    date: "Acedemic year 2024-25 Even Semester",
+    image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098316/PowerBI_z4f1rc.jpg"
   }
 ];
 

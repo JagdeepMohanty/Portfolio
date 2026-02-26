@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaStar, FaCodeBranch } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import * as GitHubCalendarModule from 'react-github-calendar';
 import RepoCard from '../RepoCard';
 import './GitHubSection.css';
 
-const GitHubCalendar = GitHubCalendarModule.default ?? GitHubCalendarModule;
+// Safe import with multiple fallbacks
+const GitHubCalendar = GitHubCalendarModule.default ?? GitHubCalendarModule.GitHubCalendar ?? GitHubCalendarModule;
 
 const GitHubSection = () => {
   const [profile, setProfile] = useState(null);
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const username = 'JagdeepMohanty';
 
@@ -30,6 +32,7 @@ const GitHubSection = () => {
         setLoading(false);
       } catch (error) {
         console.error('Error fetching GitHub data:', error);
+        setError(error.message);
         setLoading(false);
       }
     };
@@ -48,6 +51,17 @@ const GitHubSection = () => {
     );
   }
 
+  if (error) {
+    return (
+      <section id="github" className="github-section section">
+        <div className="container">
+          <h1 className="section-title">GitHub Activity</h1>
+          <p className="no-data">Unable to load GitHub data. Please try again later.</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="github" className="github-section section">
       <div className="container">
@@ -61,21 +75,21 @@ const GitHubSection = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <img src={profile.avatar_url} alt={profile.name} className="profile-avatar" />
+            <img src={profile.avatar_url} alt={profile.name || username} className="profile-avatar" />
             <div className="profile-info">
-              <h2 className="profile-name">{profile.name}</h2>
-              <p className="profile-bio">{profile.bio}</p>
+              <h2 className="profile-name">{profile.name || username}</h2>
+              {profile.bio && <p className="profile-bio">{profile.bio}</p>}
               <div className="profile-stats">
                 <div className="stat">
-                  <span className="stat-value">{profile.followers}</span>
+                  <span className="stat-value">{profile.followers || 0}</span>
                   <span className="stat-label">Followers</span>
                 </div>
                 <div className="stat">
-                  <span className="stat-value">{profile.following}</span>
+                  <span className="stat-value">{profile.following || 0}</span>
                   <span className="stat-label">Following</span>
                 </div>
                 <div className="stat">
-                  <span className="stat-value">{profile.public_repos}</span>
+                  <span className="stat-value">{profile.public_repos || 0}</span>
                   <span className="stat-label">Repositories</span>
                 </div>
               </div>
@@ -91,42 +105,46 @@ const GitHubSection = () => {
           </motion.div>
         )}
 
-        <motion.div
-          className="contribution-calendar"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="subsection-title">Contribution Activity</h2>
-          <div className="calendar-wrapper">
-            <GitHubCalendar
-              username={username}
-              blockSize={12}
-              blockMargin={4}
-              fontSize={14}
-              colorScheme="dark"
-              theme={{
-                dark: ['#0C0C0C', '#1A1A1A', '#F59E0B', '#EAB308', '#D97706']
-              }}
-            />
-          </div>
-        </motion.div>
-
-        <div className="repos-section">
-          <h2 className="subsection-title">Top Repositories</h2>
+        {typeof GitHubCalendar === 'function' && (
           <motion.div
-            className="repos-grid grid grid-3"
+            className="contribution-calendar"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            {repos.map((repo) => (
-              <RepoCard key={repo.id} repo={repo} />
-            ))}
+            <h2 className="subsection-title">Contribution Activity</h2>
+            <div className="calendar-wrapper">
+              <GitHubCalendar
+                username={username}
+                blockSize={12}
+                blockMargin={4}
+                fontSize={14}
+                colorScheme="dark"
+                theme={{
+                  dark: ['#0C0C0C', '#1A1A1A', '#F59E0B', '#EAB308', '#D97706']
+                }}
+              />
+            </div>
           </motion.div>
-        </div>
+        )}
+
+        {repos.length > 0 && (
+          <div className="repos-section">
+            <h2 className="subsection-title">Top Repositories</h2>
+            <motion.div
+              className="repos-grid grid grid-3"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+            >
+              {repos.map((repo) => (
+                <RepoCard key={repo.id} repo={repo} />
+              ))}
+            </motion.div>
+          </div>
+        )}
       </div>
     </section>
   );
