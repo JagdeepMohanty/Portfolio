@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding-top: 60px;
+  padding-top: 70px;
 }
 
 .hero {
@@ -61,7 +61,7 @@
 
 @media (max-width: 768px) {
   .home-section {
-    padding-top: 55px;
+    padding-top: 65px;
     min-height: calc(100vh - 55px);
   }
   

@@ -1,7 +1,7 @@
 // Static certificates data for the portfolio
 // No backend required - data is stored statically
 
-export const certificates = [
+export const technicalCertificates = [
   {
     id: 1,
     title: "AWS Certified Solutions Architect",
@@ -29,7 +29,10 @@ export const certificates = [
     issuer: "Udemy",
     date: "October 2023",
     image_url: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800"
-  },
+  }
+];
+
+export const otherCertificates = [
   {
     id: 5,
     title: "MongoDB Fundamentals",
@@ -45,5 +48,8 @@ export const certificates = [
     image_url: "https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=800"
   }
 ];
+
+// Keep backward compatibility
+export const certificates = [...technicalCertificates, ...otherCertificates];
 
 export default certificates;

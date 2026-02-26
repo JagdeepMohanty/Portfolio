@@ -1,6 +1,9 @@
 .certificate-card {
   text-align: center;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .certificate-image {
@@ -27,12 +30,14 @@
   color: var(--gold-primary);
   margin-bottom: 6px;
   font-weight: 600;
+  line-height: 1.3;
 }
 
 .certificate-issuer {
   color: var(--text-primary);
   margin-bottom: 4px;
   font-size: 0.9rem;
+  line-height: 1.4;
 }
 
 .certificate-date {
