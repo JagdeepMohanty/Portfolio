@@ -1,0 +1,14 @@
+.projects-section {
+  min-height: 100vh;
+}
+
+.projects-grid {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.no-data {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}

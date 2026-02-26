@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import './Navbar.css';
@@ -8,31 +7,40 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Projects', path: '/projects' },
-    { name: 'Certificates', path: '/certificates' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Home', href: '#home' },
+    { name: 'About', href: '#about' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'Certificates', href: '#certificates' },
+    { name: 'Contact', href: '#contact' },
   ];
+
+  const handleNavClick = (e, href) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsOpen(false);
+  };
 
   return (
     <nav className="navbar">
       <div className="container">
         <div className="nav-content">
-          <Link to="/" className="logo">
-            <span className="logo-text">Jagdeep Mohanty </span>
-          </Link>
+          <a href="#home" className="logo" onClick={(e) => handleNavClick(e, '#home')}>
+            <span className="logo-text">Jagdeep Mohanty</span>
+          </a>
 
           <div className={`nav-links ${isOpen ? 'active' : ''}`}>
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.name}
-                to={link.path}
+                href={link.href}
                 className="nav-link"
-                onClick={() => setIsOpen(false)}
+                onClick={(e) => handleNavClick(e, link.href)}
               >
                 {link.name}
-              </Link>
+              </a>
             ))}
           </div>
 

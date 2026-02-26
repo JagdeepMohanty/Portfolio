@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import './Contact.css';
+import './ContactSection.css';
 
-const Contact = () => {
+const ContactSection = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -27,15 +27,16 @@ const Contact = () => {
   };
 
   return (
-    <div className="contact section">
+    <section id="contact" className="contact-section section">
       <div className="container">
         <h1 className="section-title">Get In Touch</h1>
 
         <motion.div
           className="contact-content"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
         >
           <div className="contact-card card">
             {/* Netlify Forms - hidden input for form name */}
@@ -104,8 +105,8 @@ const Contact = () => {
           </div>
         </motion.div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default Contact;
+export default ContactSection;

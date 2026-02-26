@@ -1,0 +1,98 @@
+.about-section {
+  min-height: 100vh;
+}
+
+.about-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-card {
+  margin-bottom: 3rem;
+}
+
+.about-heading {
+  font-size: 1.8rem;
+  color: var(--gold-primary);
+  margin-bottom: 1.5rem;
+}
+
+.about-text {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.skills-section {
+  margin-bottom: 3rem;
+}
+
+.skills-heading {
+  font-size: 1.5rem;
+  color: var(--gold-primary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.skill-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.skill-icon {
+  font-size: 2.5rem;
+  color: var(--gold-primary);
+  margin-bottom: 1rem;
+}
+
+.skill-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.education-section {
+  margin-top: 2rem;
+}
+
+.education-heading {
+  font-size: 1.5rem;
+  color: var(--gold-primary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.education-card {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.education-degree {
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.education-school {
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.education-year {
+  color: var(--gold-primary);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .about-heading {
+    font-size: 1.5rem;
+  }
+
+  .skill-icon {
+    font-size: 2rem;
+  }
+}

@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import { FaGithub, FaDownload } from 'react-icons/fa';
-import './Home.css';
+import './HomeSection.css';
 
-const Home = () => {
+const HomeSection = () => {
   return (
-    <div className="home section">
+    <section id="home" className="home-section section">
       <div className="container">
         <motion.div
           className="hero"
@@ -45,8 +45,8 @@ const Home = () => {
           </div>
         </motion.div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default Home;
+export default HomeSection;

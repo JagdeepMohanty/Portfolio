@@ -1,39 +1,38 @@
-.home {
+.home-section {
+  min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  padding-top: 80px;
 }
 
 .hero {
   text-align: center;
-  margin-bottom: 60px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .hero-title {
   font-size: 3.5rem;
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
   line-height: 1.2;
 }
 
 .highlight {
-  background: linear-gradient(135deg, #EAB308, #F59E0B);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--gold-primary);
 }
 
 .hero-subtitle {
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: var(--text-secondary);
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
 }
 
 .hero-description {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: var(--text-secondary);
-  max-width: 600px;
-  margin: 0 auto 40px;
+  margin-bottom: 2.5rem;
   line-height: 1.8;
 }
 
@@ -45,22 +44,22 @@
 }
 
 .intro-section {
-  max-width: 800px;
-  margin: 0 auto;
+  margin-top: 4rem;
 }
 
 .intro-card {
   text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .intro-title {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: var(--gold-primary);
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 
 .intro-text {
-  font-size: 1.1rem;
   color: var(--text-secondary);
   line-height: 1.8;
 }
@@ -71,10 +70,22 @@
   }
 
   .hero-subtitle {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
   .hero-description {
     font-size: 1rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: 250px;
+    text-align: center;
   }
 }

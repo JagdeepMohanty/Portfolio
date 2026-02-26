@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 import { FaReact, FaNode, FaPython, FaDatabase, FaAws, FaDocker } from 'react-icons/fa';
 import { SiMongodb, SiPostgresql, SiFlask, SiExpress } from 'react-icons/si';
-import './About.css';
+import './AboutSection.css';
 
-const About = () => {
+const AboutSection = () => {
   const skills = [
     { name: 'React', icon: <FaReact /> },
     { name: 'Node.js', icon: <FaNode /> },
@@ -17,15 +17,16 @@ const About = () => {
   ];
 
   return (
-    <div className="about section">
+    <section id="about" className="about-section section">
       <div className="container">
         <h1 className="section-title">About Me</h1>
 
         <motion.div
           className="about-content"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
         >
           <div className="about-card card">
             <h2 className="about-heading">Full Stack Developer</h2>
@@ -47,8 +48,9 @@ const About = () => {
                   key={skill.name}
                   className="skill-card card"
                   initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
+                  viewport={{ once: true }}
                   whileHover={{ scale: 1.1 }}
                 >
                   <div className="skill-icon">{skill.icon}</div>
@@ -68,8 +70,8 @@ const About = () => {
           </div>
         </motion.div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default About;
+export default AboutSection;
