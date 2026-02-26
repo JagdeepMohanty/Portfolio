@@ -7,10 +7,10 @@
 
 .project-image {
   width: 100%;
-  height: 200px;
+  height: 160px;
   overflow: hidden;
   border-radius: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .project-image img {
@@ -31,48 +31,66 @@
 }
 
 .project-title {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   color: var(--gold-primary);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .project-description {
   color: var(--text-secondary);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   flex: 1;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .tech-stack {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 6px;
+  margin-bottom: 12px;
 }
 
 .tech-tag {
   background: rgba(234, 179, 8, 0.1);
   color: var(--gold-primary);
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
   border: 1px solid rgba(234, 179, 8, 0.3);
 }
 
 .project-links {
   display: flex;
-  gap: 16px;
+  gap: 14px;
 }
 
 .project-link {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: var(--gold-primary);
   font-weight: 600;
+  font-size: 0.85rem;
   transition: all 0.3s ease;
 }
 
 .project-link:hover {
   color: var(--gold-accent);
-  transform: translateX(5px);
+  transform: translateX(3px);
+}
+
+@media (max-width: 768px) {
+  .project-image {
+    height: 140px;
+  }
+  
+  .project-title {
+    font-size: 1rem;
+  }
+  
+  .project-description {
+    font-size: 0.85rem;
+  }
 }

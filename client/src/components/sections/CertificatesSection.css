@@ -1,5 +1,5 @@
 .certificates-section {
-  min-height: 100vh;
+  min-height: auto;
 }
 
 .certificates-grid {
@@ -10,5 +10,12 @@
 .no-data {
   text-align: center;
   color: var(--text-secondary);
-  font-size: 1.2rem;
+  font-size: 1rem;
+  padding: 2rem 0;
+}
+
+@media (max-width: 768px) {
+  .no-data {
+    font-size: 0.95rem;
+  }
 }

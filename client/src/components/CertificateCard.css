@@ -5,10 +5,10 @@
 
 .certificate-image {
   width: 100%;
-  height: 180px;
+  height: 140px;
   overflow: hidden;
   border-radius: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .certificate-image img {
@@ -23,17 +23,33 @@
 }
 
 .certificate-title {
-  font-size: 1.25rem;
+  font-size: 1rem;
   color: var(--gold-primary);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  font-weight: 600;
 }
 
 .certificate-issuer {
   color: var(--text-primary);
   margin-bottom: 4px;
+  font-size: 0.9rem;
 }
 
 .certificate-date {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .certificate-image {
+    height: 120px;
+  }
+  
+  .certificate-title {
+    font-size: 0.95rem;
+  }
+  
+  .certificate-issuer {
+    font-size: 0.85rem;
+  }
 }

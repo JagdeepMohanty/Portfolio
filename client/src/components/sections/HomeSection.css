@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding-top: 80px;
+  padding-top: 60px;
 }
 
 .hero {
@@ -12,80 +12,89 @@
 }
 
 .hero-title {
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 12px;
   line-height: 1.2;
 }
 
 .highlight {
-  color: var(--gold-primary);
+  background: linear-gradient(135deg, #EAB308, #F59E0B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero-subtitle {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   color: var(--text-secondary);
-  margin-bottom: 1.5rem;
+  margin-bottom: 20px;
   font-weight: 500;
 }
 
 .hero-description {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: var(--text-secondary);
-  margin-bottom: 2.5rem;
-  line-height: 1.8;
+  margin-bottom: 30px;
+  line-height: 1.7;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero-buttons {
   display: flex;
-  gap: 20px;
+  gap: 15px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.intro-section {
-  margin-top: 4rem;
-}
-
-.intro-card {
-  text-align: center;
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.intro-title {
-  font-size: 1.5rem;
-  color: var(--gold-primary);
-  margin-bottom: 1rem;
-}
-
-.intro-text {
-  color: var(--text-secondary);
-  line-height: 1.8;
-}
-
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
 
   .hero-subtitle {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-section {
+    padding-top: 55px;
+    min-height: calc(100vh - 55px);
+  }
+  
+  .hero-title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
   }
 
   .hero-description {
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+  }
+  
+  .hero-buttons {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.6rem;
+  }
+
+  .hero-subtitle {
     font-size: 1rem;
   }
 
-  .hero-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .btn-primary,
-  .btn-secondary {
-    width: 100%;
-    max-width: 250px;
-    text-align: center;
+  .hero-description {
+    font-size: 0.9rem;
   }
 }

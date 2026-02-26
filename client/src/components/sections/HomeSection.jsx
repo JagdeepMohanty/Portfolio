@@ -29,21 +29,6 @@ const HomeSection = () => {
             </a>
           </div>
         </motion.div>
-
-        <motion.div
-          className="intro-section"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-        >
-          <div className="intro-card card">
-            <h3 className="intro-title">Welcome to My Portfolio</h3>
-            <p className="intro-text">
-              I specialize in building scalable web applications using React, Node.js, Python, and modern cloud technologies.
-              With a focus on clean code, performance optimization, and user experience, I deliver solutions that make a difference.
-            </p>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
 .footer {
   background: var(--bg-card);
-  padding: 40px 0;
+  padding: 20px 0;
   border-top: 1px solid rgba(234, 179, 8, 0.1);
 }
 
@@ -8,16 +8,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 }
 
 .social-links {
   display: flex;
-  gap: 30px;
+  gap: 25px;
 }
 
 .social-link {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: var(--text-secondary);
   transition: all 0.3s ease;
 }
@@ -29,5 +29,27 @@
 
 .copyright {
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 15px 0;
+  }
+  
+  .footer-content {
+    gap: 12px;
+  }
+  
+  .social-links {
+    gap: 20px;
+  }
+  
+  .social-link {
+    font-size: 1.2rem;
+  }
+  
+  .copyright {
+    font-size: 12px;
+  }
 }
