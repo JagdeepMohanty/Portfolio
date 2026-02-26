@@ -1,53 +1,63 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { AiFillHome } from 'react-icons/ai';
+import { FaUserTie, FaCode, FaAward, FaGithub, FaEnvelope } from 'react-icons/fa';
 import './Navbar.css';
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
 
-  const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Certificates', href: '#certificates' },
-    { name: 'Contact', href: '#contact' },
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'about', 'projects', 'certificates', 'github', 'contact'];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navItems = [
+    { id: 'home', icon: AiFillHome, label: 'Home' },
+    { id: 'about', icon: FaUserTie, label: 'About' },
+    { id: 'projects', icon: FaCode, label: 'Projects' },
+    { id: 'certificates', icon: FaAward, label: 'Certificates' },
+    { id: 'github', icon: FaGithub, label: 'GitHub' },
+    { id: 'contact', icon: FaEnvelope, label: 'Contact' },
   ];
 
-  const handleNavClick = (e, href) => {
+  const handleClick = (e, id) => {
     e.preventDefault();
-    const element = document.querySelector(href);
+    const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-    setIsOpen(false);
   };
 
   return (
     <nav className="navbar">
-      <div className="container">
-        <div className="nav-content">
-          <a href="#home" className="logo" onClick={(e) => handleNavClick(e, '#home')}>
-            <span className="logo-text">Jagdeep Mohanty</span>
+      <div className="nav-content">
+        {navItems.map(({ id, icon: Icon, label }) => (
+          <a
+            key={id}
+            href={`#${id}`}
+            className={`nav-icon ${activeSection === id ? 'active' : ''}`}
+            data-tooltip={label}
+            onClick={(e) => handleClick(e, id)}
+          >
+            <Icon />
           </a>
-
-          <div className={`nav-links ${isOpen ? 'active' : ''}`}>
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="nav-link"
-                onClick={(e) => handleNavClick(e, link.href)}
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
-
-          <div className="hamburger" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <FaTimes /> : <FaBars />}
-          </div>
-        </div>
+        ))}
       </div>
     </nav>
   );

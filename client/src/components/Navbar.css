@@ -11,61 +11,66 @@
 
 .nav-content {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   height: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  gap: 40px;
 }
 
-.logo-text {
-  font-size: 20px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #EAB308, #F59E0B);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.nav-links {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-.nav-link {
-  color: var(--text-primary);
-  font-weight: 500;
-  font-size: 14px;
-  transition: all 0.3s ease;
+.nav-icon {
   position: relative;
-}
-
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--gold-primary);
-  transition: width 0.3s ease;
-}
-
-.nav-link:hover {
-  color: var(--gold-primary);
-}
-
-.nav-link:hover::after {
-  width: 100%;
-}
-
-.hamburger {
-  display: none;
-  font-size: 1.3rem;
-  color: var(--gold-primary);
+  color: var(--text-secondary);
+  font-size: 22px;
+  transition: all 0.3s ease;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon:hover {
+  color: var(--gold-primary);
+  transform: translateY(-2px);
+}
+
+.nav-icon.active {
+  color: var(--gold-primary);
+}
+
+.nav-icon::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: #1A1A1A;
+  color: var(--gold-primary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.nav-icon:hover::before {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+
+@media (max-width: 1024px) {
+  .nav-content {
+    gap: 30px;
+  }
+  
+  .nav-icon {
+    font-size: 20px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -74,35 +79,25 @@
   }
   
   .nav-content {
+    gap: 20px;
     padding: 0 15px;
   }
   
-  .logo-text {
+  .nav-icon {
     font-size: 18px;
   }
   
-  .nav-links {
-    position: fixed;
-    top: 55px;
-    left: -100%;
-    flex-direction: column;
-    background: #0C0C0C;
-    width: 100%;
-    padding: 30px 0;
-    transition: left 0.3s ease;
-    border-bottom: 1px solid rgba(234, 179, 8, 0.2);
-    gap: 20px;
+  .nav-icon::before {
+    display: none;
   }
+}
 
-  .nav-links.active {
-    left: 0;
-  }
-
-  .hamburger {
-    display: block;
+@media (max-width: 480px) {
+  .nav-content {
+    gap: 15px;
   }
   
-  .nav-link {
-    font-size: 15px;
+  .nav-icon {
+    font-size: 16px;
   }
 }
