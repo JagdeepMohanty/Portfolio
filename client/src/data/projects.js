@@ -8,7 +8,7 @@ export const projects = [
     description: "A full-featured e-commerce platform with payment integration, user authentication, and admin dashboard.",
     tech_stack: ["React", "Node.js", "MongoDB", "Stripe"],
     github_link: "https://github.com/JagdeepMohanty/easyxpense.git",
-    demo_link: "easyxpense.netlify.app",
+    demo_link: "https://easyxpense.netlify.app",
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ export const projects = [
     description: "A collaborative task management application with real-time updates and team features.",
     tech_stack: ["React", "Flask", "PostgreSQL", "Socket.io"],
     github_link: "https://github.com/JagdeepMohanty/fmg_technologies.git",
-    demo_link: "fmgtechnologies.netlify.app",
+    demo_link: "https://fmgtechnologies.netlify.app",
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ export const projects = [
     description: "Real-time weather dashboard with forecasts, maps, and location-based alerts.",
     tech_stack: ["React", "Python", "OpenWeather API", "Chart.js"],
     github_link: "https://github.com/JagdeepMohanty/BB1.git",
-    demo_link: "butterbatter.netlify.app",
+    demo_link: "https://butterbatter.netlify.app",
   },
   {
     id: 4,
@@ -39,7 +39,7 @@ export const projects = [
     title: "Portfolio Website",
     description: "A premium dark-themed portfolio website with smooth animations and responsive design.",
     tech_stack: ["React", "Vite", "Framer Motion"],
-    github_link: "https://github.com/JagdeepMohanty/Portfolio.git",
+    github_link: "https://github.com/JagdeepMohanty/Portfolio",
     demo_link: "https://jagdeepmohanty.netlify.app",
   },
   {
@@ -47,8 +47,8 @@ export const projects = [
     title: "Blog Application",
     description: "A feature-rich blogging platform with markdown support and comments functionality.",
     tech_stack: ["React", "Node.js", "MongoDB", "Express"],
-    github_link: "https://github.com/JagdeepMohanty/blog",
-    demo_link: "https://blog-demo.com",
+    github_link: "https://github.com/JagdeepMohanty/StudyHelp.git",
+    demo_link: "https://groundzeroo.netlify.app",
   }
 ];
 
