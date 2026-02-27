@@ -35,13 +35,13 @@ const CertificateCard = ({ certificate }) => {
     },
     eyeIcon: {
       position: 'absolute',
-      top: '10px',
-      right: '10px',
+      top: '12px',
+      right: '12px',
       cursor: 'pointer',
       color: '#EAB308',
-      fontSize: '1.2rem',
+      fontSize: '22px',
       background: 'rgba(12, 12, 12, 0.8)',
-      padding: '8px',
+      padding: '10px',
       borderRadius: '50%',
       transition: 'all 0.3s ease',
       zIndex: 10
@@ -130,7 +130,7 @@ const CertificateCard = ({ certificate }) => {
             style={styles.eyeIcon}
             onClick={() => setShowModal(true)}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.1)';
+              e.currentTarget.style.transform = 'scale(1.2)';
               e.currentTarget.style.color = '#F59E0B';
             }}
             onMouseLeave={(e) => {
