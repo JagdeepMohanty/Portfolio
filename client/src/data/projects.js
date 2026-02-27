@@ -40,11 +40,11 @@ export const projects = [
     description: "A premium dark-themed portfolio website with smooth animations and responsive design.",
     tech_stack: ["React", "Vite", "Framer Motion"],
     github_link: "https://github.com/JagdeepMohanty/Portfolio.git",
-    demo_link: "jagdeepmohanty.netlify.app",
+    demo_link: "https://jagdeepmohanty.netlify.app",
   },
   {
     id: 6,
-    title: "GroundZero",
+    title: "Blog Application",
     description: "A feature-rich blogging platform with markdown support and comments functionality.",
     tech_stack: ["React", "Node.js", "MongoDB", "Express"],
     github_link: "https://github.com/JagdeepMohanty/blog",
