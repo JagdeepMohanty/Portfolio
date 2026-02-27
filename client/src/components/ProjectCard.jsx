@@ -1,33 +1,123 @@
 import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
-import './ProjectCard.css';
 
 const ProjectCard = ({ project }) => {
+  const styles = {
+    card: {
+      background: '#1A1A1A',
+      borderRadius: '10px',
+      padding: '20px',
+      border: '1px solid rgba(234, 179, 8, 0.1)',
+      transition: 'all 0.3s ease',
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between'
+    },
+    content: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      textAlign: 'left'
+    },
+    title: {
+      fontSize: '1.1rem',
+      color: '#EAB308',
+      marginBottom: '10px',
+      fontWeight: 600,
+      lineHeight: 1.3
+    },
+    description: {
+      color: '#A3A3A3',
+      marginBottom: '12px',
+      flex: 1,
+      fontSize: '0.9rem',
+      lineHeight: 1.5
+    },
+    techStack: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '6px',
+      marginBottom: '12px'
+    },
+    techTag: {
+      background: 'rgba(234, 179, 8, 0.1)',
+      color: '#EAB308',
+      padding: '3px 10px',
+      borderRadius: '12px',
+      fontSize: '0.75rem',
+      border: '1px solid rgba(234, 179, 8, 0.3)'
+    },
+    links: {
+      display: 'flex',
+      gap: '14px'
+    },
+    link: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '6px',
+      color: '#EAB308',
+      fontWeight: 600,
+      fontSize: '0.85rem',
+      transition: 'all 0.3s ease',
+      textDecoration: 'none',
+      cursor: 'pointer'
+    }
+  };
+
   return (
     <motion.div
-      className="project-card card"
+      style={styles.card}
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      whileHover={{ scale: 1.02 }}
+      viewport={{ once: true }}
+      whileHover={{ 
+        scale: 1.02,
+        boxShadow: '0 0 15px rgba(234, 179, 8, 0.4)',
+        borderColor: '#EAB308'
+      }}
     >
-      <div className="project-image">
-        <img src={project.image_url} alt={project.title} />
-      </div>
-      <div className="project-content">
-        <h3 className="project-title">{project.title}</h3>
-        <p className="project-description">{project.description}</p>
-        <div className="tech-stack">
+      <div style={styles.content}>
+        <h3 style={styles.title}>{project.title}</h3>
+        <p style={styles.description}>{project.description}</p>
+        <div style={styles.techStack}>
           {project.tech_stack.map((tech, index) => (
-            <span key={index} className="tech-tag">{tech}</span>
+            <span key={index} style={styles.techTag}>{tech}</span>
           ))}
         </div>
-        <div className="project-links">
-          <a href={project.github_link} target="_blank" rel="noopener noreferrer" className="project-link">
+        <div style={styles.links}>
+          <a 
+            href={project.github_link} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            style={styles.link}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#F59E0B';
+              e.currentTarget.style.transform = 'translateX(3px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = '#EAB308';
+              e.currentTarget.style.transform = 'translateX(0)';
+            }}
+          >
             <FaGithub /> Code
           </a>
           {project.demo_link && (
-            <a href={project.demo_link} target="_blank" rel="noopener noreferrer" className="project-link">
+            <a 
+              href={project.demo_link} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              style={styles.link}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#F59E0B';
+                e.currentTarget.style.transform = 'translateX(3px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = '#EAB308';
+                e.currentTarget.style.transform = 'translateX(0)';
+              }}
+            >
               <FaExternalLinkAlt /> Demo
             </a>
           )}

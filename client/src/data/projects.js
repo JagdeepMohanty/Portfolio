@@ -47,8 +47,8 @@ export const projects = [
     title: "GroundZero",
     description: "A feature-rich blogging platform with markdown support and comments functionality.",
     tech_stack: ["React", "Node.js", "MongoDB", "Express"],
-    github_link: "https://github.com/JagdeepMohanty/StudyHelp.git",
-    demo_link: "groundzeroo.netlify.app",
+    github_link: "https://github.com/JagdeepMohanty/blog",
+    demo_link: "https://blog-demo.com",
   }
 ];
 
