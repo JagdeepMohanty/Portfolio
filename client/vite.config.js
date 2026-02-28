@@ -5,12 +5,12 @@ export default defineConfig({
   plugins: [react()],
   base: '/',
   optimizeDeps: {
-    include: ['react-github-calendar'],
+    include: ['react-github-calendar']
   },
   build: {
     outDir: 'dist',
     commonjsOptions: {
-      transformMixedEsModules: true,
-    },
-  },
+      transformMixedEsModules: true
+    }
+  }
 })
