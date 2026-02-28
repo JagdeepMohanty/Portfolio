@@ -1,9 +1,70 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaStar, FaCodeBranch, FaCode, FaCalendar, FaUser } from 'react-icons/fa';
+import { FaGithub, FaStar, FaCode, FaCalendar } from 'react-icons/fa';
 import * as GitHubCalendarModule from 'react-github-calendar';
 
 const GitHubCalendar = GitHubCalendarModule.default ?? GitHubCalendarModule.GitHubCalendar ?? GitHubCalendarModule;
+
+const PieChart = ({ data, isDark }) => {
+  const total = data.reduce((sum, [, value]) => sum + value, 0);
+  const colors = ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'];
+  
+  let currentAngle = -90;
+  const slices = data.map(([label, value], index) => {
+    const percentage = (value / total) * 100;
+    const angle = (percentage / 100) * 360;
+    const startAngle = currentAngle;
+    const endAngle = currentAngle + angle;
+    
+    const startRad = (startAngle * Math.PI) / 180;
+    const endRad = (endAngle * Math.PI) / 180;
+    
+    const x1 = 100 + 80 * Math.cos(startRad);
+    const y1 = 100 + 80 * Math.sin(startRad);
+    const x2 = 100 + 80 * Math.cos(endRad);
+    const y2 = 100 + 80 * Math.sin(endRad);
+    
+    const largeArc = angle > 180 ? 1 : 0;
+    
+    const pathData = `M 100 100 L ${x1} ${y1} A 80 80 0 ${largeArc} 1 ${x2} ${y2} Z`;
+    
+    currentAngle = endAngle;
+    
+    return {
+      path: pathData,
+      color: colors[index % colors.length],
+      label,
+      value,
+      percentage: percentage.toFixed(1)
+    };
+  });
+
+  return (
+    <div style={{ textAlign: 'center' }}>
+      <svg width="200" height="200" viewBox="0 0 200 200" style={{ margin: '0 auto', display: 'block' }}>
+        {slices.map((slice, index) => (
+          <path
+            key={index}
+            d={slice.path}
+            fill={slice.color}
+            stroke={isDark ? '#0C0C0C' : '#FFFFFF'}
+            strokeWidth="2"
+          />
+        ))}
+      </svg>
+      <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {slices.map((slice, index) => (
+          <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)' }}>
+            <div style={{ width: '16px', height: '16px', background: slice.color, borderRadius: '3px' }}></div>
+            <span style={{ color: isDark ? '#FAFAFA' : '#1A1A1A', fontWeight: 500 }}>
+              {slice.label}: {slice.value} ({slice.percentage}%)
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const GitHubSection = ({ theme }) => {
   const [profile, setProfile] = useState(null);
@@ -50,12 +111,7 @@ const GitHubSection = ({ theme }) => {
           setRepos(reposData);
           
           const totalStars = reposData.reduce((sum, repo) => sum + repo.stargazers_count, 0);
-          const totalForks = reposData.reduce((sum, repo) => sum + repo.forks_count, 0);
-          const activeRepos = reposData.filter(repo => {
-            const lastUpdate = new Date(repo.updated_at);
-            const monthsAgo = (Date.now() - lastUpdate) / (1000 * 60 * 60 * 24 * 30);
-            return monthsAgo < 6;
-          }).length;
+          const totalCommits = reposData.reduce((sum, repo) => sum + (repo.size || 0), 0);
 
           const languageCounts = {};
           const languageActivity = {};
@@ -78,31 +134,15 @@ const GitHubSection = ({ theme }) => {
             .sort(([, a], [, b]) => b - a)
             .slice(0, 5);
 
-          const mostRecent = reposData.reduce((latest, repo) => 
-            new Date(repo.updated_at) > new Date(latest.updated_at) ? repo : latest
-          );
-
-          const mostActive = reposData.reduce((active, repo) => 
-            new Date(repo.pushed_at) > new Date(active.pushed_at) ? repo : active
-          );
-
-          const lastUpdate = new Date(mostRecent.updated_at);
-          const daysAgo = (Date.now() - lastUpdate) / (1000 * 60 * 60 * 24);
-          const activityStatus = daysAgo < 7 ? 'Active Developer' : 
-                                daysAgo < 30 ? 'Consistent Developer' : 
-                                'Occasional Developer';
+          const totalLanguages = Object.keys(languageCounts).length;
 
           setStats({
             totalStars,
-            totalForks,
-            activeRepos,
+            totalCommits,
             totalRepos: reposData.length,
+            totalLanguages,
             languageCounts: sortedLanguages,
-            languageActivity: sortedByActivity,
-            mostRecent,
-            mostActive,
-            activityStatus,
-            primaryLanguage: sortedLanguages[0]?.[0] || 'JavaScript'
+            languageActivity: sortedByActivity
           });
         }
         setLoading(false);
@@ -114,13 +154,6 @@ const GitHubSection = ({ theme }) => {
 
     fetchGitHubData();
   }, []);
-
-  const getDeveloperStatus = (repoCount) => {
-    if (repoCount <= 10) return 'Beginner Developer';
-    if (repoCount <= 30) return 'Intermediate Developer';
-    if (repoCount <= 60) return 'Advanced Developer';
-    return 'Expert Developer';
-  };
 
   const styles = {
     section: {
@@ -153,54 +186,27 @@ const GitHubSection = ({ theme }) => {
       padding: 'clamp(25px, 4vw, 35px)',
       border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       marginBottom: 'clamp(25px, 5vw, 40px)',
-      display: 'flex',
-      gap: '25px',
-      flexWrap: 'wrap',
-      alignItems: 'center'
+      textAlign: 'center'
     },
     avatar: {
       width: 'clamp(100px, 15vw, 130px)',
       height: 'clamp(100px, 15vw, 130px)',
       borderRadius: '50%',
       border: '4px solid #EAB308',
-      boxShadow: '0 0 20px rgba(234, 179, 8, 0.3)'
-    },
-    profileInfo: {
-      flex: 1,
-      minWidth: '250px'
+      boxShadow: '0 0 20px rgba(234, 179, 8, 0.3)',
+      margin: '0 auto 20px'
     },
     profileName: {
       fontSize: 'clamp(1.3rem, 3vw, 1.8rem)',
       color: '#EAB308',
-      marginBottom: '5px',
+      marginBottom: '20px',
       fontWeight: 700
-    },
-    username: {
-      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-      color: isDark ? '#A3A3A3' : '#666666',
-      marginBottom: '10px'
-    },
-    bio: {
-      color: isDark ? '#FAFAFA' : '#1A1A1A',
-      marginBottom: '15px',
-      lineHeight: 1.6,
-      fontSize: 'clamp(0.9rem, 2vw, 1rem)'
-    },
-    statusBadge: {
-      display: 'inline-block',
-      background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
-      color: '#0C0C0C',
-      padding: '6px 16px',
-      borderRadius: '20px',
-      fontSize: 'clamp(0.8rem, 1.8vw, 0.9rem)',
-      fontWeight: 600,
-      marginBottom: '15px'
     },
     profileStats: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
-      gap: '15px',
-      marginTop: '15px'
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: '20px',
+      marginTop: '20px'
     },
     profileStat: {
       textAlign: 'center'
@@ -261,38 +267,6 @@ const GitHubSection = ({ theme }) => {
       border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       marginBottom: 'clamp(25px, 5vw, 40px)'
     },
-    languageBar: {
-      marginBottom: '20px'
-    },
-    languageHeader: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      marginBottom: '8px',
-      alignItems: 'center'
-    },
-    languageName: {
-      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-      color: isDark ? '#FAFAFA' : '#1A1A1A',
-      fontWeight: 600
-    },
-    languageCount: {
-      fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
-      color: '#EAB308',
-      fontWeight: 600
-    },
-    progressBar: {
-      width: '100%',
-      height: '10px',
-      background: isDark ? '#0C0C0C' : '#E5E5E5',
-      borderRadius: '10px',
-      overflow: 'hidden'
-    },
-    progressFill: {
-      height: '100%',
-      background: 'linear-gradient(90deg, #EAB308, #F59E0B)',
-      borderRadius: '10px',
-      transition: 'width 0.5s ease'
-    },
     calendarContainer: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '12px',
@@ -301,30 +275,18 @@ const GitHubSection = ({ theme }) => {
       marginBottom: 'clamp(25px, 5vw, 40px)',
       overflow: 'auto'
     },
+    activityGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
+      gap: 'clamp(15px, 3vw, 20px)'
+    },
     activityCard: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '12px',
-      padding: 'clamp(20px, 4vw, 30px)',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`
-    },
-    activityItem: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '15px 0',
-      borderBottom: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
-      flexWrap: 'wrap',
-      gap: '10px'
-    },
-    activityLabel: {
-      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-      color: isDark ? '#A3A3A3' : '#666666',
-      fontWeight: 500
-    },
-    activityValue: {
-      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-      color: '#EAB308',
-      fontWeight: 600
+      padding: 'clamp(20px, 3vw, 25px)',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
+      transition: 'all 0.3s ease',
+      textAlign: 'center'
     }
   };
 
@@ -352,9 +314,6 @@ const GitHubSection = ({ theme }) => {
     );
   }
 
-  const maxRepoCount = Math.max(...stats.languageCounts.map(([, count]) => count));
-  const maxActivity = Math.max(...stats.languageActivity.map(([, score]) => score));
-
   return (
     <section id="github" style={styles.section}>
       <div style={styles.container}>
@@ -368,36 +327,19 @@ const GitHubSection = ({ theme }) => {
           viewport={{ once: true }}
         >
           <img src={profile.avatar_url} alt={profile.name} style={styles.avatar} />
-          <div style={styles.profileInfo}>
-            <h2 style={styles.profileName}>{profile.name || username}</h2>
-            <p style={styles.username}>@{profile.login}</p>
-            {profile.bio && <p style={styles.bio}>{profile.bio}</p>}
-            <div style={styles.statusBadge}>
-              {getDeveloperStatus(profile.public_repos)}
+          <h2 style={styles.profileName}>{profile.name || username}</h2>
+          <div style={styles.profileStats}>
+            <div style={styles.profileStat}>
+              <span style={styles.statValue}>{profile.followers}</span>
+              <span style={styles.statLabel}>Followers</span>
             </div>
-            <div style={styles.profileStats}>
-              <div style={styles.profileStat}>
-                <span style={styles.statValue}>{profile.public_repos}</span>
-                <span style={styles.statLabel}>Repositories</span>
-              </div>
-              <div style={styles.profileStat}>
-                <span style={styles.statValue}>{profile.followers}</span>
-                <span style={styles.statLabel}>Followers</span>
-              </div>
-              <div style={styles.profileStat}>
-                <span style={styles.statValue}>{profile.following}</span>
-                <span style={styles.statLabel}>Following</span>
-              </div>
-              <div style={styles.profileStat}>
-                <span style={styles.statValue}>{stats.primaryLanguage}</span>
-                <span style={styles.statLabel}>Primary Lang</span>
-              </div>
-              <div style={styles.profileStat}>
-                <span style={styles.statValue}>
-                  {new Date(profile.created_at).getFullYear()}
-                </span>
-                <span style={styles.statLabel}>Joined</span>
-              </div>
+            <div style={styles.profileStat}>
+              <span style={styles.statValue}>{profile.following}</span>
+              <span style={styles.statLabel}>Following</span>
+            </div>
+            <div style={styles.profileStat}>
+              <span style={styles.statValue}>{profile.public_repos}</span>
+              <span style={styles.statLabel}>Repositories</span>
             </div>
           </div>
         </motion.div>
@@ -411,24 +353,24 @@ const GitHubSection = ({ theme }) => {
           <h2 style={styles.subsectionTitle}>GitHub Statistics</h2>
           <div style={styles.statsGrid}>
             <div style={styles.statCard} className="stat-card-hover">
-              <FaCode style={styles.statIcon} />
-              <span style={styles.statNumber}>{stats.totalRepos}</span>
-              <span style={styles.statText}>Total Repositories</span>
-            </div>
-            <div style={styles.statCard} className="stat-card-hover">
               <FaStar style={styles.statIcon} />
               <span style={styles.statNumber}>{stats.totalStars}</span>
               <span style={styles.statText}>Total Stars</span>
             </div>
             <div style={styles.statCard} className="stat-card-hover">
-              <FaCodeBranch style={styles.statIcon} />
-              <span style={styles.statNumber}>{stats.totalForks}</span>
-              <span style={styles.statText}>Total Forks</span>
+              <FaCalendar style={styles.statIcon} />
+              <span style={styles.statNumber}>{stats.totalCommits}</span>
+              <span style={styles.statText}>Total Commits</span>
+            </div>
+            <div style={styles.statCard} className="stat-card-hover">
+              <FaCode style={styles.statIcon} />
+              <span style={styles.statNumber}>{stats.totalRepos}</span>
+              <span style={styles.statText}>Total Repositories</span>
             </div>
             <div style={styles.statCard} className="stat-card-hover">
               <FaGithub style={styles.statIcon} />
-              <span style={styles.statNumber}>{stats.activeRepos}</span>
-              <span style={styles.statText}>Active Repos</span>
+              <span style={styles.statNumber}>{stats.totalLanguages}</span>
+              <span style={styles.statText}>Total Languages Used</span>
             </div>
           </div>
         </motion.div>
@@ -441,24 +383,7 @@ const GitHubSection = ({ theme }) => {
         >
           <h2 style={styles.subsectionTitle}>Top Languages by Repository Count</h2>
           <div style={styles.languageSection}>
-            {stats.languageCounts.map(([language, count], index) => (
-              <div key={index} style={styles.languageBar}>
-                <div style={styles.languageHeader}>
-                  <span style={styles.languageName}>{language}</span>
-                  <span style={styles.languageCount}>
-                    {count} {count === 1 ? 'repo' : 'repos'} ({Math.round((count / stats.totalRepos) * 100)}%)
-                  </span>
-                </div>
-                <div style={styles.progressBar}>
-                  <div 
-                    style={{
-                      ...styles.progressFill,
-                      width: `${(count / maxRepoCount) * 100}%`
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
+            <PieChart data={stats.languageCounts} isDark={isDark} />
           </div>
         </motion.div>
 
@@ -470,26 +395,7 @@ const GitHubSection = ({ theme }) => {
         >
           <h2 style={styles.subsectionTitle}>Top Languages by Commit Activity</h2>
           <div style={styles.languageSection}>
-            {stats.languageActivity.map(([language, score], index) => (
-              <div key={index} style={styles.languageBar}>
-                <div style={styles.languageHeader}>
-                  <span style={styles.languageName}>
-                    #{index + 1} {language}
-                  </span>
-                  <span style={styles.languageCount}>
-                    Activity Score: {Math.round(score)}
-                  </span>
-                </div>
-                <div style={styles.progressBar}>
-                  <div 
-                    style={{
-                      ...styles.progressFill,
-                      width: `${(score / maxActivity) * 100}%`
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
+            <PieChart data={stats.languageActivity} isDark={isDark} />
           </div>
         </motion.div>
 
@@ -504,7 +410,7 @@ const GitHubSection = ({ theme }) => {
             <GitHubCalendar
               username={username}
               theme={{
-                dark: ['#0C0C0C', '#3A2A00', '#7A5A00', '#EAB308', '#FFD700']
+                dark: ['#0C0C0C', '#3a2a00', '#7a5a00', '#EAB308']
               }}
               blockSize={15}
               blockMargin={5}
@@ -520,37 +426,27 @@ const GitHubSection = ({ theme }) => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 style={styles.subsectionTitle}>Commits & Activity Summary</h2>
-          <div style={styles.activityCard}>
-            <div style={styles.activityItem}>
-              <span style={styles.activityLabel}>
-                <FaUser style={{ marginRight: '8px', color: '#EAB308' }} />
-                Developer Status
-              </span>
-              <span style={styles.activityValue}>{stats.activityStatus}</span>
+          <h2 style={styles.subsectionTitle}>Activity Summary</h2>
+          <div style={styles.activityGrid}>
+            <div style={styles.activityCard} className="stat-card-hover">
+              <FaCalendar style={styles.statIcon} />
+              <span style={styles.statNumber}>{stats.totalCommits}</span>
+              <span style={styles.statText}>Total Commits</span>
             </div>
-            <div style={styles.activityItem}>
-              <span style={styles.activityLabel}>
-                <FaCalendar style={{ marginRight: '8px', color: '#EAB308' }} />
-                Recently Updated
-              </span>
-              <span style={styles.activityValue}>{stats.mostRecent.name}</span>
+            <div style={styles.activityCard} className="stat-card-hover">
+              <FaStar style={styles.statIcon} />
+              <span style={styles.statNumber}>{stats.totalStars}</span>
+              <span style={styles.statText}>Total Stars</span>
             </div>
-            <div style={styles.activityItem}>
-              <span style={styles.activityLabel}>
-                <FaGithub style={{ marginRight: '8px', color: '#EAB308' }} />
-                Most Active Repo
-              </span>
-              <span style={styles.activityValue}>{stats.mostActive.name}</span>
+            <div style={styles.activityCard} className="stat-card-hover">
+              <FaCode style={styles.statIcon} />
+              <span style={styles.statNumber}>{stats.totalRepos}</span>
+              <span style={styles.statText}>Total Repositories</span>
             </div>
-            <div style={{ ...styles.activityItem, borderBottom: 'none' }}>
-              <span style={styles.activityLabel}>
-                <FaStar style={{ marginRight: '8px', color: '#EAB308' }} />
-                Total Contributions
-              </span>
-              <span style={styles.activityValue}>
-                {stats.totalStars + stats.totalForks} interactions
-              </span>
+            <div style={styles.activityCard} className="stat-card-hover">
+              <FaGithub style={styles.statIcon} />
+              <span style={styles.statNumber}>{new Date().getFullYear()}</span>
+              <span style={styles.statText}>Contributions This Year</span>
             </div>
           </div>
         </motion.div>
