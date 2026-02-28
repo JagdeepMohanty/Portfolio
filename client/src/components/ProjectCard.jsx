@@ -6,7 +6,7 @@ const ProjectCard = ({ project }) => {
     card: {
       background: '#1A1A1A',
       borderRadius: '10px',
-      padding: '20px',
+      padding: 'clamp(15px, 3vw, 20px)',
       border: '1px solid rgba(234, 179, 8, 0.1)',
       transition: 'all 0.3s ease',
       height: '100%',
@@ -21,7 +21,7 @@ const ProjectCard = ({ project }) => {
       textAlign: 'left'
     },
     title: {
-      fontSize: '1.1rem',
+      fontSize: 'clamp(1rem, 2vw, 1.1rem)',
       color: '#EAB308',
       marginBottom: '10px',
       fontWeight: 600,
@@ -31,7 +31,7 @@ const ProjectCard = ({ project }) => {
       color: '#A3A3A3',
       marginBottom: '12px',
       flex: 1,
-      fontSize: '0.9rem',
+      fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
       lineHeight: 1.5
     },
     techStack: {
@@ -45,12 +45,13 @@ const ProjectCard = ({ project }) => {
       color: '#EAB308',
       padding: '3px 10px',
       borderRadius: '12px',
-      fontSize: '0.75rem',
+      fontSize: 'clamp(0.7rem, 1.5vw, 0.75rem)',
       border: '1px solid rgba(234, 179, 8, 0.3)'
     },
     links: {
       display: 'flex',
-      gap: '14px'
+      gap: '14px',
+      flexWrap: 'wrap'
     },
     link: {
       display: 'flex',
@@ -58,7 +59,7 @@ const ProjectCard = ({ project }) => {
       gap: '6px',
       color: '#EAB308',
       fontWeight: 600,
-      fontSize: '0.85rem',
+      fontSize: 'clamp(0.8rem, 1.8vw, 0.85rem)',
       transition: 'all 0.3s ease',
       textDecoration: 'none',
       cursor: 'pointer'

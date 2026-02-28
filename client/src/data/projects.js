@@ -44,7 +44,7 @@ export const projects = [
   },
   {
     id: 6,
-    title: "Blog Application",
+    title: "GroundZero",
     description: "A feature-rich blogging platform with markdown support and comments functionality.",
     tech_stack: ["React", "Node.js", "MongoDB", "Express"],
     github_link: "https://github.com/JagdeepMohanty/StudyHelp.git",

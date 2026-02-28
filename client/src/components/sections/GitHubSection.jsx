@@ -3,9 +3,7 @@ import { motion } from 'framer-motion';
 import { FaGithub } from 'react-icons/fa';
 import * as GitHubCalendarModule from 'react-github-calendar';
 import RepoCard from '../RepoCard';
-import './GitHubSection.css';
 
-// Safe import with multiple fallbacks
 const GitHubCalendar = GitHubCalendarModule.default ?? GitHubCalendarModule.GitHubCalendar ?? GitHubCalendarModule;
 
 const GitHubSection = () => {
@@ -40,12 +38,162 @@ const GitHubSection = () => {
     fetchGitHubData();
   }, []);
 
+  const styles = {
+    section: {
+      padding: 'clamp(40px, 8vw, 60px) 20px'
+    },
+    container: {
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '0 15px'
+    },
+    sectionTitle: {
+      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+      fontWeight: 700,
+      textAlign: 'center',
+      marginBottom: 'clamp(25px, 5vw, 40px)',
+      color: '#EAB308'
+    },
+    loader: {
+      width: '40px',
+      height: '40px',
+      border: '3px solid #1A1A1A',
+      borderTop: '3px solid #EAB308',
+      borderRadius: '50%',
+      animation: 'spin 1s linear infinite',
+      margin: '40px auto'
+    },
+    noData: {
+      textAlign: 'center',
+      color: '#A3A3A3',
+      fontSize: 'clamp(1rem, 2vw, 1.1rem)',
+      padding: '40px 20px'
+    },
+    githubProfile: {
+      background: '#1A1A1A',
+      borderRadius: '10px',
+      padding: 'clamp(20px, 4vw, 30px)',
+      border: '1px solid rgba(234, 179, 8, 0.1)',
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'clamp(20px, 4vw, 30px)',
+      marginBottom: 'clamp(25px, 5vw, 40px)',
+      flexWrap: 'wrap',
+      justifyContent: 'center'
+    },
+    profileAvatar: {
+      width: 'clamp(100px, 20vw, 120px)',
+      height: 'clamp(100px, 20vw, 120px)',
+      borderRadius: '50%',
+      border: '3px solid #EAB308'
+    },
+    profileInfo: {
+      flex: 1,
+      minWidth: '250px',
+      textAlign: 'center'
+    },
+    profileName: {
+      fontSize: 'clamp(1.3rem, 3vw, 1.8rem)',
+      color: '#EAB308',
+      marginBottom: '10px',
+      fontWeight: 600
+    },
+    profileBio: {
+      color: '#A3A3A3',
+      marginBottom: '20px',
+      lineHeight: 1.5,
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)'
+    },
+    profileStats: {
+      display: 'flex',
+      gap: 'clamp(20px, 4vw, 30px)',
+      marginBottom: '20px',
+      flexWrap: 'wrap',
+      justifyContent: 'center'
+    },
+    stat: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
+    statValue: {
+      fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+      color: '#EAB308',
+      fontWeight: 700
+    },
+    statLabel: {
+      color: '#A3A3A3',
+      fontSize: 'clamp(0.8rem, 1.8vw, 0.9rem)'
+    },
+    btnPrimary: {
+      background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
+      color: '#0C0C0C',
+      padding: 'clamp(8px, 2vw, 10px) clamp(20px, 4vw, 24px)',
+      borderRadius: '6px',
+      fontWeight: 600,
+      fontSize: 'clamp(13px, 2vw, 14px)',
+      transition: 'all 0.3s ease',
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
+      textDecoration: 'none',
+      border: 'none',
+      cursor: 'pointer'
+    },
+    statsCardsGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+      gap: 'clamp(15px, 3vw, 20px)',
+      marginBottom: 'clamp(25px, 5vw, 40px)'
+    },
+    statsCard: {
+      background: '#1A1A1A',
+      borderRadius: '10px',
+      padding: 'clamp(15px, 3vw, 20px)',
+      border: '1px solid rgba(234, 179, 8, 0.1)',
+      overflow: 'hidden'
+    },
+    statsImage: {
+      width: '100%',
+      height: 'auto',
+      borderRadius: '8px'
+    },
+    contributionCalendar: {
+      marginBottom: 'clamp(25px, 5vw, 40px)'
+    },
+    subsectionTitle: {
+      fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+      color: '#EAB308',
+      marginBottom: 'clamp(15px, 3vw, 20px)',
+      textAlign: 'center',
+      fontWeight: 600
+    },
+    calendarWrapper: {
+      background: '#1A1A1A',
+      borderRadius: '10px',
+      padding: 'clamp(15px, 3vw, 20px)',
+      border: '1px solid rgba(234, 179, 8, 0.1)',
+      overflow: 'auto'
+    },
+    reposGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+      gap: 'clamp(15px, 3vw, 20px)'
+    }
+  };
+
   if (loading) {
     return (
-      <section id="github" className="github-section section">
-        <div className="container">
-          <h1 className="section-title">GitHub Activity</h1>
-          <div className="loader"></div>
+      <section id="github" style={styles.section}>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+        <div style={styles.container}>
+          <h1 style={styles.sectionTitle}>GitHub Activity</h1>
+          <div style={styles.loader}></div>
         </div>
       </section>
     );
@@ -53,51 +201,65 @@ const GitHubSection = () => {
 
   if (error) {
     return (
-      <section id="github" className="github-section section">
-        <div className="container">
-          <h1 className="section-title">GitHub Activity</h1>
-          <p className="no-data">Unable to load GitHub data. Please try again later.</p>
+      <section id="github" style={styles.section}>
+        <div style={styles.container}>
+          <h1 style={styles.sectionTitle}>GitHub Activity</h1>
+          <p style={styles.noData}>Unable to load GitHub data. Please try again later.</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section id="github" className="github-section section">
-      <div className="container">
-        <h1 className="section-title">GitHub Activity</h1>
+    <section id="github" style={styles.section}>
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+      <div style={styles.container}>
+        <h1 style={styles.sectionTitle}>GitHub Activity</h1>
 
         {profile && (
           <motion.div
-            className="github-profile card"
+            style={styles.githubProfile}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <img src={profile.avatar_url} alt={profile.name || username} className="profile-avatar" />
-            <div className="profile-info">
-              <h2 className="profile-name">{profile.name || username}</h2>
-              {profile.bio && <p className="profile-bio">{profile.bio}</p>}
-              <div className="profile-stats">
-                <div className="stat">
-                  <span className="stat-value">{profile.followers || 0}</span>
-                  <span className="stat-label">Followers</span>
+            <img src={profile.avatar_url} alt={profile.name || username} style={styles.profileAvatar} />
+            <div style={styles.profileInfo}>
+              <h2 style={styles.profileName}>{profile.name || username}</h2>
+              {profile.bio && <p style={styles.profileBio}>{profile.bio}</p>}
+              <div style={styles.profileStats}>
+                <div style={styles.stat}>
+                  <span style={styles.statValue}>{profile.followers || 0}</span>
+                  <span style={styles.statLabel}>Followers</span>
                 </div>
-                <div className="stat">
-                  <span className="stat-value">{profile.following || 0}</span>
-                  <span className="stat-label">Following</span>
+                <div style={styles.stat}>
+                  <span style={styles.statValue}>{profile.following || 0}</span>
+                  <span style={styles.statLabel}>Following</span>
                 </div>
-                <div className="stat">
-                  <span className="stat-value">{profile.public_repos || 0}</span>
-                  <span className="stat-label">Repositories</span>
+                <div style={styles.stat}>
+                  <span style={styles.statValue}>{profile.public_repos || 0}</span>
+                  <span style={styles.statLabel}>Repositories</span>
                 </div>
               </div>
               <a
                 href={profile.html_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary"
+                style={styles.btnPrimary}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 0 15px rgba(234, 179, 8, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               >
                 <FaGithub /> View Profile
               </a>
@@ -105,16 +267,49 @@ const GitHubSection = () => {
           </motion.div>
         )}
 
+        {/* GitHub Stats Cards */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <h2 style={styles.subsectionTitle}>GitHub Statistics</h2>
+          <div style={styles.statsCardsGrid}>
+            <div style={styles.statsCard}>
+              <img 
+                src={`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&theme=radical&bg_color=1A1A1A&title_color=EAB308&text_color=FAFAFA&icon_color=F59E0B&border_color=EAB308`}
+                alt="GitHub Stats"
+                style={styles.statsImage}
+              />
+            </div>
+            <div style={styles.statsCard}>
+              <img 
+                src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=radical&bg_color=1A1A1A&title_color=EAB308&text_color=FAFAFA&border_color=EAB308`}
+                alt="Top Languages"
+                style={styles.statsImage}
+              />
+            </div>
+          </div>
+          <div style={{ ...styles.statsCard, marginBottom: '40px' }}>
+            <img 
+              src={`https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=radical&background=1A1A1A&ring=EAB308&fire=F59E0B&currStreakLabel=EAB308&border=EAB308`}
+              alt="GitHub Streak"
+              style={styles.statsImage}
+            />
+          </div>
+        </motion.div>
+
         {typeof GitHubCalendar === 'function' && (
           <motion.div
-            className="contribution-calendar"
+            style={styles.contributionCalendar}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <h2 className="subsection-title">Contribution Activity</h2>
-            <div className="calendar-wrapper">
+            <h2 style={styles.subsectionTitle}>Contribution Activity</h2>
+            <div style={styles.calendarWrapper}>
               <GitHubCalendar
                 username={username}
                 blockSize={12}
@@ -130,10 +325,10 @@ const GitHubSection = () => {
         )}
 
         {repos.length > 0 && (
-          <div className="repos-section">
-            <h2 className="subsection-title">Top Repositories</h2>
+          <div>
+            <h2 style={styles.subsectionTitle}>Top Repositories</h2>
             <motion.div
-              className="repos-grid grid grid-3"
+              style={styles.reposGrid}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}

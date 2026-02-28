@@ -1,19 +1,47 @@
 import { motion } from 'framer-motion';
 import ProjectCard from '../ProjectCard';
 import { projects } from '../../data/projects';
-import './ProjectsSection.css';
 
 const ProjectsSection = () => {
+  const styles = {
+    section: {
+      padding: 'clamp(40px, 8vw, 60px) 20px'
+    },
+    container: {
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '0 15px'
+    },
+    sectionTitle: {
+      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+      fontWeight: 700,
+      textAlign: 'center',
+      marginBottom: 'clamp(25px, 5vw, 40px)',
+      color: '#EAB308'
+    },
+    projectsGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+      gap: 'clamp(20px, 4vw, 25px)'
+    },
+    noData: {
+      textAlign: 'center',
+      color: '#A3A3A3',
+      fontSize: 'clamp(1rem, 2vw, 1.1rem)',
+      padding: '40px 20px'
+    }
+  };
+
   return (
-    <section id="projects" className="projects-section section">
-      <div className="container">
-        <h1 className="section-title">My Projects</h1>
+    <section id="projects" style={styles.section}>
+      <div style={styles.container}>
+        <h1 style={styles.sectionTitle}>My Projects</h1>
         
         {projects.length === 0 ? (
-          <p className="no-data">No projects available yet.</p>
+          <p style={styles.noData}>No projects available yet.</p>
         ) : (
           <motion.div
-            className="projects-grid grid grid-2"
+            style={styles.projectsGrid}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6 }}

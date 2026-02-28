@@ -1,22 +1,60 @@
 import { motion } from 'framer-motion';
 import CertificateCard from '../CertificateCard';
 import { technicalCertificates, otherCertificates } from '../../data/certificates';
-import './CertificatesSection.css';
 
 const CertificatesSection = () => {
+  const styles = {
+    section: {
+      padding: 'clamp(40px, 8vw, 60px) 20px'
+    },
+    container: {
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '0 15px'
+    },
+    sectionTitle: {
+      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+      fontWeight: 700,
+      textAlign: 'center',
+      marginBottom: 'clamp(25px, 5vw, 40px)',
+      color: '#EAB308'
+    },
+    certificateCategory: {
+      marginBottom: 'clamp(35px, 6vw, 50px)'
+    },
+    categoryTitle: {
+      fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+      color: '#EAB308',
+      marginBottom: 'clamp(20px, 4vw, 30px)',
+      textAlign: 'center',
+      fontWeight: 600
+    },
+    certificatesGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))',
+      gap: 'clamp(20px, 4vw, 25px)'
+    },
+    noData: {
+      textAlign: 'center',
+      color: '#A3A3A3',
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+      padding: '20px'
+    }
+  };
+
   return (
-    <section id="certificates" className="certificates-section section">
-      <div className="container">
-        <h1 className="section-title">Certificates & Achievements</h1>
+    <section id="certificates" style={styles.section}>
+      <div style={styles.container}>
+        <h1 style={styles.sectionTitle}>Certificates & Achievements</h1>
         
         {/* Technical Achievements */}
-        <div className="certificate-category">
-          <h2 className="category-title">Technical Achievements</h2>
+        <div style={styles.certificateCategory}>
+          <h2 style={styles.categoryTitle}>Technical Achievements</h2>
           {technicalCertificates.length === 0 ? (
-            <p className="no-data">No technical certificates available yet.</p>
+            <p style={styles.noData}>No technical certificates available yet.</p>
           ) : (
             <motion.div
-              className="certificates-grid grid grid-3"
+              style={styles.certificatesGrid}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
@@ -30,13 +68,13 @@ const CertificatesSection = () => {
         </div>
 
         {/* Other Achievements */}
-        <div className="certificate-category">
-          <h2 className="category-title">Other Achievements</h2>
+        <div style={styles.certificateCategory}>
+          <h2 style={styles.categoryTitle}>Other Achievements</h2>
           {otherCertificates.length === 0 ? (
-            <p className="no-data">No other certificates available yet.</p>
+            <p style={styles.noData}>No other certificates available yet.</p>
           ) : (
             <motion.div
-              className="certificates-grid grid grid-3"
+              style={styles.certificatesGrid}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6 }}

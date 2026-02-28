@@ -4,16 +4,15 @@ import { FaWhatsapp, FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 const ContactSection = () => {
   const styles = {
     section: {
-      padding: '60px 20px',
-      minHeight: 'auto'
+      padding: 'clamp(40px, 8vw, 60px) 20px'
     },
     container: {
       maxWidth: '1200px',
       margin: '0 auto',
-      padding: '0 20px'
+      padding: '0 15px'
     },
     title: {
-      fontSize: '2rem',
+      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
       fontWeight: 700,
       textAlign: 'center',
       marginBottom: '16px',
@@ -22,21 +21,23 @@ const ContactSection = () => {
     subtitle: {
       color: '#A3A3A3',
       marginBottom: '40px',
-      fontSize: '15px',
+      fontSize: 'clamp(0.9rem, 2vw, 15px)',
       textAlign: 'center',
       maxWidth: '700px',
-      margin: '0 auto 40px'
+      margin: '0 auto 40px',
+      lineHeight: 1.6,
+      padding: '0 10px'
     },
     contactContainer: {
       display: 'flex',
       justifyContent: 'space-between',
-      gap: '40px',
+      gap: 'clamp(20px, 5vw, 40px)',
       flexWrap: 'wrap'
     },
     leftColumn: {
       display: 'flex',
       flexDirection: 'column',
-      gap: '20px',
+      gap: 'clamp(15px, 3vw, 20px)',
       flex: '1',
       minWidth: '280px'
     },
@@ -47,7 +48,7 @@ const ContactSection = () => {
     contactItem: {
       background: '#1A1A1A',
       borderRadius: '10px',
-      padding: '20px',
+      padding: 'clamp(15px, 3vw, 20px)',
       border: '1px solid rgba(234, 179, 8, 0.1)',
       transition: 'all 0.3s ease',
       textDecoration: 'none',
@@ -57,7 +58,7 @@ const ContactSection = () => {
       cursor: 'pointer'
     },
     contactIcon: {
-      fontSize: '24px',
+      fontSize: 'clamp(20px, 4vw, 24px)',
       color: '#EAB308',
       transition: 'all 0.3s ease',
       minWidth: '24px'
@@ -68,23 +69,23 @@ const ContactSection = () => {
       gap: '4px'
     },
     contactLabel: {
-      fontSize: '1rem',
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
       color: '#FAFAFA',
       fontWeight: 600
     },
     contactInfo: {
-      fontSize: '0.85rem',
+      fontSize: 'clamp(0.8rem, 1.8vw, 0.85rem)',
       color: '#A3A3A3'
     },
     formCard: {
       background: '#1A1A1A',
       borderRadius: '10px',
-      padding: '30px',
+      padding: 'clamp(20px, 4vw, 30px)',
       border: '1px solid rgba(234, 179, 8, 0.1)',
       height: '100%'
     },
     formTitle: {
-      fontSize: '1.3rem',
+      fontSize: 'clamp(1.1rem, 2.5vw, 1.3rem)',
       color: '#EAB308',
       marginBottom: '20px',
       textAlign: 'center'
@@ -92,7 +93,7 @@ const ContactSection = () => {
     form: {
       display: 'flex',
       flexDirection: 'column',
-      gap: '18px'
+      gap: 'clamp(15px, 3vw, 18px)'
     },
     formGroup: {
       display: 'flex',
@@ -102,27 +103,27 @@ const ContactSection = () => {
     label: {
       color: '#EAB308',
       fontWeight: 600,
-      fontSize: '0.9rem'
+      fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)'
     },
     input: {
       width: '100%',
-      padding: '12px',
+      padding: 'clamp(10px, 2vw, 12px)',
       background: '#0C0C0C',
       border: '1px solid rgba(234, 179, 8, 0.2)',
       borderRadius: '6px',
       color: '#FAFAFA',
-      fontSize: '14px',
+      fontSize: 'clamp(13px, 2vw, 14px)',
       transition: 'all 0.3s ease',
       outline: 'none'
     },
     textarea: {
       width: '100%',
-      padding: '12px',
+      padding: 'clamp(10px, 2vw, 12px)',
       background: '#0C0C0C',
       border: '1px solid rgba(234, 179, 8, 0.2)',
       borderRadius: '6px',
       color: '#FAFAFA',
-      fontSize: '14px',
+      fontSize: 'clamp(13px, 2vw, 14px)',
       transition: 'all 0.3s ease',
       outline: 'none',
       resize: 'vertical',
@@ -131,10 +132,10 @@ const ContactSection = () => {
     button: {
       background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
       color: '#0C0C0C',
-      padding: '12px 24px',
+      padding: 'clamp(10px, 2vw, 12px) clamp(20px, 4vw, 24px)',
       borderRadius: '6px',
       fontWeight: 600,
-      fontSize: '14px',
+      fontSize: 'clamp(13px, 2vw, 14px)',
       border: 'none',
       cursor: 'pointer',
       transition: 'all 0.3s ease'

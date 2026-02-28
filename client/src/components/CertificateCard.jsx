@@ -9,7 +9,7 @@ const CertificateCard = ({ certificate }) => {
     card: {
       background: '#1A1A1A',
       borderRadius: '10px',
-      padding: '15px',
+      padding: 'clamp(12px, 2.5vw, 15px)',
       border: '1px solid rgba(234, 179, 8, 0.1)',
       transition: 'all 0.3s ease',
       textAlign: 'center',
@@ -21,7 +21,7 @@ const CertificateCard = ({ certificate }) => {
     },
     imageContainer: {
       width: '100%',
-      height: '140px',
+      height: 'clamp(120px, 25vw, 140px)',
       overflow: 'hidden',
       borderRadius: '8px',
       marginBottom: '12px',
@@ -39,15 +39,15 @@ const CertificateCard = ({ certificate }) => {
       right: '12px',
       cursor: 'pointer',
       color: '#EAB308',
-      fontSize: '22px',
-      background: 'rgba(12, 12, 12, 0.8)',
-      padding: '10px',
+      fontSize: '28px',
+      background: 'rgba(12, 12, 12, 0.9)',
+      padding: '12px',
       borderRadius: '50%',
       transition: 'all 0.3s ease',
       zIndex: 10
     },
     title: {
-      fontSize: '1rem',
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
       color: '#EAB308',
       marginBottom: '6px',
       fontWeight: 600,
@@ -56,12 +56,12 @@ const CertificateCard = ({ certificate }) => {
     issuer: {
       color: '#FAFAFA',
       marginBottom: '4px',
-      fontSize: '0.9rem',
+      fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
       lineHeight: 1.4
     },
     date: {
       color: '#A3A3A3',
-      fontSize: '0.8rem'
+      fontSize: 'clamp(0.75rem, 1.6vw, 0.8rem)'
     },
     modalOverlay: {
       position: 'fixed',
@@ -87,26 +87,29 @@ const CertificateCard = ({ certificate }) => {
     modalImage: {
       maxWidth: '100%',
       maxHeight: '90vh',
+      width: 'auto',
+      height: 'auto',
       objectFit: 'contain',
       borderRadius: '8px',
       border: '2px solid #EAB308'
     },
     closeButton: {
       position: 'absolute',
-      top: '-40px',
+      top: '-50px',
       right: '0',
       background: '#EAB308',
       color: '#0C0C0C',
       border: 'none',
       borderRadius: '50%',
-      width: '40px',
-      height: '40px',
+      width: '45px',
+      height: '45px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       cursor: 'pointer',
-      fontSize: '1.2rem',
-      transition: 'all 0.3s ease'
+      fontSize: '1.3rem',
+      transition: 'all 0.3s ease',
+      zIndex: 10000
     }
   };
 
