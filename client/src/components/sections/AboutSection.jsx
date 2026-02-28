@@ -1,20 +1,25 @@
 import { motion } from 'framer-motion';
-import { FaReact, FaNode, FaPython, FaDatabase, FaAws, FaDocker } from 'react-icons/fa';
-import { SiMongodb, SiPostgresql, SiFlask, SiExpress } from 'react-icons/si';
 
 const AboutSection = ({ theme }) => {
   const isDark = theme === 'dark';
 
   const skills = [
-    { name: 'React', icon: <FaReact /> },
-    { name: 'Node.js', icon: <FaNode /> },
-    { name: 'Python', icon: <FaPython /> },
-    { name: 'Flask', icon: <SiFlask /> },
-    { name: 'Express', icon: <SiExpress /> },
-    { name: 'MongoDB', icon: <SiMongodb /> },
-    { name: 'PostgreSQL', icon: <SiPostgresql /> },
-    { name: 'AWS', icon: <FaAws /> },
-    { name: 'Docker', icon: <FaDocker /> },
+    'HTML',
+    'CSS',
+    'React',
+    'JavaScript',
+    'Node.js',
+    'SQL',
+    'MongoDB',
+    'Python',
+    'Flask',
+    'AWS',
+    'Docker',
+    'Git / GitHub',
+    'C',
+    'C++',
+    'Next.js',
+    'TypeScript'
   ];
 
   const styles = {
@@ -66,31 +71,22 @@ const AboutSection = ({ theme }) => {
     },
     skillsGrid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
-      gap: 'clamp(15px, 3vw, 20px)',
-      maxWidth: '900px',
-      margin: '0 auto'
+      gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+      gap: '15px',
+      maxWidth: '700px',
+      margin: '20px auto 0 auto'
     },
     skillCard: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
-      borderRadius: '10px',
-      padding: '18px',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`,
-      transition: 'all 0.3s ease',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '10px',
-      textAlign: 'center'
-    },
-    skillIcon: {
-      fontSize: 'clamp(2rem, 4vw, 2.5rem)',
-      color: '#EAB308'
-    },
-    skillName: {
-      color: isDark ? '#FAFAFA' : '#1A1A1A',
-      fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
-      fontWeight: 500
+      color: '#EAB308',
+      padding: '12px 14px',
+      borderRadius: '8px',
+      textAlign: 'center',
+      fontSize: '14px',
+      fontWeight: 500,
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.3)' : 'rgba(234, 179, 8, 0.4)'}`,
+      cursor: 'default',
+      transition: 'all 0.3s ease'
     },
     educationCard: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
@@ -160,12 +156,10 @@ const AboutSection = ({ theme }) => {
           <div style={styles.aboutCard}>
             <h2 style={styles.aboutHeading}>Full Stack Developer</h2>
             <p style={styles.aboutText}>
-              I'm a passionate full-stack developer with expertise in building modern web applications.
-              I love turning complex problems into simple, beautiful, and intuitive solutions.
+              I'm a Full-Stack Developer who enjoys building modern, scalable, and user-focused web applications that solve real-world problems. I specialize in technologies like React, Node.js, Python, Flask, and MongoDB, and I focus on creating clean interfaces backed by efficient and reliable systems. I enjoy turning ideas into practical products and continuously improving the quality and performance of my work.
             </p>
-            <p style={styles.aboutText}>
-              With experience in both frontend and backend technologies, I create seamless user experiences
-              backed by robust and scalable server-side architectures.
+            <p style={{ ...styles.aboutText, marginTop: '12px' }}>
+              Alongside development, I have a strong interest in Data Analytics, Data Science, and Artificial Intelligence. I'm curious about how data can drive decisions and power intelligent solutions. I'm a hardworking and consistent learner who enjoys exploring new technologies, taking on challenges, and growing every day. My goal is to contribute to impactful projects, gain real-world experience, and evolve into a versatile software engineer capable of building meaningful and intelligent solutions.
             </p>
           </div>
 
@@ -173,22 +167,22 @@ const AboutSection = ({ theme }) => {
             <h2 style={styles.skillsHeading}>Technical Skills</h2>
             <div style={styles.skillsGrid} className="skills-grid">
               {skills.map((skill, index) => (
-                <motion.div
-                  key={skill.name}
+                <div
+                  key={index}
                   style={styles.skillCard}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  viewport={{ once: true }}
-                  whileHover={{ 
-                    scale: 1.1,
-                    boxShadow: '0 0 15px rgba(234, 179, 8, 0.4)',
-                    borderColor: '#EAB308'
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'scale(1.05)';
+                    e.currentTarget.style.backgroundColor = '#EAB308';
+                    e.currentTarget.style.color = '#000';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'scale(1)';
+                    e.currentTarget.style.backgroundColor = isDark ? '#1A1A1A' : '#FFFFFF';
+                    e.currentTarget.style.color = '#EAB308';
                   }}
                 >
-                  <div style={styles.skillIcon}>{skill.icon}</div>
-                  <p style={styles.skillName}>{skill.name}</p>
-                </motion.div>
+                  {skill}
+                </div>
               ))}
             </div>
           </div>
