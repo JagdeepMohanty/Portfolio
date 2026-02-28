@@ -410,12 +410,11 @@ const GitHubSection = ({ theme }) => {
             <GitHubCalendar
               username={username}
               theme={{
-                dark: ['#0C0C0C', '#3a2a00', '#7a5a00', '#EAB308']
+                dark: ['#0C0C0C', '#3a2a00', '#7a5a00', '#b89600', '#EAB308']
               }}
               blockSize={15}
               blockMargin={5}
               fontSize={14}
-              colorScheme="dark"
             />
           </div>
         </motion.div>
