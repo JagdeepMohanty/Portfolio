@@ -1,37 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaStar, FaCode, FaCalendar } from 'react-icons/fa';
-import axios from 'axios';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer
-} from 'recharts';
 import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
-
-const GITHUB_THEME = {
-  dark: [
-    '#0d1117',
-    '#3a2a00',
-    '#7a5a00',
-    '#eab308',
-    '#facc15'
-  ],
-  light: [
-    '#0d1117',
-    '#3a2a00',
-    '#7a5a00',
-    '#eab308',
-    '#facc15'
-  ]
-};
 
 const DoughnutChart = ({ data, isDark, title }) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
@@ -117,25 +90,9 @@ const GitHubSection = ({ theme }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
-  const [contributionData, setContributionData] = useState([]);
-  const [GitHubCalendar, setGitHubCalendar] = useState(null);
 
   const username = 'JagdeepMohanty';
   const isDark = theme === 'dark';
-
-  useEffect(() => {
-    // Dynamically load GitHubCalendar
-    import('react-github-calendar')
-      .then((module) => {
-        const CalendarComponent = module.default || module.GitHubCalendar || module;
-        if (typeof CalendarComponent === 'function' || (CalendarComponent && typeof CalendarComponent.$$typeof !== 'undefined')) {
-          setGitHubCalendar(() => CalendarComponent);
-        }
-      })
-      .catch((error) => {
-        console.warn('Failed to load GitHubCalendar:', error);
-      });
-  }, []);
 
   useEffect(() => {
     const styleSheet = document.createElement('style');
@@ -169,47 +126,16 @@ const GitHubSection = ({ theme }) => {
   useEffect(() => {
     const fetchGitHubData = async () => {
       try {
-        const [profileRes, reposRes, eventsRes] = await Promise.all([
+        const [profileRes, reposRes] = await Promise.all([
           fetch(`https://api.github.com/users/${username}`),
-          fetch(`https://api.github.com/users/${username}/repos?per_page=100`),
-          axios.get(`https://api.github.com/users/${username}/events/public`)
+          fetch(`https://api.github.com/users/${username}/repos?per_page=100`)
         ]);
 
         if (profileRes.ok && reposRes.ok) {
           const profileData = await profileRes.json();
           const reposData = await reposRes.json();
-          const eventsData = eventsRes.data;
           
           setProfile(profileData);
-          
-          // Process contribution data for last 30 days
-          const commitsByDay = {};
-          const last30Days = [];
-          const today = new Date();
-          
-          for (let i = 29; i >= 0; i--) {
-            const date = new Date(today);
-            date.setDate(date.getDate() - i);
-            const dateStr = date.toISOString().split('T')[0];
-            last30Days.push(dateStr);
-            commitsByDay[dateStr] = 0;
-          }
-          
-          eventsData.forEach(event => {
-            if (event.type === 'PushEvent') {
-              const eventDate = event.created_at.split('T')[0];
-              if (commitsByDay.hasOwnProperty(eventDate)) {
-                commitsByDay[eventDate] += event.payload.commits?.length || 1;
-              }
-            }
-          });
-          
-          const chartData = last30Days.map(date => ({
-            date: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-            commits: commitsByDay[date]
-          }));
-          
-          setContributionData(chartData);
           
           const totalStars = reposData.reduce((sum, repo) => sum + repo.stargazers_count, 0);
           const totalCommits = reposData.reduce((sum, repo) => sum + (repo.size || 0), 0);
@@ -467,39 +393,16 @@ const GitHubSection = ({ theme }) => {
             marginBottom: '20px',
             border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`
           }}>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={contributionData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-                <XAxis 
-                  dataKey="date" 
-                  stroke="#FAFAFA"
-                  tick={{ fill: '#FAFAFA', fontSize: 12 }}
-                  interval="preserveStartEnd"
-                />
-                <YAxis 
-                  stroke="#FAFAFA"
-                  tick={{ fill: '#FAFAFA', fontSize: 12 }}
-                  allowDecimals={false}
-                />
-                <Tooltip 
-                  contentStyle={{
-                    background: '#1A1A1A',
-                    border: '1px solid #EAB308',
-                    borderRadius: '8px',
-                    color: '#FAFAFA'
-                  }}
-                  labelStyle={{ color: '#EAB308' }}
-                />
-                <Line 
-                  type="monotone" 
-                  dataKey="commits" 
-                  stroke="#EAB308" 
-                  strokeWidth={3}
-                  dot={{ fill: '#EAB308', r: 4 }}
-                  activeDot={{ r: 6, fill: '#F59E0B', stroke: '#EAB308', strokeWidth: 2 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+            <img 
+              src={`https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=github-dark&bg_color=1A1A1A&color=EAB308&line=F59E0B&point=EAB308&area=true&hide_border=true`}
+              alt="GitHub Contribution Graph"
+              style={{
+                width: '100%',
+                height: 'auto',
+                borderRadius: '8px',
+                display: 'block'
+              }}
+            />
           </div>
         </motion.div>
 
@@ -518,19 +421,16 @@ const GitHubSection = ({ theme }) => {
             marginBottom: 'clamp(25px, 5vw, 40px)',
             overflow: 'auto'
           }}>
-            {GitHubCalendar ? (
-              <GitHubCalendar
-                username={username}
-                theme={GITHUB_THEME}
-                blockSize={14}
-                blockMargin={4}
-                fontSize={14}
-              />
-            ) : (
-              <div style={{ textAlign: 'center', padding: '40px', color: isDark ? '#A3A3A3' : '#666666' }}>
-                Loading contribution calendar...
-              </div>
-            )}
+            <img 
+              src={`https://ghchart.rshah.org/EAB308/${username}`}
+              alt="GitHub Contribution Calendar"
+              style={{
+                width: '100%',
+                height: 'auto',
+                borderRadius: '8px',
+                display: 'block'
+              }}
+            />
           </div>
         </motion.div>
 
