@@ -2,6 +2,16 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaStar, FaCode, FaCalendar, FaFire } from 'react-icons/fa';
 import * as GitHubCalendarModule from 'react-github-calendar';
+import axios from 'axios';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from 'recharts';
 
 const GitHubCalendar = GitHubCalendarModule.default ?? GitHubCalendarModule.GitHubCalendar ?? GitHubCalendarModule;
 
@@ -70,6 +80,7 @@ const GitHubSection = ({ theme }) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
+  const [contributionData, setContributionData] = useState([]);
 
   const username = 'JagdeepMohanty';
   const isDark = theme === 'dark';
@@ -97,16 +108,47 @@ const GitHubSection = ({ theme }) => {
   useEffect(() => {
     const fetchGitHubData = async () => {
       try {
-        const [profileRes, reposRes] = await Promise.all([
+        const [profileRes, reposRes, eventsRes] = await Promise.all([
           fetch(`https://api.github.com/users/${username}`),
-          fetch(`https://api.github.com/users/${username}/repos?per_page=100`)
+          fetch(`https://api.github.com/users/${username}/repos?per_page=100`),
+          axios.get(`https://api.github.com/users/${username}/events/public`)
         ]);
 
         if (profileRes.ok && reposRes.ok) {
           const profileData = await profileRes.json();
           const reposData = await reposRes.json();
+          const eventsData = eventsRes.data;
           
           setProfile(profileData);
+          
+          // Process contribution data for last 30 days
+          const commitsByDay = {};
+          const last30Days = [];
+          const today = new Date();
+          
+          for (let i = 29; i >= 0; i--) {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i);
+            const dateStr = date.toISOString().split('T')[0];
+            last30Days.push(dateStr);
+            commitsByDay[dateStr] = 0;
+          }
+          
+          eventsData.forEach(event => {
+            if (event.type === 'PushEvent') {
+              const eventDate = event.created_at.split('T')[0];
+              if (commitsByDay.hasOwnProperty(eventDate)) {
+                commitsByDay[eventDate] += event.payload.commits?.length || 1;
+              }
+            }
+          });
+          
+          const chartData = last30Days.map(date => ({
+            date: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            commits: commitsByDay[date]
+          }));
+          
+          setContributionData(chartData);
           
           const totalStars = reposData.reduce((sum, repo) => sum + repo.stargazers_count, 0);
           const totalCommits = reposData.reduce((sum, repo) => sum + (repo.size || 0), 0);
@@ -376,27 +418,45 @@ const GitHubSection = ({ theme }) => {
           viewport={{ once: true }}
         >
           <h2 style={styles.subsectionTitle}>Contribution Graph</h2>
-          <div style={styles.contributionGrid}>
-            <div style={styles.contributionCard} className="stat-card-hover">
-              <FaGithub style={styles.statIcon} />
-              <span style={styles.statNumber}>{stats.totalContributions}</span>
-              <span style={styles.statText}>Total Contributions</span>
-            </div>
-            <div style={styles.contributionCard} className="stat-card-hover">
-              <FaFire style={styles.statIcon} />
-              <span style={styles.statNumber}>{stats.currentStreak}</span>
-              <span style={styles.statText}>Current Streak</span>
-            </div>
-            <div style={styles.contributionCard} className="stat-card-hover">
-              <FaCalendar style={styles.statIcon} />
-              <span style={styles.statNumber}>{stats.longestStreak}</span>
-              <span style={styles.statText}>Longest Streak</span>
-            </div>
-            <div style={styles.contributionCard} className="stat-card-hover">
-              <FaStar style={styles.statIcon} />
-              <span style={styles.statNumber}>{new Date().getFullYear()}</span>
-              <span style={styles.statText}>This Year</span>
-            </div>
+          <div style={{
+            background: '#1A1A1A',
+            borderRadius: '12px',
+            padding: '20px',
+            marginBottom: '20px',
+            border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`
+          }}>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={contributionData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                <XAxis 
+                  dataKey="date" 
+                  stroke="#FAFAFA"
+                  tick={{ fill: '#FAFAFA', fontSize: 12 }}
+                  interval="preserveStartEnd"
+                />
+                <YAxis 
+                  stroke="#FAFAFA"
+                  tick={{ fill: '#FAFAFA', fontSize: 12 }}
+                />
+                <Tooltip 
+                  contentStyle={{
+                    background: '#1A1A1A',
+                    border: '1px solid #EAB308',
+                    borderRadius: '8px',
+                    color: '#FAFAFA'
+                  }}
+                  labelStyle={{ color: '#EAB308' }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="commits" 
+                  stroke="#EAB308" 
+                  strokeWidth={3}
+                  dot={{ fill: '#EAB308', r: 4 }}
+                  activeDot={{ r: 6, fill: '#F59E0B', stroke: '#EAB308', strokeWidth: 2 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </motion.div>
 
@@ -407,14 +467,25 @@ const GitHubSection = ({ theme }) => {
           viewport={{ once: true }}
         >
           <h2 style={styles.subsectionTitle}>Contribution Calendar</h2>
-          <div style={styles.calendarContainer}>
+          <div style={{
+            background: '#1A1A1A',
+            padding: '20px',
+            borderRadius: '12px',
+            border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
+            marginBottom: 'clamp(25px, 5vw, 40px)',
+            overflow: 'auto'
+          }}>
             <GitHubCalendar
               username={username}
               theme={{
-                dark: ['#0C0C0C', '#3a2a00', '#7a5a00', '#b89600', '#EAB308']
+                dark: [
+                  '#161B22',
+                  '#EAB308',
+                  '#F59E0B'
+                ]
               }}
-              blockSize={15}
-              blockMargin={5}
+              blockSize={14}
+              blockMargin={4}
               fontSize={14}
             />
           </div>
