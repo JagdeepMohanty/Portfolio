@@ -361,7 +361,7 @@ const GitHubSection = ({ theme }) => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <img src={profile.avatar_url} alt={profile.name} style={styles.avatar} />
+          <img src={profile.avatar_url} alt={profile.name} style={styles.avatar} loading="lazy" decoding="async" />
           <h2 style={styles.profileName}>{profile.name || username}</h2>
           <div style={styles.profileStats}>
             <div style={styles.profileStatItem}>
@@ -396,6 +396,8 @@ const GitHubSection = ({ theme }) => {
             <img 
               src={`https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=github-dark&bg_color=1A1A1A&color=EAB308&line=F59E0B&point=EAB308&area=true&hide_border=true`}
               alt="GitHub Contribution Graph"
+              loading="lazy"
+              decoding="async"
               style={{
                 width: '100%',
                 height: 'auto',
@@ -424,6 +426,8 @@ const GitHubSection = ({ theme }) => {
             <img 
               src={`https://ghchart.rshah.org/EAB308/${username}`}
               alt="GitHub Contribution Calendar"
+              loading="lazy"
+              decoding="async"
               style={{
                 width: '100%',
                 height: 'auto',

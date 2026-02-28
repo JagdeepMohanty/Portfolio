@@ -76,8 +76,8 @@ const ProjectCard = ({ project, theme }) => {
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
       whileHover={{ 
-        scale: 1.02,
-        boxShadow: '0 0 15px rgba(234, 179, 8, 0.4)',
+        scale: 1.03,
+        boxShadow: '0 0 20px rgba(234, 179, 8, 0.5)',
         borderColor: '#EAB308'
       }}
     >

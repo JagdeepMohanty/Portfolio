@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import HomeSection from './components/sections/HomeSection';
-import AboutSection from './components/sections/AboutSection';
-import ProjectsSection from './components/sections/ProjectsSection';
-import CertificatesSection from './components/sections/CertificatesSection';
-import GitHubSection from './components/sections/GitHubSection';
-import ContactSection from './components/sections/ContactSection';
+import LoadingScreen from './components/LoadingScreen';
+
+const HomeSection = lazy(() => import('./components/sections/HomeSection'));
+const AboutSection = lazy(() => import('./components/sections/AboutSection'));
+const ProjectsSection = lazy(() => import('./components/sections/ProjectsSection'));
+const CertificatesSection = lazy(() => import('./components/sections/CertificatesSection'));
+const GitHubSection = lazy(() => import('./components/sections/GitHubSection'));
+const ContactSection = lazy(() => import('./components/sections/ContactSection'));
 
 function App() {
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -70,14 +72,16 @@ function App() {
         }
       `}</style>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <main style={{ paddingTop: '60px' }}>
-        <HomeSection theme={theme} />
-        <AboutSection theme={theme} />
-        <ProjectsSection theme={theme} />
-        <CertificatesSection theme={theme} />
-        <GitHubSection theme={theme} />
-        <ContactSection theme={theme} />
-      </main>
+      <Suspense fallback={<LoadingScreen />}>
+        <main style={{ paddingTop: '60px' }}>
+          <HomeSection theme={theme} />
+          <AboutSection theme={theme} />
+          <ProjectsSection theme={theme} />
+          <CertificatesSection theme={theme} />
+          <GitHubSection theme={theme} />
+          <ContactSection theme={theme} />
+        </main>
+      </Suspense>
       <Footer theme={theme} />
       
       <button
@@ -85,8 +89,8 @@ function App() {
           position: 'fixed',
           bottom: 'clamp(20px, 4vw, 30px)',
           right: 'clamp(20px, 4vw, 30px)',
-          width: 'clamp(45px, 8vw, 50px)',
-          height: 'clamp(45px, 8vw, 50px)',
+          width: 'clamp(50px, 8vw, 55px)',
+          height: 'clamp(50px, 8vw, 55px)',
           background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
           color: '#0C0C0C',
           border: 'none',
@@ -95,19 +99,19 @@ function App() {
           alignItems: 'center',
           justifyContent: 'center',
           cursor: 'pointer',
-          fontSize: 'clamp(18px, 3vw, 20px)',
+          fontSize: 'clamp(20px, 3vw, 22px)',
           transition: 'all 0.3s ease',
           zIndex: 999,
-          boxShadow: '0 4px 15px rgba(234, 179, 8, 0.4)'
+          boxShadow: '0 4px 20px rgba(234, 179, 8, 0.5)'
         }}
         onClick={scrollToTop}
         onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'scale(1.1)';
-          e.currentTarget.style.boxShadow = '0 6px 20px rgba(234, 179, 8, 0.6)';
+          e.currentTarget.style.transform = 'scale(1.15) translateY(-3px)';
+          e.currentTarget.style.boxShadow = '0 8px 30px rgba(234, 179, 8, 0.7)';
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.boxShadow = '0 4px 15px rgba(234, 179, 8, 0.4)';
+          e.currentTarget.style.boxShadow = '0 4px 20px rgba(234, 179, 8, 0.5)';
         }}
         aria-label="Back to top"
       >
