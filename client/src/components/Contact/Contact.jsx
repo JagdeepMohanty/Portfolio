@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaUser, FaPaperPlane } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaUser, FaComment } from 'react-icons/fa';
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -20,167 +19,212 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" style={styles.section}>
-      <style>{internalCSS}</style>
-      
-      <div style={styles.container}>
-        <motion.div
-          style={styles.header}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <h1 style={styles.heading}>Get In Touch</h1>
-          <p style={styles.subheading}>
-            Have a project, opportunity, or idea? Let's connect and build something impactful.
-          </p>
-        </motion.div>
+    <>
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes successFade {
+          0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+          10% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          90% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
 
-        <motion.div
-          style={styles.layout}
-          className="contact-layout"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          {/* Left Side - Contact Info Card */}
-          <div style={styles.card}>
-            <div style={styles.infoContainer}>
-              <a href="mailto:jagdeep@email.com" style={styles.infoItem} className="info-item">
-                <FaEnvelope style={styles.icon} />
-                <div style={styles.infoText}>
-                  <span style={styles.label}>Email</span>
-                  <span style={styles.value}>jagdeep@email.com</span>
-                </div>
-              </a>
+        .contact-section {
+          animation: fadeIn 0.8s ease-out;
+        }
 
-              <a
-                href="https://github.com/JagdeepMohanty"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={styles.infoItem}
-                className="info-item"
-              >
-                <FaGithub style={styles.icon} />
-                <div style={styles.infoText}>
-                  <span style={styles.label}>GitHub</span>
-                  <span style={styles.value}>github.com/jagdeep</span>
-                </div>
-              </a>
+        .info-item:hover {
+          background: rgba(59, 130, 246, 0.1) !important;
+          border-color: rgba(59, 130, 246, 0.3) !important;
+          box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+          transform: translateX(5px);
+        }
 
-              <a
-                href="https://linkedin.com/in/jagdeep"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={styles.infoItem}
-                className="info-item"
-              >
-                <FaLinkedin style={styles.icon} />
-                <div style={styles.infoText}>
-                  <span style={styles.label}>LinkedIn</span>
-                  <span style={styles.value}>linkedin.com/in/jagdeep</span>
-                </div>
-              </a>
+        .contact-input:focus {
+          border-color: #3b82f6 !important;
+          box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
+        }
 
-              <div style={styles.infoItem} className="info-item">
-                <FaMapMarkerAlt style={styles.icon} />
-                <div style={styles.infoText}>
-                  <span style={styles.label}>Location</span>
-                  <span style={styles.value}>India</span>
+        .submit-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .submit-btn:active {
+          transform: translateY(0);
+        }
+
+        .social-icon:hover {
+          transform: scale(1.15);
+          box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+          border-color: #3b82f6;
+        }
+
+        .success-message {
+          animation: successFade 3s ease-out forwards;
+        }
+
+        @media (max-width: 1024px) {
+          .contact-layout {
+            flex-direction: column !important;
+            gap: 20px !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .contact-section {
+            padding: 40px 15px !important;
+          }
+        }
+      `}</style>
+
+      <section id="contact" className="contact-section" style={styles.section}>
+        <div style={styles.container}>
+          <div style={styles.header}>
+            <h1 style={styles.heading}>Get In Touch</h1>
+            <p style={styles.subheading}>
+              Have a project, opportunity, or idea? Let's connect and build something impactful.
+            </p>
+          </div>
+
+          <div className="contact-layout" style={styles.layout}>
+            {/* Left Side - Contact Info Card */}
+            <div style={styles.card}>
+              <div style={styles.infoContainer}>
+                <a href="mailto:jagdeepmohanty1807@email.com" className="info-item" style={styles.infoItem}>
+                  <FaEnvelope style={styles.icon} />
+                  <div style={styles.infoText}>
+                    <span style={styles.label}>Email</span>
+                    <span style={styles.value}>jagdeepmohanty1807@email.com</span>
+                  </div>
+                </a>
+
+                <a
+                  href="https://github.com/JagdeepMohanty"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="info-item"
+                  style={styles.infoItem}
+                >
+                  <FaGithub style={styles.icon} />
+                  <div style={styles.infoText}>
+                    <span style={styles.label}>GitHub</span>
+                    <span style={styles.value}>github.com/JagdeepMohanty</span>
+                  </div>
+                </a>
+
+                <a
+                  href="https://www.linkedin.com/in/jagdeepmohanty"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="info-item"
+                  style={styles.infoItem}
+                >
+                  <FaLinkedin style={styles.icon} />
+                  <div style={styles.infoText}>
+                    <span style={styles.label}>LinkedIn</span>
+                    <span style={styles.value}>linkedin.com/in/jagdeepmohanty</span>
+                  </div>
+                </a>
+
+                <div className="info-item" style={styles.infoItem}>
+                  <FaMapMarkerAlt style={styles.icon} />
+                  <div style={styles.infoText}>
+                    <span style={styles.label}>Location</span>
+                    <span style={styles.value}>India</span>
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Right Side - Contact Form Card */}
+            <div style={{ ...styles.card, position: 'relative' }}>
+              {isSubmitted && (
+                <div className="success-message" style={styles.successMessage}>
+                  ✓ Message sent successfully!
+                </div>
+              )}
+
+              <form style={styles.form} onSubmit={handleSubmit}>
+                <div style={styles.inputGroup}>
+                  <FaUser style={styles.inputIcon} />
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="contact-input"
+                    style={styles.input}
+                  />
+                </div>
+
+                <div style={styles.inputGroup}>
+                  <FaEnvelope style={styles.inputIcon} />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Your Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="contact-input"
+                    style={styles.input}
+                  />
+                </div>
+
+                <div style={styles.inputGroup}>
+                  <FaComment style={styles.textareaIcon} />
+                  <textarea
+                    name="message"
+                    placeholder="Your Message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    className="contact-input"
+                    style={styles.textarea}
+                  />
+                </div>
+
+                <button type="submit" className="submit-btn" style={styles.button}>
+                  Send Message
+                </button>
+              </form>
+            </div>
           </div>
 
-          {/* Right Side - Contact Form Card */}
-          <div style={{ ...styles.card, position: 'relative' }}>
-            {isSubmitted && (
-              <div style={styles.successMessage} className="success-message">
-                ✓ Message sent successfully!
-              </div>
-            )}
-
-            <form style={styles.form} onSubmit={handleSubmit}>
-              <div style={styles.inputGroup}>
-                <FaUser style={styles.inputIcon} />
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Your Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  style={styles.input}
-                  className="contact-input"
-                />
-              </div>
-
-              <div style={styles.inputGroup}>
-                <FaEnvelope style={styles.inputIcon} />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Your Email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  style={styles.input}
-                  className="contact-input"
-                />
-              </div>
-
-              <div style={styles.inputGroup}>
-                <FaPaperPlane style={styles.textareaIcon} />
-                <textarea
-                  name="message"
-                  placeholder="Your Message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  style={styles.textarea}
-                  className="contact-input"
-                />
-              </div>
-
-              <button type="submit" style={styles.button} className="submit-btn">
-                <FaPaperPlane />
-                Send Message
-              </button>
-            </form>
+          {/* Bottom Social Icons Row */}
+          <div style={styles.socialRow}>
+            <a
+              href="https://github.com/JagdeepMohanty"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-icon"
+              style={styles.socialIcon}
+            >
+              <FaGithub />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/jagdeepmohanty"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-icon"
+              style={styles.socialIcon}
+            >
+              <FaLinkedin />
+            </a>
+            <a href="mailto:jagdeepmohanty1807@email.com" className="social-icon" style={styles.socialIcon}>
+              <FaEnvelope />
+            </a>
           </div>
-        </motion.div>
-
-        {/* Bottom Social Icons Row */}
-        <motion.div
-          style={styles.socialRow}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <a
-            href="https://github.com/JagdeepMohanty"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={styles.socialIcon}
-            className="social-icon"
-          >
-            <FaGithub />
-          </a>
-          <a
-            href="https://linkedin.com/in/jagdeep"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={styles.socialIcon}
-            className="social-icon"
-          >
-            <FaLinkedin />
-          </a>
-          <a href="mailto:jagdeep@email.com" style={styles.socialIcon} className="social-icon">
-            <FaEnvelope />
-          </a>
-        </motion.div>
-      </div>
-    </section>
+        </div>
+      </section>
+    </>
   );
 };
 
@@ -219,12 +263,12 @@ const styles = {
     margin: '0 auto'
   },
   layout: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
+    display: 'flex',
     gap: '30px',
     marginBottom: '50px'
   },
   card: {
+    flex: 1,
     background: 'rgba(17, 24, 39, 0.6)',
     backdropFilter: 'blur(10px)',
     WebkitBackdropFilter: 'blur(10px)',
@@ -334,11 +378,7 @@ const styles = {
     fontSize: '16px',
     fontWeight: 600,
     cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '10px'
+    transition: 'all 0.3s ease'
   },
   successMessage: {
     position: 'absolute',
@@ -381,64 +421,5 @@ const styles = {
     textDecoration: 'none'
   }
 };
-
-const internalCSS = `
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes successFade {
-    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-    10% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    90% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-  }
-
-  .info-item:hover {
-    background: rgba(59, 130, 246, 0.1) !important;
-    border-color: rgba(59, 130, 246, 0.3) !important;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
-    transform: translateX(5px);
-  }
-
-  .contact-input:focus {
-    border-color: #3b82f6 !important;
-    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3) !important;
-  }
-
-  .submit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
-  }
-
-  .submit-btn:active {
-    transform: translateY(0);
-  }
-
-  .social-icon:hover {
-    transform: scale(1.15);
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-    border-color: #3b82f6;
-  }
-
-  .success-message {
-    animation: successFade 3s ease-out forwards;
-  }
-
-  @media (max-width: 1024px) {
-    .contact-layout {
-      grid-template-columns: 1fr !important;
-      gap: 20px !important;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .contact-layout {
-      grid-template-columns: 1fr !important;
-      gap: 20px !important;
-    }
-  }
-`;
 
 export default Contact;
