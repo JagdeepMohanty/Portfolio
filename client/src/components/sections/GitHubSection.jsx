@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaStar, FaCode, FaCalendar, FaFire } from 'react-icons/fa';
+import { FaGithub, FaStar, FaCode, FaCalendar } from 'react-icons/fa';
 import axios from 'axios';
 import {
   LineChart,
@@ -11,6 +11,10 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts';
+import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+
+ChartJS.register(ArcElement, ChartTooltip, Legend);
 
 const GITHUB_THEME = {
   dark: [
@@ -29,78 +33,81 @@ const GITHUB_THEME = {
   ]
 };
 
-const PieChart = ({ data, isDark }) => {
+const DoughnutChart = ({ data, isDark, title }) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '40px', color: isDark ? '#A3A3A3' : '#666666' }}>
+      <div style={{ textAlign: 'center', padding: '20px', color: isDark ? '#A3A3A3' : '#666666', fontSize: '14px' }}>
         No data available
       </div>
     );
   }
 
-  const total = data.reduce((sum, [, value]) => sum + value, 0);
-  if (total === 0) {
-    return (
-      <div style={{ textAlign: 'center', padding: '40px', color: isDark ? '#A3A3A3' : '#666666' }}>
-        No data available
-      </div>
-    );
-  }
+  const chartData = {
+    labels: data.map(([label]) => label),
+    datasets: [
+      {
+        data: data.map(([, value]) => value),
+        backgroundColor: ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'],
+        borderColor: isDark ? '#0C0C0C' : '#FFFFFF',
+        borderWidth: 2
+      }
+    ]
+  };
 
-  const colors = ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'];
-  
-  let currentAngle = -90;
-  const slices = data.map(([label, value], index) => {
-    const percentage = (value / total) * 100;
-    const angle = (percentage / 100) * 360;
-    const startAngle = currentAngle;
-    const endAngle = currentAngle + angle;
-    
-    const startRad = (startAngle * Math.PI) / 180;
-    const endRad = (endAngle * Math.PI) / 180;
-    
-    const x1 = 100 + 80 * Math.cos(startRad);
-    const y1 = 100 + 80 * Math.sin(startRad);
-    const x2 = 100 + 80 * Math.cos(endRad);
-    const y2 = 100 + 80 * Math.sin(endRad);
-    
-    const largeArc = angle > 180 ? 1 : 0;
-    
-    const pathData = `M 100 100 L ${x1} ${y1} A 80 80 0 ${largeArc} 1 ${x2} ${y2} Z`;
-    
-    currentAngle = endAngle;
-    
-    return {
-      path: pathData,
-      color: colors[index % colors.length],
-      label,
-      value,
-      percentage: percentage.toFixed(1)
-    };
-  });
+  const options = {
+    cutout: '70%',
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        backgroundColor: '#1A1A1A',
+        titleColor: '#EAB308',
+        bodyColor: '#FAFAFA',
+        borderColor: '#EAB308',
+        borderWidth: 1
+      }
+    },
+    maintainAspectRatio: false
+  };
 
   return (
-    <div style={{ textAlign: 'center' }}>
-      <svg width="200" height="200" viewBox="0 0 200 200" style={{ margin: '0 auto', display: 'block' }}>
-        {slices.map((slice, index) => (
-          <path
-            key={index}
-            d={slice.path}
-            fill={slice.color}
-            stroke={isDark ? '#0C0C0C' : '#FFFFFF'}
-            strokeWidth="2"
-          />
-        ))}
-      </svg>
-      <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {slices.map((slice, index) => (
-          <div key={index} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)' }}>
-            <div style={{ width: '16px', height: '16px', background: slice.color, borderRadius: '3px' }}></div>
-            <span style={{ color: isDark ? '#FAFAFA' : '#1A1A1A', fontWeight: 500 }}>
-              {slice.label}: {slice.value} ({slice.percentage}%)
-            </span>
+    <div style={{ 
+      background: isDark ? '#1A1A1A' : '#FFFFFF',
+      borderRadius: '12px',
+      padding: '20px',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
+      height: '200px'
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', height: '100%' }} className="doughnut-chart-container">
+        <div style={{ flex: 1 }}>
+          <h3 style={{ 
+            fontSize: 'clamp(1rem, 2.5vw, 1.1rem)', 
+            color: '#EAB308', 
+            marginBottom: '15px',
+            fontWeight: 600
+          }}>
+            {title}
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {data.slice(0, 3).map(([label, value], index) => (
+              <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
+                <div style={{ 
+                  width: '12px', 
+                  height: '12px', 
+                  background: ['#EAB308', '#F59E0B', '#FCD34D'][index], 
+                  borderRadius: '3px' 
+                }}></div>
+                <span style={{ color: isDark ? '#FAFAFA' : '#1A1A1A', fontWeight: 500 }}>
+                  {label}: {value}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+        <div style={{ width: '140px', height: '140px', flexShrink: 0 }}>
+          <Doughnut data={chartData} options={options} />
+        </div>
       </div>
     </div>
   );
@@ -141,6 +148,15 @@ const GitHubSection = ({ theme }) => {
         transform: translateY(-5px);
         box-shadow: 0 8px 25px rgba(234, 179, 8, 0.4);
         border-color: #EAB308;
+      }
+      @media (max-width: 768px) {
+        .doughnut-chart-container {
+          flex-direction: column !important;
+          text-align: center;
+        }
+        .doughnut-chart-wrapper {
+          margin: 0 auto;
+        }
       }
     `;
     document.head.appendChild(styleSheet);
@@ -271,59 +287,50 @@ const GitHubSection = ({ theme }) => {
     profileCard: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '12px',
-      padding: '16px',
+      padding: '30px 20px',
       border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       marginBottom: 'clamp(25px, 5vw, 40px)',
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      minHeight: '100px',
-      gap: '20px',
-      flexWrap: 'wrap',
+      textAlign: 'center',
       transition: 'all 0.3s ease'
     },
-    profileLeft: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '10px'
-    },
     avatar: {
-      width: '80px',
-      height: '80px',
+      width: '100px',
+      height: '100px',
       borderRadius: '50%',
       border: '3px solid #EAB308',
-      boxShadow: '0 0 15px rgba(234, 179, 8, 0.3)'
+      boxShadow: '0 0 15px rgba(234, 179, 8, 0.3)',
+      marginBottom: '15px'
     },
     profileName: {
-      fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
+      fontSize: 'clamp(1.1rem, 2.5vw, 1.3rem)',
       color: '#EAB308',
       fontWeight: 700,
-      margin: 0
+      margin: '0 0 20px 0'
     },
-    profileRight: {
+    profileStats: {
+      display: 'flex',
+      gap: '30px',
+      justifyContent: 'center',
+      flexWrap: 'wrap'
+    },
+    profileStatItem: {
       display: 'flex',
       flexDirection: 'column',
-      gap: '6px',
-      flex: 1,
-      minWidth: '200px'
+      alignItems: 'center'
     },
-    profileStatRow: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '4px 0'
+    statValue: {
+      fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)',
+      color: '#EAB308',
+      fontWeight: 700,
+      marginBottom: '5px'
     },
     statLabel: {
       fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)',
       color: isDark ? '#A3A3A3' : '#666666',
       fontWeight: 500
-    },
-    statValue: {
-      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-      color: '#EAB308',
-      fontWeight: 700
     },
     subsectionTitle: {
       fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
@@ -384,20 +391,12 @@ const GitHubSection = ({ theme }) => {
       color: isDark ? '#FAFAFA' : '#1A1A1A',
       fontWeight: 500
     },
-    pieChartsContainer: {
-      display: 'flex',
-      gap: '20px',
-      flexWrap: 'wrap',
+    languagesGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))',
+      gap: 'clamp(15px, 3vw, 20px)',
       marginBottom: 'clamp(30px, 5vw, 40px)'
     },
-    pieChartCard: {
-      background: isDark ? '#1A1A1A' : '#FFFFFF',
-      padding: '20px',
-      borderRadius: '12px',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
-      flex: 1,
-      minWidth: '300px'
-    }
   };
 
   if (loading) {
@@ -436,22 +435,20 @@ const GitHubSection = ({ theme }) => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <div style={styles.profileLeft}>
-            <img src={profile.avatar_url} alt={profile.name} style={styles.avatar} />
-            <h2 style={styles.profileName}>{profile.name || username}</h2>
-          </div>
-          <div style={styles.profileRight}>
-            <div style={styles.profileStatRow}>
-              <span style={styles.statLabel}>Followers:</span>
+          <img src={profile.avatar_url} alt={profile.name} style={styles.avatar} />
+          <h2 style={styles.profileName}>{profile.name || username}</h2>
+          <div style={styles.profileStats}>
+            <div style={styles.profileStatItem}>
               <span style={styles.statValue}>{profile.followers}</span>
+              <span style={styles.statLabel}>Followers</span>
             </div>
-            <div style={styles.profileStatRow}>
-              <span style={styles.statLabel}>Following:</span>
+            <div style={styles.profileStatItem}>
               <span style={styles.statValue}>{profile.following}</span>
+              <span style={styles.statLabel}>Following</span>
             </div>
-            <div style={styles.profileStatRow}>
-              <span style={styles.statLabel}>Repositories:</span>
+            <div style={styles.profileStatItem}>
               <span style={styles.statValue}>{profile.public_repos}</span>
+              <span style={styles.statLabel}>Repositories</span>
             </div>
           </div>
         </motion.div>
@@ -575,22 +572,20 @@ const GitHubSection = ({ theme }) => {
           viewport={{ once: true }}
         >
           <h2 style={styles.subsectionTitle}>Top Languages</h2>
-          <div style={styles.pieChartsContainer}>
+          <div style={styles.languagesGrid}>
             {stats.languageCounts && stats.languageCounts.length > 0 && (
-              <div style={styles.pieChartCard}>
-                <h3 style={{ fontSize: 'clamp(1rem, 2.5vw, 1.2rem)', color: '#EAB308', marginBottom: '20px', textAlign: 'center' }}>
-                  By Repository Count
-                </h3>
-                <PieChart data={stats.languageCounts} isDark={isDark} />
-              </div>
+              <DoughnutChart 
+                data={stats.languageCounts} 
+                isDark={isDark} 
+                title="By Repository Count"
+              />
             )}
             {stats.languageActivity && stats.languageActivity.length > 0 && (
-              <div style={styles.pieChartCard}>
-                <h3 style={{ fontSize: 'clamp(1rem, 2.5vw, 1.2rem)', color: '#EAB308', marginBottom: '20px', textAlign: 'center' }}>
-                  By Commit Activity
-                </h3>
-                <PieChart data={stats.languageActivity} isDark={isDark} />
-              </div>
+              <DoughnutChart 
+                data={stats.languageActivity} 
+                isDark={isDark} 
+                title="By Commit Activity"
+              />
             )}
           </div>
         </motion.div>
