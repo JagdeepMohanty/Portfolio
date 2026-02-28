@@ -181,7 +181,7 @@ const GitHubSection = ({ theme }) => {
         }
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching GitHub data:', error);
+        // Silently handle error in production
         setLoading(false);
       }
     };

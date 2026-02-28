@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FaWhatsapp, FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
 const ContactSection = ({ theme }) => {
   const isDark = theme === 'dark';
@@ -146,17 +146,10 @@ const ContactSection = ({ theme }) => {
 
   const contactOptions = [
     {
-      icon: FaWhatsapp,
-      label: 'WhatsApp',
-      info: '+91 YOUR_NUMBER',
-      link: 'https://wa.me/YOUR_NUMBER',
-      color: '#25D366'
-    },
-    {
       icon: FaLinkedin,
       label: 'LinkedIn',
       info: 'Connect with me',
-      link: 'https://linkedin.com/in/jagdeep-mohanty',
+      link: 'https://www.linkedin.com/in/jagdeepmohanty',
       color: '#0A66C2'
     },
     {
@@ -168,9 +161,9 @@ const ContactSection = ({ theme }) => {
     },
     {
       icon: FaEnvelope,
-      label: 'Gmail',
-      info: 'your.email@gmail.com',
-      link: 'mailto:your.email@gmail.com',
+      label: 'Email',
+      info: 'jagdeepmohanty1807@gmail.com',
+      link: 'mailto:jagdeepmohanty1807@gmail.com',
       color: '#EA4335'
     }
   ];
@@ -180,7 +173,7 @@ const ContactSection = ({ theme }) => {
       <div style={styles.container}>
         <h1 style={styles.title}>Get In Touch</h1>
         <p style={styles.subtitle}>
-          Let's connect and discuss opportunities. I'm always ready to collaborate and open to new projects.
+          Have a project, opportunity, or idea? Let’s connect and build something impactful.
         </p>
 
         <motion.div
