@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaStar, FaCode, FaCalendar, FaFire } from 'react-icons/fa';
-import * as GitHubCalendarModule from 'react-github-calendar';
+import * as GitHubCalendarPkg from 'react-github-calendar';
 import axios from 'axios';
 import {
   LineChart,
@@ -13,7 +13,17 @@ import {
   ResponsiveContainer
 } from 'recharts';
 
-const GitHubCalendar = GitHubCalendarModule.default ?? GitHubCalendarModule.GitHubCalendar ?? GitHubCalendarModule;
+const GitHubCalendar = GitHubCalendarPkg.default || GitHubCalendarPkg;
+
+const GITHUB_CALENDAR_THEME = {
+  dark: [
+    '#161B22',  // no contribution
+    '#3A2A00',  // level 1
+    '#7A5A00',  // level 2
+    '#EAB308',  // level 3
+    '#F59E0B'   // level 4
+  ]
+};
 
 const PieChart = ({ data, isDark }) => {
   const total = data.reduce((sum, [, value]) => sum + value, 0);
@@ -477,18 +487,10 @@ const GitHubSection = ({ theme }) => {
           }}>
             <GitHubCalendar
               username={username}
-              theme={{
-                dark: [
-                  '#161B22',
-                  '#5A3E00',
-                  '#EAB308',
-                  '#F59E0B'
-                ]
-              }}
+              theme={GITHUB_CALENDAR_THEME}
               blockSize={14}
               blockMargin={4}
               fontSize={14}
-              maxLevel={3}
             />
           </div>
         </motion.div>
