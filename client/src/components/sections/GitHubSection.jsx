@@ -480,6 +480,7 @@ const GitHubSection = ({ theme }) => {
               theme={{
                 dark: [
                   '#161B22',
+                  '#5A3E00',
                   '#EAB308',
                   '#F59E0B'
                 ]
@@ -487,6 +488,7 @@ const GitHubSection = ({ theme }) => {
               blockSize={14}
               blockMargin={4}
               fontSize={14}
+              maxLevel={3}
             />
           </div>
         </motion.div>
