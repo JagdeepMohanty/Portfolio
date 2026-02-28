@@ -99,10 +99,11 @@ const HomeSection = ({ theme }) => {
           <h1 style={styles.heroTitle}>
             Hi, I'm <span style={styles.highlight}>Jagdeep Mohanty</span>
           </h1>
-          <h2 style={styles.heroSubtitle}>Full Stack Developer</h2>
+          <h2 style={styles.heroSubtitle}>Software Engineer</h2>
           <p style={styles.heroDescription}>
-            I build exceptional digital experiences with modern web technologies.
-            Passionate about creating elegant solutions to complex problems.
+            Engineering full-stack web solutions with performance and precision.
+            <br />
+            Analyzing data to uncover patterns that create real business value.
           </p>
           <div style={styles.heroButtons}>
             <a 

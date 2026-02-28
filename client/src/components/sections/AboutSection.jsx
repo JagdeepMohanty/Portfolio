@@ -1,25 +1,27 @@
 import { motion } from 'framer-motion';
+import { FaHtml5, FaCss3Alt, FaReact, FaJs, FaNodeJs, FaDatabase, FaPython, FaAws, FaDocker, FaGitAlt } from 'react-icons/fa';
+import { SiMongodb, SiFlask, SiNextdotjs, SiTypescript, SiC, SiCplusplus } from 'react-icons/si';
 
 const AboutSection = ({ theme }) => {
   const isDark = theme === 'dark';
 
   const skills = [
-    'HTML',
-    'CSS',
-    'React',
-    'JavaScript',
-    'Node.js',
-    'SQL',
-    'MongoDB',
-    'Python',
-    'Flask',
-    'AWS',
-    'Docker',
-    'Git / GitHub',
-    'C',
-    'C++',
-    'Next.js',
-    'TypeScript'
+    { name: 'HTML', icon: FaHtml5 },
+    { name: 'CSS', icon: FaCss3Alt },
+    { name: 'React', icon: FaReact },
+    { name: 'JavaScript', icon: FaJs },
+    { name: 'Node.js', icon: FaNodeJs },
+    { name: 'SQL', icon: FaDatabase },
+    { name: 'MongoDB', icon: SiMongodb },
+    { name: 'Python', icon: FaPython },
+    { name: 'Flask', icon: SiFlask },
+    { name: 'AWS', icon: FaAws },
+    { name: 'Docker', icon: FaDocker },
+    { name: 'Git / GitHub', icon: FaGitAlt },
+    { name: 'C', icon: SiC },
+    { name: 'C++', icon: SiCplusplus },
+    { name: 'Next.js', icon: SiNextdotjs },
+    { name: 'TypeScript', icon: SiTypescript }
   ];
 
   const styles = {
@@ -86,7 +88,15 @@ const AboutSection = ({ theme }) => {
       fontWeight: 500,
       border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.3)' : 'rgba(234, 179, 8, 0.4)'}`,
       cursor: 'default',
-      transition: 'all 0.3s ease'
+      transition: 'all 0.3s ease',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '8px'
+    },
+    skillIcon: {
+      fontSize: '28px',
+      color: '#EAB308'
     },
     educationCard: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
@@ -154,7 +164,7 @@ const AboutSection = ({ theme }) => {
           viewport={{ once: true }}
         >
           <div style={styles.aboutCard}>
-            <h2 style={styles.aboutHeading}>Full Stack Developer</h2>
+            <h2 style={styles.aboutHeading}>Software Engineer</h2>
             <p style={styles.aboutText}>
               I'm a Full-Stack Developer who enjoys building modern, scalable, and user-focused web applications that solve real-world problems. I specialize in technologies like React, Node.js, Python, Flask, and MongoDB, and I focus on creating clean interfaces backed by efficient and reliable systems. I enjoy turning ideas into practical products and continuously improving the quality and performance of my work.
             </p>
@@ -166,24 +176,32 @@ const AboutSection = ({ theme }) => {
           <div style={styles.skillsSection}>
             <h2 style={styles.skillsHeading}>Technical Skills</h2>
             <div style={styles.skillsGrid} className="skills-grid">
-              {skills.map((skill, index) => (
-                <div
-                  key={index}
-                  style={styles.skillCard}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.05)';
-                    e.currentTarget.style.backgroundColor = '#EAB308';
-                    e.currentTarget.style.color = '#000';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)';
-                    e.currentTarget.style.backgroundColor = isDark ? '#1A1A1A' : '#FFFFFF';
-                    e.currentTarget.style.color = '#EAB308';
-                  }}
-                >
-                  {skill}
-                </div>
-              ))}
+              {skills.map((skill, index) => {
+                const IconComponent = skill.icon;
+                return (
+                  <div
+                    key={index}
+                    style={styles.skillCard}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.05)';
+                      e.currentTarget.style.backgroundColor = '#EAB308';
+                      e.currentTarget.style.color = '#000';
+                      const icon = e.currentTarget.querySelector('.skill-icon');
+                      if (icon) icon.style.color = '#000';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)';
+                      e.currentTarget.style.backgroundColor = isDark ? '#1A1A1A' : '#FFFFFF';
+                      e.currentTarget.style.color = '#EAB308';
+                      const icon = e.currentTarget.querySelector('.skill-icon');
+                      if (icon) icon.style.color = '#EAB308';
+                    }}
+                  >
+                    <IconComponent className="skill-icon" style={styles.skillIcon} />
+                    <span>{skill.name}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
