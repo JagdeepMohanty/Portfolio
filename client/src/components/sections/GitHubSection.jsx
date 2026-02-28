@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaStar, FaCode, FaCalendar, FaFire } from 'react-icons/fa';
-import * as GitHubCalendarPkg from 'react-github-calendar';
 import axios from 'axios';
 import {
   LineChart,
@@ -13,15 +12,13 @@ import {
   ResponsiveContainer
 } from 'recharts';
 
-const GitHubCalendar = GitHubCalendarPkg.default || GitHubCalendarPkg;
-
 const GITHUB_THEME = {
   dark: [
-    '#0d1117',  // level 0
-    '#3a2a00',  // level 1
-    '#7a5a00',  // level 2
-    '#eab308',  // level 3
-    '#facc15'   // level 4
+    '#0d1117',
+    '#3a2a00',
+    '#7a5a00',
+    '#eab308',
+    '#facc15'
   ],
   light: [
     '#0d1117',
@@ -33,7 +30,23 @@ const GITHUB_THEME = {
 };
 
 const PieChart = ({ data, isDark }) => {
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    return (
+      <div style={{ textAlign: 'center', padding: '40px', color: isDark ? '#A3A3A3' : '#666666' }}>
+        No data available
+      </div>
+    );
+  }
+
   const total = data.reduce((sum, [, value]) => sum + value, 0);
+  if (total === 0) {
+    return (
+      <div style={{ textAlign: 'center', padding: '40px', color: isDark ? '#A3A3A3' : '#666666' }}>
+        No data available
+      </div>
+    );
+  }
+
   const colors = ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'];
   
   let currentAngle = -90;
@@ -98,9 +111,24 @@ const GitHubSection = ({ theme }) => {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
   const [contributionData, setContributionData] = useState([]);
+  const [GitHubCalendar, setGitHubCalendar] = useState(null);
 
   const username = 'JagdeepMohanty';
   const isDark = theme === 'dark';
+
+  useEffect(() => {
+    // Dynamically load GitHubCalendar
+    import('react-github-calendar')
+      .then((module) => {
+        const CalendarComponent = module.default || module.GitHubCalendar || module;
+        if (typeof CalendarComponent === 'function' || (CalendarComponent && typeof CalendarComponent.$$typeof !== 'undefined')) {
+          setGitHubCalendar(() => CalendarComponent);
+        }
+      })
+      .catch((error) => {
+        console.warn('Failed to load GitHubCalendar:', error);
+      });
+  }, []);
 
   useEffect(() => {
     const styleSheet = document.createElement('style');
@@ -454,6 +482,7 @@ const GitHubSection = ({ theme }) => {
                 <YAxis 
                   stroke="#FAFAFA"
                   tick={{ fill: '#FAFAFA', fontSize: 12 }}
+                  allowDecimals={false}
                 />
                 <Tooltip 
                   contentStyle={{
@@ -492,13 +521,19 @@ const GitHubSection = ({ theme }) => {
             marginBottom: 'clamp(25px, 5vw, 40px)',
             overflow: 'auto'
           }}>
-            <GitHubCalendar
-              username={username}
-              theme={GITHUB_THEME}
-              blockSize={14}
-              blockMargin={4}
-              fontSize={14}
-            />
+            {GitHubCalendar ? (
+              <GitHubCalendar
+                username={username}
+                theme={GITHUB_THEME}
+                blockSize={14}
+                blockMargin={4}
+                fontSize={14}
+              />
+            ) : (
+              <div style={{ textAlign: 'center', padding: '40px', color: isDark ? '#A3A3A3' : '#666666' }}>
+                Loading contribution calendar...
+              </div>
+            )}
           </div>
         </motion.div>
 
@@ -541,18 +576,22 @@ const GitHubSection = ({ theme }) => {
         >
           <h2 style={styles.subsectionTitle}>Top Languages</h2>
           <div style={styles.pieChartsContainer}>
-            <div style={styles.pieChartCard}>
-              <h3 style={{ fontSize: 'clamp(1rem, 2.5vw, 1.2rem)', color: '#EAB308', marginBottom: '20px', textAlign: 'center' }}>
-                By Repository Count
-              </h3>
-              <PieChart data={stats.languageCounts} isDark={isDark} />
-            </div>
-            <div style={styles.pieChartCard}>
-              <h3 style={{ fontSize: 'clamp(1rem, 2.5vw, 1.2rem)', color: '#EAB308', marginBottom: '20px', textAlign: 'center' }}>
-                By Commit Activity
-              </h3>
-              <PieChart data={stats.languageActivity} isDark={isDark} />
-            </div>
+            {stats.languageCounts && stats.languageCounts.length > 0 && (
+              <div style={styles.pieChartCard}>
+                <h3 style={{ fontSize: 'clamp(1rem, 2.5vw, 1.2rem)', color: '#EAB308', marginBottom: '20px', textAlign: 'center' }}>
+                  By Repository Count
+                </h3>
+                <PieChart data={stats.languageCounts} isDark={isDark} />
+              </div>
+            )}
+            {stats.languageActivity && stats.languageActivity.length > 0 && (
+              <div style={styles.pieChartCard}>
+                <h3 style={{ fontSize: 'clamp(1rem, 2.5vw, 1.2rem)', color: '#EAB308', marginBottom: '20px', textAlign: 'center' }}>
+                  By Commit Activity
+                </h3>
+                <PieChart data={stats.languageActivity} isDark={isDark} />
+              </div>
+            )}
           </div>
         </motion.div>
       </div>
