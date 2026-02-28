@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
 import { FaGithub, FaDownload } from 'react-icons/fa';
 
-const HomeSection = () => {
+const HomeSection = ({ theme }) => {
+  const isDark = theme === 'dark';
+
   const styles = {
     section: {
       padding: '100px 20px 60px',
@@ -25,7 +27,7 @@ const HomeSection = () => {
       fontWeight: 700,
       marginBottom: '20px',
       lineHeight: 1.2,
-      color: '#FAFAFA'
+      color: isDark ? '#FAFAFA' : '#1A1A1A'
     },
     highlight: {
       background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
@@ -41,7 +43,7 @@ const HomeSection = () => {
     },
     heroDescription: {
       fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
-      color: '#A3A3A3',
+      color: isDark ? '#A3A3A3' : '#666666',
       marginBottom: '40px',
       lineHeight: 1.6,
       padding: '0 10px'

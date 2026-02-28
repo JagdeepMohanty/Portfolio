@@ -1,13 +1,15 @@
 import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, theme }) => {
+  const isDark = theme === 'dark';
+
   const styles = {
     card: {
-      background: '#1A1A1A',
+      background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '10px',
       padding: 'clamp(15px, 3vw, 20px)',
-      border: '1px solid rgba(234, 179, 8, 0.1)',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       transition: 'all 0.3s ease',
       height: '100%',
       display: 'flex',
@@ -28,7 +30,7 @@ const ProjectCard = ({ project }) => {
       lineHeight: 1.3
     },
     description: {
-      color: '#A3A3A3',
+      color: isDark ? '#A3A3A3' : '#666666',
       marginBottom: '12px',
       flex: 1,
       fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',

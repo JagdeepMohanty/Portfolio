@@ -2,7 +2,9 @@ import { motion } from 'framer-motion';
 import { FaReact, FaNode, FaPython, FaDatabase, FaAws, FaDocker } from 'react-icons/fa';
 import { SiMongodb, SiPostgresql, SiFlask, SiExpress } from 'react-icons/si';
 
-const AboutSection = () => {
+const AboutSection = ({ theme }) => {
+  const isDark = theme === 'dark';
+
   const skills = [
     { name: 'React', icon: <FaReact /> },
     { name: 'Node.js', icon: <FaNode /> },
@@ -32,10 +34,10 @@ const AboutSection = () => {
       color: '#EAB308'
     },
     aboutCard: {
-      background: '#1A1A1A',
+      background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '10px',
       padding: 'clamp(20px, 4vw, 30px)',
-      border: '1px solid rgba(234, 179, 8, 0.1)',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       marginBottom: 'clamp(25px, 5vw, 40px)'
     },
     aboutHeading: {
@@ -45,7 +47,7 @@ const AboutSection = () => {
       fontWeight: 600
     },
     aboutText: {
-      color: '#A3A3A3',
+      color: isDark ? '#A3A3A3' : '#666666',
       marginBottom: '15px',
       lineHeight: 1.6,
       fontSize: 'clamp(0.9rem, 2vw, 1rem)'
@@ -62,14 +64,14 @@ const AboutSection = () => {
     },
     skillsGrid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+      gridTemplateColumns: 'repeat(4, 1fr)',
       gap: 'clamp(15px, 3vw, 20px)'
     },
     skillCard: {
-      background: '#1A1A1A',
+      background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '10px',
       padding: 'clamp(15px, 3vw, 20px)',
-      border: '1px solid rgba(234, 179, 8, 0.1)',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       transition: 'all 0.3s ease',
       display: 'flex',
       flexDirection: 'column',
@@ -82,15 +84,15 @@ const AboutSection = () => {
       color: '#EAB308'
     },
     skillName: {
-      color: '#FAFAFA',
+      color: isDark ? '#FAFAFA' : '#1A1A1A',
       fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
       fontWeight: 500
     },
     educationCard: {
-      background: '#1A1A1A',
+      background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '10px',
       padding: 'clamp(20px, 4vw, 30px)',
-      border: '1px solid rgba(234, 179, 8, 0.1)'
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`
     },
     educationHeading: {
       fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
@@ -101,12 +103,12 @@ const AboutSection = () => {
     },
     educationDegree: {
       fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
-      color: '#FAFAFA',
+      color: isDark ? '#FAFAFA' : '#1A1A1A',
       marginBottom: '10px',
       fontWeight: 600
     },
     educationSchool: {
-      color: '#A3A3A3',
+      color: isDark ? '#A3A3A3' : '#666666',
       marginBottom: '5px',
       fontSize: 'clamp(0.9rem, 2vw, 1rem)'
     },
@@ -118,6 +120,18 @@ const AboutSection = () => {
 
   return (
     <section id="about" style={styles.section}>
+      <style>{`
+        @media (max-width: 1024px) {
+          .skills-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .skills-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+      `}</style>
       <div style={styles.container}>
         <h1 style={styles.sectionTitle}>About Me</h1>
 
@@ -141,7 +155,7 @@ const AboutSection = () => {
 
           <div style={styles.skillsSection}>
             <h2 style={styles.skillsHeading}>Technical Skills</h2>
-            <div style={styles.skillsGrid}>
+            <div style={styles.skillsGrid} className="skills-grid">
               {skills.map((skill, index) => (
                 <motion.div
                   key={skill.name}

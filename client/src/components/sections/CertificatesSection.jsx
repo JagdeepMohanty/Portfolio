@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import CertificateCard from '../CertificateCard';
 import { technicalCertificates, otherCertificates } from '../../data/certificates';
 
-const CertificatesSection = () => {
+const CertificatesSection = ({ theme }) => {
   const styles = {
     section: {
       padding: 'clamp(40px, 8vw, 60px) 20px'
@@ -61,7 +61,7 @@ const CertificatesSection = () => {
               viewport={{ once: true }}
             >
               {technicalCertificates.map((certificate) => (
-                <CertificateCard key={certificate.id} certificate={certificate} />
+                <CertificateCard key={certificate.id} certificate={certificate} theme={theme} />
               ))}
             </motion.div>
           )}
@@ -81,7 +81,7 @@ const CertificatesSection = () => {
               viewport={{ once: true }}
             >
               {otherCertificates.map((certificate) => (
-                <CertificateCard key={certificate.id} certificate={certificate} />
+                <CertificateCard key={certificate.id} certificate={certificate} theme={theme} />
               ))}
             </motion.div>
           )}

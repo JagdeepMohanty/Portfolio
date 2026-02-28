@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import ProjectCard from '../ProjectCard';
 import { projects } from '../../data/projects';
 
-const ProjectsSection = () => {
+const ProjectsSection = ({ theme }) => {
   const styles = {
     section: {
       padding: 'clamp(40px, 8vw, 60px) 20px'
@@ -48,7 +48,7 @@ const ProjectsSection = () => {
             viewport={{ once: true }}
           >
             {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+              <ProjectCard key={project.id} project={project} theme={theme} />
             ))}
           </motion.div>
         )}

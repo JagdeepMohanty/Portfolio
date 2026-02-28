@@ -1,7 +1,9 @@
 import { motion } from 'framer-motion';
 import { FaWhatsapp, FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
-const ContactSection = () => {
+const ContactSection = ({ theme }) => {
+  const isDark = theme === 'dark';
+
   const styles = {
     section: {
       padding: 'clamp(40px, 8vw, 60px) 20px'
@@ -19,7 +21,7 @@ const ContactSection = () => {
       color: '#EAB308'
     },
     subtitle: {
-      color: '#A3A3A3',
+      color: isDark ? '#A3A3A3' : '#666666',
       marginBottom: '40px',
       fontSize: 'clamp(0.9rem, 2vw, 15px)',
       textAlign: 'center',
@@ -46,10 +48,10 @@ const ContactSection = () => {
       minWidth: '280px'
     },
     contactItem: {
-      background: '#1A1A1A',
+      background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '10px',
       padding: 'clamp(15px, 3vw, 20px)',
-      border: '1px solid rgba(234, 179, 8, 0.1)',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       transition: 'all 0.3s ease',
       textDecoration: 'none',
       display: 'flex',
@@ -70,18 +72,18 @@ const ContactSection = () => {
     },
     contactLabel: {
       fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-      color: '#FAFAFA',
+      color: isDark ? '#FAFAFA' : '#1A1A1A',
       fontWeight: 600
     },
     contactInfo: {
       fontSize: 'clamp(0.8rem, 1.8vw, 0.85rem)',
-      color: '#A3A3A3'
+      color: isDark ? '#A3A3A3' : '#666666'
     },
     formCard: {
-      background: '#1A1A1A',
+      background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '10px',
       padding: 'clamp(20px, 4vw, 30px)',
-      border: '1px solid rgba(234, 179, 8, 0.1)',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       height: '100%'
     },
     formTitle: {
@@ -108,10 +110,10 @@ const ContactSection = () => {
     input: {
       width: '100%',
       padding: 'clamp(10px, 2vw, 12px)',
-      background: '#0C0C0C',
-      border: '1px solid rgba(234, 179, 8, 0.2)',
+      background: isDark ? '#0C0C0C' : '#F5F5F5',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
       borderRadius: '6px',
-      color: '#FAFAFA',
+      color: isDark ? '#FAFAFA' : '#1A1A1A',
       fontSize: 'clamp(13px, 2vw, 14px)',
       transition: 'all 0.3s ease',
       outline: 'none'
@@ -119,10 +121,10 @@ const ContactSection = () => {
     textarea: {
       width: '100%',
       padding: 'clamp(10px, 2vw, 12px)',
-      background: '#0C0C0C',
-      border: '1px solid rgba(234, 179, 8, 0.2)',
+      background: isDark ? '#0C0C0C' : '#F5F5F5',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
       borderRadius: '6px',
-      color: '#FAFAFA',
+      color: isDark ? '#FAFAFA' : '#1A1A1A',
       fontSize: 'clamp(13px, 2vw, 14px)',
       transition: 'all 0.3s ease',
       outline: 'none',

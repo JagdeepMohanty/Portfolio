@@ -1,13 +1,15 @@
 import { motion } from 'framer-motion';
 import { FaStar, FaCodeBranch, FaExternalLinkAlt } from 'react-icons/fa';
 
-const RepoCard = ({ repo }) => {
+const RepoCard = ({ repo, theme }) => {
+  const isDark = theme === 'dark';
+
   const styles = {
     card: {
-      background: '#1A1A1A',
+      background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '10px',
       padding: '20px',
-      border: '1px solid rgba(234, 179, 8, 0.1)',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       transition: 'all 0.3s ease',
       display: 'flex',
       flexDirection: 'column',
@@ -25,7 +27,7 @@ const RepoCard = ({ repo }) => {
       fontWeight: 600
     },
     repoDescription: {
-      color: '#A3A3A3',
+      color: isDark ? '#A3A3A3' : '#666666',
       marginBottom: '15px',
       lineHeight: 1.5,
       fontSize: '0.9rem'
@@ -41,7 +43,7 @@ const RepoCard = ({ repo }) => {
       display: 'flex',
       alignItems: 'center',
       gap: '6px',
-      color: '#FAFAFA',
+      color: isDark ? '#FAFAFA' : '#1A1A1A',
       fontSize: '0.85rem'
     },
     languageDot: {
@@ -53,7 +55,7 @@ const RepoCard = ({ repo }) => {
       display: 'flex',
       alignItems: 'center',
       gap: '5px',
-      color: '#A3A3A3',
+      color: isDark ? '#A3A3A3' : '#666666',
       fontSize: '0.85rem'
     },
     repoLink: {

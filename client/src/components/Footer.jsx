@@ -1,13 +1,16 @@
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
-const Footer = () => {
+const Footer = ({ theme }) => {
+  const isDark = theme === 'dark';
+
   const styles = {
     footer: {
       width: '100%',
-      background: '#1A1A1A',
-      borderTop: '1px solid rgba(234, 179, 8, 0.2)',
+      background: isDark ? '#1A1A1A' : '#FFFFFF',
+      borderTop: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
       padding: '30px 0',
-      marginTop: '40px'
+      marginTop: '40px',
+      transition: 'background 0.3s ease'
     },
     container: {
       maxWidth: '1200px',
@@ -32,7 +35,7 @@ const Footer = () => {
       cursor: 'pointer'
     },
     copyright: {
-      color: '#A3A3A3',
+      color: isDark ? '#A3A3A3' : '#666666',
       fontSize: '14px',
       textAlign: 'center'
     }

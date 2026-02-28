@@ -11,6 +11,14 @@ import ContactSection from './components/sections/ContactSection';
 
 function App() {
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'dark';
+  });
+
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,44 +33,12 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const styles = {
-    app: {
-      margin: 0,
-      padding: 0,
-      boxSizing: 'border-box',
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif",
-      backgroundColor: '#0C0C0C',
-      color: '#FAFAFA',
-      lineHeight: 1.6,
-      overflowX: 'hidden',
-      minHeight: '100vh'
-    },
-    mainContent: {
-      paddingTop: '60px'
-    },
-    backToTop: {
-      position: 'fixed',
-      bottom: 'clamp(20px, 4vw, 30px)',
-      right: 'clamp(20px, 4vw, 30px)',
-      width: 'clamp(45px, 8vw, 50px)',
-      height: 'clamp(45px, 8vw, 50px)',
-      background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
-      color: '#0C0C0C',
-      border: 'none',
-      borderRadius: '50%',
-      display: showBackToTop ? 'flex' : 'none',
-      alignItems: 'center',
-      justifyContent: 'center',
-      cursor: 'pointer',
-      fontSize: 'clamp(18px, 3vw, 20px)',
-      transition: 'all 0.3s ease',
-      zIndex: 999,
-      boxShadow: '0 4px 15px rgba(234, 179, 8, 0.4)'
-    }
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
   return (
-    <div style={styles.app}>
+    <>
       <style>{`
         * {
           margin: 0;
@@ -75,28 +51,55 @@ function App() {
         body {
           margin: 0;
           padding: 0;
+          overflow-x: hidden;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+          line-height: 1.6;
+          transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        body[data-theme="dark"] {
           background-color: #0C0C0C;
           color: #FAFAFA;
-          overflow-x: hidden;
+        }
+        body[data-theme="light"] {
+          background-color: #F5F5F5;
+          color: #1A1A1A;
         }
         #root {
           margin: 0;
           padding: 0;
         }
       `}</style>
-      <Navbar />
-      <main style={styles.mainContent}>
-        <HomeSection />
-        <AboutSection />
-        <ProjectsSection />
-        <CertificatesSection />
-        <GitHubSection />
-        <ContactSection />
+      <Navbar theme={theme} toggleTheme={toggleTheme} />
+      <main style={{ paddingTop: '60px' }}>
+        <HomeSection theme={theme} />
+        <AboutSection theme={theme} />
+        <ProjectsSection theme={theme} />
+        <CertificatesSection theme={theme} />
+        <GitHubSection theme={theme} />
+        <ContactSection theme={theme} />
       </main>
-      <Footer />
+      <Footer theme={theme} />
       
       <button
-        style={styles.backToTop}
+        style={{
+          position: 'fixed',
+          bottom: 'clamp(20px, 4vw, 30px)',
+          right: 'clamp(20px, 4vw, 30px)',
+          width: 'clamp(45px, 8vw, 50px)',
+          height: 'clamp(45px, 8vw, 50px)',
+          background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
+          color: '#0C0C0C',
+          border: 'none',
+          borderRadius: '50%',
+          display: showBackToTop ? 'flex' : 'none',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          fontSize: 'clamp(18px, 3vw, 20px)',
+          transition: 'all 0.3s ease',
+          zIndex: 999,
+          boxShadow: '0 4px 15px rgba(234, 179, 8, 0.4)'
+        }}
         onClick={scrollToTop}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'scale(1.1)';
@@ -110,7 +113,7 @@ function App() {
       >
         <FaArrowUp />
       </button>
-    </div>
+    </>
   );
 }
 

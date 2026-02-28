@@ -2,15 +2,17 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaEye, FaTimes } from 'react-icons/fa';
 
-const CertificateCard = ({ certificate }) => {
+const CertificateCard = ({ certificate, theme }) => {
   const [showModal, setShowModal] = useState(false);
+
+  const isDark = theme === 'dark';
 
   const styles = {
     card: {
-      background: '#1A1A1A',
+      background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '10px',
       padding: 'clamp(12px, 2.5vw, 15px)',
-      border: '1px solid rgba(234, 179, 8, 0.1)',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       transition: 'all 0.3s ease',
       textAlign: 'center',
       overflow: 'hidden',
@@ -35,13 +37,13 @@ const CertificateCard = ({ certificate }) => {
     },
     eyeIcon: {
       position: 'absolute',
-      top: '12px',
-      right: '12px',
+      top: '10px',
+      right: '10px',
       cursor: 'pointer',
       color: '#EAB308',
-      fontSize: '28px',
-      background: 'rgba(12, 12, 12, 0.9)',
-      padding: '12px',
+      fontSize: '32px',
+      background: 'rgba(12, 12, 12, 0.95)',
+      padding: '14px',
       borderRadius: '50%',
       transition: 'all 0.3s ease',
       zIndex: 10
@@ -54,13 +56,13 @@ const CertificateCard = ({ certificate }) => {
       lineHeight: 1.3
     },
     issuer: {
-      color: '#FAFAFA',
+      color: isDark ? '#FAFAFA' : '#1A1A1A',
       marginBottom: '4px',
       fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
       lineHeight: 1.4
     },
     date: {
-      color: '#A3A3A3',
+      color: isDark ? '#A3A3A3' : '#666666',
       fontSize: 'clamp(0.75rem, 1.6vw, 0.8rem)'
     },
     modalOverlay: {
