@@ -13,6 +13,26 @@ const GitHubSection = ({ theme }) => {
   const isDark = theme === 'dark';
 
   useEffect(() => {
+    const styleSheet = document.createElement('style');
+    styleSheet.innerText = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .stat-card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(234, 179, 8, 0.4);
+        border-color: #EAB308;
+      }
+    `;
+    document.head.appendChild(styleSheet);
+
+    return () => {
+      document.head.removeChild(styleSheet);
+    };
+  }, []);
+
+  useEffect(() => {
     const fetchGitHubData = async () => {
       try {
         const [profileRes, reposRes] = await Promise.all([
@@ -27,7 +47,6 @@ const GitHubSection = ({ theme }) => {
           setProfile(profileData);
           setRepos(reposData);
           
-          // Calculate statistics
           const totalStars = reposData.reduce((sum, repo) => sum + repo.stargazers_count, 0);
           const totalForks = reposData.reduce((sum, repo) => sum + repo.forks_count, 0);
           const activeRepos = reposData.filter(repo => {
@@ -36,7 +55,6 @@ const GitHubSection = ({ theme }) => {
             return monthsAgo < 6;
           }).length;
 
-          // Language analysis
           const languageCounts = {};
           const languageActivity = {};
           
@@ -292,7 +310,7 @@ const GitHubSection = ({ theme }) => {
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: '15px 0',
-      borderBottom: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}',
+      borderBottom: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       flexWrap: 'wrap',
       gap: '10px'
     },
@@ -311,12 +329,6 @@ const GitHubSection = ({ theme }) => {
   if (loading) {
     return (
       <section id="github" style={styles.section}>
-        <style>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
         <div style={styles.container}>
           <h1 style={styles.sectionTitle}>GitHub Analysis Dashboard</h1>
           <div style={styles.loader}></div>
@@ -343,21 +355,9 @@ const GitHubSection = ({ theme }) => {
 
   return (
     <section id="github" style={styles.section}>
-      <style>{`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        .stat-card-hover:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 8px 25px rgba(234, 179, 8, 0.4);
-          border-color: #EAB308;
-        }
-      `}</style>
       <div style={styles.container}>
         <h1 style={styles.sectionTitle}>GitHub Analysis Dashboard</h1>
 
-        {/* SECTION 1: Profile Summary */}
         <motion.div
           style={styles.profileCard}
           initial={{ opacity: 0, y: 20 }}
@@ -400,7 +400,6 @@ const GitHubSection = ({ theme }) => {
           </div>
         </motion.div>
 
-        {/* SECTION 2: Statistics Dashboard */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -432,7 +431,6 @@ const GitHubSection = ({ theme }) => {
           </div>
         </motion.div>
 
-        {/* SECTION 3: Top Languages by Repository Count */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -462,7 +460,6 @@ const GitHubSection = ({ theme }) => {
           </div>
         </motion.div>
 
-        {/* SECTION 4: Top Languages by Activity */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -494,7 +491,6 @@ const GitHubSection = ({ theme }) => {
           </div>
         </motion.div>
 
-        {/* SECTION 5: Contribution Calendar */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -516,7 +512,6 @@ const GitHubSection = ({ theme }) => {
           </div>
         </motion.div>
 
-        {/* SECTION 6: Activity Summary */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
