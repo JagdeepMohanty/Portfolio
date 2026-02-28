@@ -90,32 +90,38 @@ const AboutSection = ({ theme }) => {
     },
     educationCard: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
-      borderRadius: '10px',
-      padding: 'clamp(20px, 4vw, 30px)',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`
+      borderRadius: '12px',
+      padding: '25px',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`
     },
-    educationHeading: {
-      fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+    educationGrid: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: '30px',
+      alignItems: 'start'
+    },
+    educationItem: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center'
+    },
+    educationTitle: {
       color: '#EAB308',
-      marginBottom: '20px',
-      textAlign: 'center',
-      fontWeight: 600
+      fontSize: 'clamp(1rem, 2.5vw, 1.1rem)',
+      fontWeight: 600,
+      marginBottom: '8px',
+      lineHeight: 1.3
     },
-    educationDegree: {
-      fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
+    educationInstitute: {
       color: isDark ? '#FAFAFA' : '#1A1A1A',
-      marginBottom: '10px',
-      fontWeight: 600
-    },
-    educationSchool: {
-      color: isDark ? '#A3A3A3' : '#666666',
-      marginBottom: '5px',
-      fontSize: 'clamp(0.9rem, 2vw, 1rem)'
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+      marginBottom: '8px',
+      lineHeight: 1.4
     },
     educationYear: {
-      color: '#EAB308',
-      fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)'
-    }
+      color: '#A3A3A3',
+      fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)'
+    },
   };
 
   return (
@@ -129,6 +135,10 @@ const AboutSection = ({ theme }) => {
         @media (max-width: 768px) {
           .skills-grid {
             grid-template-columns: repeat(2, 1fr) !important;
+          }
+          .education-grid {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
           }
         }
       `}</style>
@@ -178,12 +188,31 @@ const AboutSection = ({ theme }) => {
           </div>
 
           <div>
-            <h2 style={styles.educationHeading}>Education</h2>
-            <div style={styles.educationCard}>
-              <h3 style={styles.educationDegree}>Bachelor of Technology in Computer Science</h3>
-              <p style={styles.educationSchool}>Rai University Ahmedabad</p>
-              <p style={styles.educationYear}>2023 - 2027</p>
-            </div>
+            <h2 style={styles.skillsHeading}>Education</h2>
+            <motion.div
+              style={styles.educationCard}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              whileHover={{
+                scale: 1.02,
+                boxShadow: '0 0 15px rgba(234, 179, 8, 0.3)'
+              }}
+            >
+              <div style={styles.educationGrid} className="education-grid">
+                <div style={styles.educationItem}>
+                  <h3 style={styles.educationTitle}>Senior Secondary</h3>
+                  <p style={styles.educationInstitute}>Kendriya Vidyalaya No.1 Balasore</p>
+                  <p style={styles.educationYear}>2021 – 2023</p>
+                </div>
+                <div style={styles.educationItem}>
+                  <h3 style={styles.educationTitle}>Bachelor of Technology in Computer Science</h3>
+                  <p style={styles.educationInstitute}>Rai University Ahmedabad</p>
+                  <p style={styles.educationYear}>2023 – 2027</p>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>
