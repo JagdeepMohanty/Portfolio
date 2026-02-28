@@ -15,13 +15,20 @@ import {
 
 const GitHubCalendar = GitHubCalendarPkg.default || GitHubCalendarPkg;
 
-const GITHUB_CALENDAR_THEME = {
+const GITHUB_THEME = {
   dark: [
-    '#161B22',  // no contribution
-    '#3A2A00',  // level 1
-    '#7A5A00',  // level 2
-    '#EAB308',  // level 3
-    '#F59E0B'   // level 4
+    '#0d1117',  // level 0
+    '#3a2a00',  // level 1
+    '#7a5a00',  // level 2
+    '#eab308',  // level 3
+    '#facc15'   // level 4
+  ],
+  light: [
+    '#0d1117',
+    '#3a2a00',
+    '#7a5a00',
+    '#eab308',
+    '#facc15'
   ]
 };
 
@@ -487,7 +494,7 @@ const GitHubSection = ({ theme }) => {
           }}>
             <GitHubCalendar
               username={username}
-              theme={GITHUB_CALENDAR_THEME}
+              theme={GITHUB_THEME}
               blockSize={14}
               blockMargin={4}
               fontSize={14}
