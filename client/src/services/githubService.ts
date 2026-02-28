@@ -143,7 +143,7 @@ class GitHubService {
     repos.forEach(repo => {
       if (repo.language) {
         languageCounts[repo.language] = (languageCounts[repo.language] || 0) + 1;
-        const daysSinceUpdate = (Date.now() - new Date(repo.html_url).getTime()) / (1000 * 60 * 60 * 24);
+        const daysSinceUpdate = (Date.now() - new Date(repo.updated_at || repo.created_at).getTime()) / (1000 * 60 * 60 * 24);
         const activityScore = daysSinceUpdate < 30 ? 10 : daysSinceUpdate < 90 ? 5 : 1;
         languageActivity[repo.language] = (languageActivity[repo.language] || 0) + activityScore;
       }

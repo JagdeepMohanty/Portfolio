@@ -3,6 +3,7 @@ export const APP_CONFIG = {
   title: 'Jagdeep Mohanty || B.Tech CSE || Passionate About Coding and Data',
   description: 'Software Engineer Portfolio - Black & Gold Premium Theme',
   author: 'Jagdeep Mohanty',
+  githubUsername: 'JagdeepMohanty',
 } as const;
 
 export const SCROLL_CONFIG = {

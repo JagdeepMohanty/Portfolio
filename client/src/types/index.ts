@@ -34,6 +34,8 @@ export interface GitHubRepo {
   forks_count: number;
   language: string;
   html_url: string;
+  updated_at: string;
+  created_at: string;
 }
 
 export interface GitHubStats {

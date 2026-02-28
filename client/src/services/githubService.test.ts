@@ -49,7 +49,9 @@ describe('GitHubService', () => {
           stargazers_count: 10,
           forks_count: 5,
           language: 'JavaScript',
-          html_url: 'https://github.com/test/repo1'
+          html_url: 'https://github.com/test/repo1',
+          updated_at: '2024-01-01T00:00:00Z',
+          created_at: '2023-01-01T00:00:00Z'
         }
       ];
 
@@ -73,7 +75,9 @@ describe('GitHubService', () => {
           stargazers_count: 10,
           forks_count: 5,
           language: 'JavaScript',
-          html_url: 'https://github.com/test/repo1'
+          html_url: 'https://github.com/test/repo1',
+          updated_at: '2024-01-01T00:00:00Z',
+          created_at: '2023-01-01T00:00:00Z'
         },
         {
           id: 2,
@@ -82,7 +86,9 @@ describe('GitHubService', () => {
           stargazers_count: 20,
           forks_count: 10,
           language: 'TypeScript',
-          html_url: 'https://github.com/test/repo2'
+          html_url: 'https://github.com/test/repo2',
+          updated_at: '2024-01-01T00:00:00Z',
+          created_at: '2023-01-01T00:00:00Z'
         }
       ];
 
@@ -115,7 +121,9 @@ describe('GitHubService', () => {
           stargazers_count: 10,
           forks_count: 5,
           language: 'JavaScript',
-          html_url: 'https://github.com/test/repo1'
+          html_url: 'https://github.com/test/repo1',
+          updated_at: '2024-01-01T00:00:00Z',
+          created_at: '2023-01-01T00:00:00Z'
         }
       ];
 

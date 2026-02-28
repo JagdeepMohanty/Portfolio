@@ -27,7 +27,9 @@ describe('GitHub Data Fetching Integration', () => {
         stargazers_count: 10,
         forks_count: 2,
         language: 'TypeScript',
-        html_url: 'https://github.com/JagdeepMohanty/portfolio'
+        html_url: 'https://github.com/JagdeepMohanty/portfolio',
+        updated_at: '2024-01-01T00:00:00Z',
+        created_at: '2023-01-01T00:00:00Z'
       },
       {
         id: 2,
@@ -36,7 +38,9 @@ describe('GitHub Data Fetching Integration', () => {
         stargazers_count: 5,
         forks_count: 1,
         language: 'JavaScript',
-        html_url: 'https://github.com/JagdeepMohanty/easyxpense'
+        html_url: 'https://github.com/JagdeepMohanty/easyxpense',
+        updated_at: '2024-01-01T00:00:00Z',
+        created_at: '2023-01-01T00:00:00Z'
       }
     ];
 
@@ -79,7 +83,9 @@ describe('GitHub Data Fetching Integration', () => {
         stargazers_count: 10,
         forks_count: 5,
         language: 'JavaScript',
-        html_url: 'https://github.com/test/repo1'
+        html_url: 'https://github.com/test/repo1',
+        updated_at: '2024-01-01T00:00:00Z',
+        created_at: '2023-01-01T00:00:00Z'
       },
       {
         id: 2,
@@ -88,7 +94,9 @@ describe('GitHub Data Fetching Integration', () => {
         stargazers_count: 20,
         forks_count: 10,
         language: 'JavaScript',
-        html_url: 'https://github.com/test/repo2'
+        html_url: 'https://github.com/test/repo2',
+        updated_at: '2024-01-01T00:00:00Z',
+        created_at: '2023-01-01T00:00:00Z'
       },
       {
         id: 3,
@@ -97,7 +105,9 @@ describe('GitHub Data Fetching Integration', () => {
         stargazers_count: 15,
         forks_count: 8,
         language: 'TypeScript',
-        html_url: 'https://github.com/test/repo3'
+        html_url: 'https://github.com/test/repo3',
+        updated_at: '2024-01-01T00:00:00Z',
+        created_at: '2023-01-01T00:00:00Z'
       }
     ];
 
