@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jagdeepmohanty.netlify.app/sitemap.xml
+
+# Disallow admin or private paths (if any)
+Disallow: /admin/
+Disallow: /_headers
+Disallow: /_redirects
+
+# Crawl-delay
+Crawl-delay: 1

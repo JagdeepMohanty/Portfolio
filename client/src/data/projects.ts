@@ -1,7 +1,6 @@
-// Static projects data for the portfolio
-// No backend required - data is stored statically
+import { Project } from '../types';
 
-export const projects = [
+export const projects: Project[] = [
   {
     id: 1,
     title: "EasyXpense - Expense Tracker Web App ",

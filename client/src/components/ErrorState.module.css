@@ -1,0 +1,66 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  gap: 16px;
+}
+
+.fullScreen {
+  min-height: 100vh;
+}
+
+.icon {
+  font-size: 48px;
+  color: #F59E0B;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: #FAFAFA;
+  margin: 0;
+}
+
+.message {
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  color: #A3A3A3;
+  max-width: 500px;
+  margin: 0;
+}
+
+.retryButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #EAB308, #F59E0B);
+  color: #0C0C0C;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+}
+
+.retryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(234, 179, 8, 0.4);
+}
+
+.retryButton:focus {
+  outline: 2px solid #EAB308;
+  outline-offset: 2px;
+}

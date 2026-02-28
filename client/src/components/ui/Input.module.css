@@ -1,0 +1,47 @@
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  color: #EAB308;
+  font-weight: 600;
+  font-size: clamp(0.85rem, 1.8vw, 0.9rem);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: clamp(10px, 2vw, 12px);
+  border: 1px solid rgba(234, 179, 8, 0.2);
+  border-radius: 6px;
+  font-size: clamp(13px, 2vw, 14px);
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: #EAB308;
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.2);
+}
+
+.dark .input,
+.dark .textarea {
+  background: #0C0C0C;
+  color: #FAFAFA;
+  border-color: rgba(234, 179, 8, 0.2);
+}
+
+.light .input,
+.light .textarea {
+  background: #F5F5F5;
+  color: #1A1A1A;
+  border-color: rgba(234, 179, 8, 0.3);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}

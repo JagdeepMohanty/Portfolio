@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import ProjectCard from '../ProjectCard';
-import { projects } from '../../data/projects';
+import ProjectCard from '../components/ProjectCard';
+import { projects } from '../data/projects';
 
 const ProjectsSection = ({ theme }) => {
   const styles = {

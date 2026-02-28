@@ -1,0 +1,31 @@
+.button {
+  background: linear-gradient(135deg, #EAB308, #F59E0B);
+  color: #0C0C0C;
+  padding: clamp(10px, 2vw, 12px) clamp(20px, 4vw, 24px);
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: clamp(13px, 2vw, 14px);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(234, 179, 8, 0.4);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.secondary {
+  background: transparent;
+  border: 1px solid #EAB308;
+  color: #EAB308;
+}
+
+.secondary:hover {
+  background: rgba(234, 179, 8, 0.1);
+}

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import CertificateCard from '../CertificateCard';
-import { technicalCertificates, otherCertificates } from '../../data/certificates';
+import CertificateCard from '../components/CertificateCard';
+import { technicalCertificates, otherCertificates } from '../data/certificates';
 
 const CertificatesSection = ({ theme }) => {
   const styles = {

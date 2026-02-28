@@ -3,6 +3,9 @@ import { motion } from 'framer-motion';
 import { FaGithub, FaStar, FaCode, FaCalendar } from 'react-icons/fa';
 import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import githubService from '../services/githubService';
+import { APP_CONFIG, EXTERNAL_APIS } from '../constants/config';
+import { COLORS } from '../constants/theme';
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
@@ -91,7 +94,7 @@ const GitHubSection = ({ theme }) => {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
 
-  const username = 'JagdeepMohanty';
+  const username = APP_CONFIG.githubUsername;
   const isDark = theme === 'dark';
 
   useEffect(() => {
@@ -129,65 +132,17 @@ const GitHubSection = ({ theme }) => {
 
   useEffect(() => {
     const fetchGitHubData = async () => {
-      try {
-        const [profileRes, reposRes] = await Promise.all([
-          fetch(`https://api.github.com/users/${username}`),
-          fetch(`https://api.github.com/users/${username}/repos?per_page=100`)
-        ]);
-
-        if (profileRes.ok && reposRes.ok) {
-          const profileData = await profileRes.json();
-          const reposData = await reposRes.json();
-          
-          setProfile(profileData);
-          
-          const totalStars = reposData.reduce((sum, repo) => sum + repo.stargazers_count, 0);
-          const totalCommits = reposData.reduce((sum, repo) => sum + (repo.size || 0), 0);
-
-          const languageCounts = {};
-          const languageActivity = {};
-          
-          reposData.forEach(repo => {
-            if (repo.language) {
-              languageCounts[repo.language] = (languageCounts[repo.language] || 0) + 1;
-              
-              const daysSinceUpdate = (Date.now() - new Date(repo.updated_at)) / (1000 * 60 * 60 * 24);
-              const activityScore = daysSinceUpdate < 30 ? 10 : daysSinceUpdate < 90 ? 5 : 1;
-              languageActivity[repo.language] = (languageActivity[repo.language] || 0) + activityScore;
-            }
-          });
-
-          const sortedLanguages = Object.entries(languageCounts)
-            .sort(([, a], [, b]) => b - a)
-            .slice(0, 5);
-
-          const sortedByActivity = Object.entries(languageActivity)
-            .sort(([, a], [, b]) => b - a)
-            .slice(0, 5);
-
-          const totalLanguages = Object.keys(languageCounts).length;
-
-          setStats({
-            totalStars,
-            totalCommits,
-            totalRepos: reposData.length,
-            totalLanguages,
-            languageCounts: sortedLanguages,
-            languageActivity: sortedByActivity,
-            totalContributions: totalStars + totalCommits,
-            currentStreak: Math.floor(Math.random() * 30) + 1,
-            longestStreak: Math.floor(Math.random() * 60) + 30
-          });
-        }
-        setLoading(false);
-      } catch (error) {
-        // Silently handle error in production
-        setLoading(false);
+      const data = await githubService.fetchGitHubData(username);
+      
+      if (data) {
+        setProfile(data.profile);
+        setStats(data.stats);
       }
+      setLoading(false);
     };
 
     fetchGitHubData();
-  }, []);
+  }, [username]);
 
   const styles = {
     section: {
@@ -416,7 +371,7 @@ const GitHubSection = ({ theme }) => {
             border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`
           }}>
             <img 
-              src={`https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=github-dark&bg_color=1A1A1A&color=EAB308&line=F59E0B&point=EAB308&area=true&hide_border=true`}
+              src={EXTERNAL_APIS.githubGraph(username)}
               alt="GitHub Contribution Graph"
               loading="lazy"
               decoding="async"
@@ -446,7 +401,7 @@ const GitHubSection = ({ theme }) => {
             overflow: 'auto'
           }}>
             <img 
-              src={`https://ghchart.rshah.org/EAB308/${username}`}
+              src={EXTERNAL_APIS.githubCalendar(username)}
               alt="GitHub Contribution Calendar"
               loading="lazy"
               decoding="async"

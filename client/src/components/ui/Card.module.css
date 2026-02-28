@@ -1,0 +1,26 @@
+.card {
+  border-radius: 10px;
+  padding: clamp(15px, 3vw, 20px);
+  border: 1px solid rgba(234, 179, 8, 0.1);
+  transition: all 0.3s ease;
+}
+
+.dark {
+  background: #1A1A1A;
+  border-color: rgba(234, 179, 8, 0.1);
+}
+
+.light {
+  background: #FFFFFF;
+  border-color: rgba(234, 179, 8, 0.2);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+  border-color: #EAB308;
+}
+
+.clickable {
+  cursor: pointer;
+}

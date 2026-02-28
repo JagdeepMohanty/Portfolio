@@ -1,7 +1,6 @@
-// Static certificates data for the portfolio
-// No backend required - data is stored statically
+import { Certificate } from '../types';
 
-export const technicalCertificates = [
+export const technicalCertificates: Certificate[] = [
   {
     id: 1,
     title: "NEW INDIA VIBRANT HACKATHON-2023",
@@ -46,7 +45,7 @@ export const technicalCertificates = [
   }
 ];
 
-export const otherCertificates = [
+export const otherCertificates: Certificate[] = [
    {
     id: 7,
     title: "Gujarat Youth Parliament",
@@ -105,7 +104,6 @@ export const otherCertificates = [
   }
 ];
 
-// Keep backward compatibility
-export const certificates = [...technicalCertificates, ...otherCertificates];
+export const certificates: Certificate[] = [...technicalCertificates, ...otherCertificates];
 
 export default certificates;

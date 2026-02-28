@@ -1,0 +1,83 @@
+.contactContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: clamp(20px, 5vw, 40px);
+  flex-wrap: wrap;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(15px, 3vw, 20px);
+  flex: 1;
+  min-width: 280px;
+}
+
+.rightColumn {
+  flex: 1;
+  min-width: 280px;
+}
+
+.contactItem {
+  background: #1A1A1A;
+  border-radius: 10px;
+  padding: clamp(15px, 3vw, 20px);
+  border: 1px solid rgba(234, 179, 8, 0.1);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.contactItem:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+  border-color: #EAB308;
+}
+
+.contactIcon {
+  font-size: clamp(20px, 4vw, 24px);
+  color: #EAB308;
+  transition: all 0.3s ease;
+  min-width: 24px;
+}
+
+.contactText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contactLabel {
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  color: #FAFAFA;
+  font-weight: 600;
+}
+
+.contactInfo {
+  font-size: clamp(0.8rem, 1.8vw, 0.85rem);
+  color: #A3A3A3;
+}
+
+.formCard {
+  background: #1A1A1A;
+  border-radius: 10px;
+  padding: clamp(20px, 4vw, 30px);
+  border: 1px solid rgba(234, 179, 8, 0.1);
+  height: 100%;
+}
+
+.formTitle {
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  color: #EAB308;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(15px, 3vw, 18px);
+}
