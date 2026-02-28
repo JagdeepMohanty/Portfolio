@@ -21,8 +21,11 @@ const ProjectsSection = ({ theme }) => {
     },
     projectsGrid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
-      gap: 'clamp(20px, 4vw, 25px)'
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+      gap: 'clamp(20px, 4vw, 25px)',
+      maxWidth: '1100px',
+      margin: '0 auto',
+      justifyItems: 'center'
     },
     noData: {
       textAlign: 'center',

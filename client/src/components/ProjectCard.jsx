@@ -8,13 +8,14 @@ const ProjectCard = ({ project, theme }) => {
     card: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '10px',
-      padding: 'clamp(15px, 3vw, 20px)',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
+      padding: '18px',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`,
       transition: 'all 0.3s ease',
-      height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      maxWidth: '450px',
+      width: '100%'
     },
     content: {
       flex: 1,

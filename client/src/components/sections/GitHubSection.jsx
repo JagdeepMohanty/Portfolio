@@ -114,6 +114,10 @@ const GitHubSection = ({ theme }) => {
         .doughnut-chart-wrapper {
           margin: 0 auto;
         }
+        .profile-grid {
+          grid-template-columns: 1fr !important;
+          text-align: center;
+        }
       }
     `;
     document.head.appendChild(styleSheet);
@@ -213,50 +217,59 @@ const GitHubSection = ({ theme }) => {
     profileCard: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '12px',
-      padding: '30px 20px',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
-      marginBottom: 'clamp(25px, 5vw, 40px)',
+      padding: '20px',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
+      marginBottom: 'clamp(20px, 4vw, 30px)',
+      maxWidth: '600px',
+      margin: '0 auto clamp(20px, 4vw, 30px) auto',
+      transition: 'all 0.3s ease'
+    },
+    profileGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'auto 1fr',
+      gap: '20px',
+      alignItems: 'center'
+    },
+    profileLeft: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      textAlign: 'center',
-      transition: 'all 0.3s ease'
+      gap: '8px'
     },
-    avatar: {
-      width: '100px',
-      height: '100px',
-      borderRadius: '50%',
-      border: '3px solid #EAB308',
-      boxShadow: '0 0 15px rgba(234, 179, 8, 0.3)',
-      marginBottom: '15px'
-    },
-    profileName: {
-      fontSize: 'clamp(1.1rem, 2.5vw, 1.3rem)',
-      color: '#EAB308',
-      fontWeight: 700,
-      margin: '0 0 20px 0'
-    },
-    profileStats: {
-      display: 'flex',
-      gap: '30px',
-      justifyContent: 'center',
-      flexWrap: 'wrap'
-    },
-    profileStatItem: {
+    profileRight: {
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center'
+      gap: '8px'
     },
-    statValue: {
-      fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)',
+    profileStatRow: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '4px 0'
+    },
+    avatar: {
+      width: '80px',
+      height: '80px',
+      borderRadius: '50%',
+      border: '3px solid #EAB308',
+      boxShadow: '0 0 15px rgba(234, 179, 8, 0.3)'
+    },
+    profileName: {
+      fontSize: 'clamp(0.95rem, 2.5vw, 1.05rem)',
       color: '#EAB308',
       fontWeight: 700,
-      marginBottom: '5px'
+      margin: 0,
+      textAlign: 'center'
     },
     statLabel: {
-      fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)',
+      fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
       color: isDark ? '#A3A3A3' : '#666666',
       fontWeight: 500
+    },
+    statValue: {
+      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+      color: '#EAB308',
+      fontWeight: 700
     },
     subsectionTitle: {
       fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
@@ -288,15 +301,17 @@ const GitHubSection = ({ theme }) => {
     },
     statsGrid: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
       gap: 'clamp(15px, 3vw, 20px)',
-      marginBottom: 'clamp(30px, 5vw, 40px)'
+      marginBottom: 'clamp(30px, 5vw, 40px)',
+      maxWidth: '1000px',
+      margin: '0 auto clamp(30px, 5vw, 40px) auto'
     },
     statCard: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '12px',
-      padding: 'clamp(20px, 3vw, 25px)',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
+      padding: '18px',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`,
       transition: 'all 0.3s ease',
       textAlign: 'center'
     },
@@ -321,7 +336,10 @@ const GitHubSection = ({ theme }) => {
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))',
       gap: 'clamp(15px, 3vw, 20px)',
-      marginBottom: 'clamp(30px, 5vw, 40px)'
+      marginBottom: 'clamp(30px, 5vw, 40px)',
+      maxWidth: '1000px',
+      margin: '0 auto',
+      justifyItems: 'center'
     },
   };
 
@@ -361,20 +379,24 @@ const GitHubSection = ({ theme }) => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <img src={profile.avatar_url} alt={profile.name} style={styles.avatar} loading="lazy" decoding="async" />
-          <h2 style={styles.profileName}>{profile.name || username}</h2>
-          <div style={styles.profileStats}>
-            <div style={styles.profileStatItem}>
-              <span style={styles.statValue}>{profile.followers}</span>
-              <span style={styles.statLabel}>Followers</span>
+          <div style={styles.profileGrid} className="profile-grid">
+            <div style={styles.profileLeft}>
+              <img src={profile.avatar_url} alt={profile.name} style={styles.avatar} loading="lazy" decoding="async" />
+              <h2 style={styles.profileName}>{profile.name || username}</h2>
             </div>
-            <div style={styles.profileStatItem}>
-              <span style={styles.statValue}>{profile.following}</span>
-              <span style={styles.statLabel}>Following</span>
-            </div>
-            <div style={styles.profileStatItem}>
-              <span style={styles.statValue}>{profile.public_repos}</span>
-              <span style={styles.statLabel}>Repositories</span>
+            <div style={styles.profileRight}>
+              <div style={styles.profileStatRow}>
+                <span style={styles.statLabel}>Followers:</span>
+                <span style={styles.statValue}>{profile.followers}</span>
+              </div>
+              <div style={styles.profileStatRow}>
+                <span style={styles.statLabel}>Following:</span>
+                <span style={styles.statValue}>{profile.following}</span>
+              </div>
+              <div style={styles.profileStatRow}>
+                <span style={styles.statLabel}>Repositories:</span>
+                <span style={styles.statValue}>{profile.public_repos}</span>
+              </div>
             </div>
           </div>
         </motion.div>

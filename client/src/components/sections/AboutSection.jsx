@@ -36,9 +36,11 @@ const AboutSection = ({ theme }) => {
     aboutCard: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '10px',
-      padding: 'clamp(20px, 4vw, 30px)',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
-      marginBottom: 'clamp(25px, 5vw, 40px)'
+      padding: '20px',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`,
+      marginBottom: 'clamp(25px, 5vw, 40px)',
+      maxWidth: '900px',
+      margin: '0 auto clamp(25px, 5vw, 40px) auto'
     },
     aboutHeading: {
       fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
@@ -65,13 +67,15 @@ const AboutSection = ({ theme }) => {
     skillsGrid: {
       display: 'grid',
       gridTemplateColumns: 'repeat(4, 1fr)',
-      gap: 'clamp(15px, 3vw, 20px)'
+      gap: 'clamp(15px, 3vw, 20px)',
+      maxWidth: '900px',
+      margin: '0 auto'
     },
     skillCard: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '10px',
-      padding: 'clamp(15px, 3vw, 20px)',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
+      padding: '18px',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`,
       transition: 'all 0.3s ease',
       display: 'flex',
       flexDirection: 'column',
@@ -91,8 +95,10 @@ const AboutSection = ({ theme }) => {
     educationCard: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderRadius: '12px',
-      padding: '25px',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`
+      padding: '20px',
+      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
+      maxWidth: '900px',
+      margin: '0 auto'
     },
     educationGrid: {
       display: 'grid',
