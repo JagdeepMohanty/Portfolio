@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaStar, FaCode, FaCalendar } from 'react-icons/fa';
 import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend } from 'chart.js';
@@ -9,7 +9,17 @@ import { COLORS } from '../constants/theme';
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
-const DoughnutChart = ({ data, isDark, title }) => {
+interface GitHubSectionProps {
+  theme: 'dark' | 'light';
+}
+
+interface DoughnutChartProps {
+  data: [string, number][] | null;
+  isDark: boolean;
+  title: string;
+}
+
+const DoughnutChart = memo<DoughnutChartProps>(({ data, isDark, title }) => {
   if (!data || !Array.isArray(data) || data.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '20px', color: isDark ? '#A3A3A3' : '#666666', fontSize: '14px' }}>
@@ -87,12 +97,14 @@ const DoughnutChart = ({ data, isDark, title }) => {
       </div>
     </div>
   );
-};
+});
 
-const GitHubSection = ({ theme }) => {
-  const [profile, setProfile] = useState(null);
+DoughnutChart.displayName = 'DoughnutChart';
+
+const GitHubSection = memo<GitHubSectionProps>(({ theme }) => {
+  const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState<any>(null);
 
   const username = APP_CONFIG.githubUsername;
   const isDark = theme === 'dark';
@@ -156,7 +168,7 @@ const GitHubSection = ({ theme }) => {
     sectionTitle: {
       fontSize: 'clamp(1.5rem, 4vw, 2rem)',
       fontWeight: 700,
-      textAlign: 'center',
+      textAlign: 'center' as const,
       marginBottom: 'clamp(25px, 5vw, 40px)',
       color: '#EAB308'
     },
@@ -187,13 +199,13 @@ const GitHubSection = ({ theme }) => {
     },
     profileLeft: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column' as const,
       alignItems: 'center',
       gap: '8px'
     },
     profileRight: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column' as const,
       gap: '8px'
     },
     profileStatRow: {
@@ -214,7 +226,7 @@ const GitHubSection = ({ theme }) => {
       color: '#EAB308',
       fontWeight: 700,
       margin: 0,
-      textAlign: 'center'
+      textAlign: 'center' as const
     },
     statLabel: {
       fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
@@ -244,7 +256,7 @@ const GitHubSection = ({ theme }) => {
       padding: '16px',
       border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
       transition: 'all 0.3s ease',
-      textAlign: 'center'
+      textAlign: 'center' as const
     },
     calendarContainer: {
       background: isDark ? '#1A1A1A' : '#FFFFFF',
@@ -268,7 +280,7 @@ const GitHubSection = ({ theme }) => {
       padding: '18px',
       border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`,
       transition: 'all 0.3s ease',
-      textAlign: 'center'
+      textAlign: 'center' as const
     },
     statIcon: {
       fontSize: 'clamp(1.8rem, 4vw, 2.2rem)',
@@ -473,6 +485,8 @@ const GitHubSection = ({ theme }) => {
       </div>
     </section>
   );
-};
+});
+
+GitHubSection.displayName = 'GitHubSection';
 
 export default GitHubSection;

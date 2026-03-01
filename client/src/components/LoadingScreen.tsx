@@ -1,4 +1,6 @@
-const LoadingScreen = () => {
+import { memo } from 'react';
+
+const LoadingScreen = memo(() => {
   return (
     <div style={{
       display: 'flex',
@@ -32,6 +34,8 @@ const LoadingScreen = () => {
       `}</style>
     </div>
   );
-};
+});
+
+LoadingScreen.displayName = 'LoadingScreen';
 
 export default LoadingScreen;

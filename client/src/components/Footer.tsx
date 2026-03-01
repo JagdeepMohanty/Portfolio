@@ -1,56 +1,48 @@
+import { memo } from 'react';
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
-const Footer = ({ theme }) => {
+interface FooterProps {
+  theme: 'dark' | 'light';
+}
+
+const Footer = memo<FooterProps>(({ theme }) => {
   const isDark = theme === 'dark';
 
-  const styles = {
-    footer: {
+  return (
+    <footer style={{
       width: '100%',
       background: isDark ? '#1A1A1A' : '#FFFFFF',
       borderTop: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
       padding: '30px 0',
       marginTop: '40px',
       transition: 'background 0.3s ease'
-    },
-    container: {
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '0 20px'
-    },
-    footerContent: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '20px'
-    },
-    socialLinks: {
-      display: 'flex',
-      gap: '20px',
-      alignItems: 'center'
-    },
-    socialLink: {
-      color: '#EAB308',
-      fontSize: '24px',
-      transition: 'all 0.3s ease',
-      cursor: 'pointer'
-    },
-    copyright: {
-      color: isDark ? '#A3A3A3' : '#666666',
-      fontSize: '14px',
-      textAlign: 'center'
-    }
-  };
-
-  return (
-    <footer style={styles.footer}>
-      <div style={styles.container}>
-        <div style={styles.footerContent}>
-          <div style={styles.socialLinks}>
+    }}>
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 20px'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '20px'
+        }}>
+          <div style={{
+            display: 'flex',
+            gap: '20px',
+            alignItems: 'center'
+          }}>
             <a 
               href="https://github.com/JagdeepMohanty" 
               target="_blank" 
               rel="noopener noreferrer" 
-              style={styles.socialLink}
+              style={{
+                color: '#EAB308',
+                fontSize: '24px',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#F59E0B';
                 e.currentTarget.style.transform = 'translateY(-3px)';
@@ -59,6 +51,7 @@ const Footer = ({ theme }) => {
                 e.currentTarget.style.color = '#EAB308';
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
+              aria-label="GitHub Profile"
             >
               <FaGithub />
             </a>
@@ -66,7 +59,12 @@ const Footer = ({ theme }) => {
               href="https://www.linkedin.com/in/jagdeepmohanty" 
               target="_blank" 
               rel="noopener noreferrer" 
-              style={styles.socialLink}
+              style={{
+                color: '#EAB308',
+                fontSize: '24px',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#F59E0B';
                 e.currentTarget.style.transform = 'translateY(-3px)';
@@ -75,12 +73,18 @@ const Footer = ({ theme }) => {
                 e.currentTarget.style.color = '#EAB308';
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
+              aria-label="LinkedIn Profile"
             >
               <FaLinkedin />
             </a>
             <a 
-              href="mailto:your.email@example.com" 
-              style={styles.socialLink}
+              href="mailto:jagdeepmohanty1807@gmail.com" 
+              style={{
+                color: '#EAB308',
+                fontSize: '24px',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
+              }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#F59E0B';
                 e.currentTarget.style.transform = 'translateY(-3px)';
@@ -89,15 +93,24 @@ const Footer = ({ theme }) => {
                 e.currentTarget.style.color = '#EAB308';
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
+              aria-label="Email"
             >
               <FaEnvelope />
             </a>
           </div>
-          <p style={styles.copyright}>© {new Date().getFullYear()} All rights reserved.</p>
+          <p style={{
+            color: isDark ? '#A3A3A3' : '#666666',
+            fontSize: '14px',
+            textAlign: 'center'
+          }}>
+            © {new Date().getFullYear()} Jagdeep Mohanty. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
   );
-};
+});
+
+Footer.displayName = 'Footer';
 
 export default Footer;

@@ -1,23 +1,31 @@
-import React from 'react';
+import { Component, ReactNode, ErrorInfo } from 'react';
 
-class ErrorBoundary extends React.Component {
-  constructor(props) {
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error, errorInfo) {
-    // Error logged - in production, send to error tracking service
+  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     if (process.env.NODE_ENV === 'development') {
       console.error('Error caught by boundary:', error, errorInfo);
     }
   }
 
-  render() {
+  render(): ReactNode {
     if (this.state.hasError) {
       return (
         <div style={{
@@ -31,7 +39,9 @@ class ErrorBoundary extends React.Component {
           padding: '20px',
           textAlign: 'center'
         }}>
-          <h1 style={{ color: '#EAB308', marginBottom: '20px' }}>Something went wrong</h1>
+          <h1 style={{ color: '#EAB308', marginBottom: '20px' }}>
+            Something went wrong
+          </h1>
           <p style={{ color: '#A3A3A3', marginBottom: '20px' }}>
             {this.state.error?.message || 'An unexpected error occurred'}
           </p>
@@ -44,7 +54,16 @@ class ErrorBoundary extends React.Component {
               borderRadius: '6px',
               border: 'none',
               cursor: 'pointer',
-              fontWeight: '600'
+              fontWeight: '600',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+              e.currentTarget.style.boxShadow = '0 4px 20px rgba(234, 179, 8, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.boxShadow = 'none';
             }}
           >
             Reload Page
