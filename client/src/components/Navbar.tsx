@@ -1,19 +1,25 @@
 import { useState, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa';
+import { FiHome, FiUser, FiCode, FiAward, FiGithub, FiMail, FiSun, FiMoon, FiMenu, FiX, FiLinkedin } from 'react-icons/fi';
 
 interface NavbarProps {
   theme: 'dark' | 'light';
   toggleTheme: () => void;
 }
 
-const NAV_LINKS = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'certificates', label: 'Certificates' },
-  { id: 'github', label: 'GitHub' },
-  { id: 'contact', label: 'Contact' }
+interface NavLink {
+  id: string;
+  label: string;
+  icon: typeof FiHome;
+}
+
+const NAV_LINKS: NavLink[] = [
+  { id: 'home', label: 'Home', icon: FiHome },
+  { id: 'about', label: 'About', icon: FiUser },
+  { id: 'projects', label: 'Projects', icon: FiCode },
+  { id: 'certificates', label: 'Certificates', icon: FiAward },
+  { id: 'github', label: 'GitHub', icon: FiGithub },
+  { id: 'contact', label: 'Contact', icon: FiMail }
 ];
 
 const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
@@ -21,6 +27,7 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
 
   const isDark = theme === 'dark';
 
@@ -66,13 +73,9 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
     }
   }, []);
 
-  const toggleMobileMenu = useCallback(() => {
-    setIsMobileMenuOpen(prev => !prev);
-  }, []);
-
   return (
     <motion.nav
-      initial={{ y: 0 }}
+      initial={{ y: -100 }}
       animate={{ y: isVisible ? 0 : -100 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
       style={{
@@ -84,9 +87,9 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
         background: isDark 
           ? 'rgba(12, 12, 12, 0.85)' 
           : 'rgba(255, 255, 255, 0.85)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`,
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        borderBottom: `1px solid rgba(234, 179, 8, 0.2)`,
         boxShadow: '0 2px 20px rgba(0, 0, 0, 0.1)'
       }}
     >
@@ -122,126 +125,161 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
           Jagdeep
         </motion.button>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Icon Navigation */}
         <div style={{
-          display: 'flex',
-          gap: '8px',
+          display: window.innerWidth >= 768 ? 'flex' : 'none',
+          gap: '4px',
           alignItems: 'center'
         }}>
-          <div style={{
-            display: window.innerWidth >= 768 ? 'flex' : 'none',
-            gap: '4px',
-            alignItems: 'center'
-          }}>
-            {NAV_LINKS.map((link) => (
-              <motion.button
-                key={link.id}
-                onClick={() => scrollToSection(link.id)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  background: activeSection === link.id 
-                    ? 'rgba(234, 179, 8, 0.1)' 
-                    : 'transparent',
-                  border: 'none',
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  color: activeSection === link.id 
-                    ? '#EAB308' 
-                    : isDark ? '#A3A3A3' : '#666666',
-                  transition: 'all 0.2s ease',
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  position: 'relative'
-                }}
-                onMouseEnter={(e) => {
-                  if (activeSection !== link.id) {
-                    e.currentTarget.style.color = '#EAB308';
-                    e.currentTarget.style.background = 'rgba(234, 179, 8, 0.05)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (activeSection !== link.id) {
-                    e.currentTarget.style.color = isDark ? '#A3A3A3' : '#666666';
-                    e.currentTarget.style.background = 'transparent';
-                  }
-                }}
-                aria-label={`Navigate to ${link.label}`}
-                aria-current={activeSection === link.id ? 'page' : undefined}
-              >
-                {link.label}
-              </motion.button>
-            ))}
-          </div>
+          {NAV_LINKS.map((link) => {
+            const Icon = link.icon;
+            return (
+              <div key={link.id} style={{ position: 'relative' }}>
+                <motion.button
+                  onClick={() => scrollToSection(link.id)}
+                  onMouseEnter={() => setHoveredIcon(link.id)}
+                  onMouseLeave={() => setHoveredIcon(null)}
+                  whileHover={{ scale: 1.1, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  style={{
+                    background: activeSection === link.id 
+                      ? 'rgba(234, 179, 8, 0.15)' 
+                      : 'transparent',
+                    border: 'none',
+                    padding: '10px',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    color: activeSection === link.id ? '#EAB308' : isDark ? '#A3A3A3' : '#666666',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '20px',
+                    position: 'relative',
+                    boxShadow: activeSection === link.id ? '0 0 20px rgba(234, 179, 8, 0.3)' : 'none'
+                  }}
+                  aria-label={`Navigate to ${link.label}`}
+                  aria-current={activeSection === link.id ? 'page' : undefined}
+                >
+                  <Icon />
+                </motion.button>
+                
+                {/* Tooltip */}
+                <AnimatePresence>
+                  {hoveredIcon === link.id && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      transition={{ duration: 0.2 }}
+                      style={{
+                        position: 'absolute',
+                        top: '100%',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        marginTop: '8px',
+                        padding: '6px 12px',
+                        background: isDark ? '#1A1A1A' : '#FFFFFF',
+                        border: '1px solid rgba(234, 179, 8, 0.3)',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: 500,
+                        color: '#EAB308',
+                        whiteSpace: 'nowrap',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                        pointerEvents: 'none',
+                        zIndex: 1001
+                      }}
+                    >
+                      {link.label}
+                      <div style={{
+                        position: 'absolute',
+                        top: '-4px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: '8px',
+                        height: '8px',
+                        background: isDark ? '#1A1A1A' : '#FFFFFF',
+                        border: '1px solid rgba(234, 179, 8, 0.3)',
+                        borderRight: 'none',
+                        borderBottom: 'none',
+                        rotate: '45deg'
+                      }} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
 
           {/* Social Icons */}
           <div style={{
-            display: window.innerWidth >= 768 ? 'flex' : 'none',
-            gap: '8px',
-            marginLeft: '16px',
-            paddingLeft: '16px',
-            borderLeft: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`
+            display: 'flex',
+            gap: '4px',
+            marginLeft: '12px',
+            paddingLeft: '12px',
+            borderLeft: `1px solid rgba(234, 179, 8, 0.2)`
           }}>
             <motion.a
               href="https://github.com/JagdeepMohanty"
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ scale: 1.15, y: -2 }}
+              whileHover={{ scale: 1.1, y: -2 }}
               whileTap={{ scale: 0.95 }}
               style={{
                 color: isDark ? '#A3A3A3' : '#666666',
                 fontSize: '20px',
+                padding: '10px',
+                borderRadius: '10px',
+                transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                width: '36px',
-                height: '36px',
-                borderRadius: '8px',
-                transition: 'all 0.2s ease'
+                justifyContent: 'center'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#EAB308';
                 e.currentTarget.style.background = 'rgba(234, 179, 8, 0.1)';
+                e.currentTarget.style.boxShadow = '0 0 15px rgba(234, 179, 8, 0.3)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = isDark ? '#A3A3A3' : '#666666';
                 e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.boxShadow = 'none';
               }}
               aria-label="GitHub Profile"
             >
-              <FaGithub />
+              <FiGithub />
             </motion.a>
 
             <motion.a
               href="https://www.linkedin.com/in/jagdeepmohanty"
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ scale: 1.15, y: -2 }}
+              whileHover={{ scale: 1.1, y: -2 }}
               whileTap={{ scale: 0.95 }}
               style={{
                 color: isDark ? '#A3A3A3' : '#666666',
                 fontSize: '20px',
+                padding: '10px',
+                borderRadius: '10px',
+                transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                width: '36px',
-                height: '36px',
-                borderRadius: '8px',
-                transition: 'all 0.2s ease'
+                justifyContent: 'center'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.color = '#EAB308';
                 e.currentTarget.style.background = 'rgba(234, 179, 8, 0.1)';
+                e.currentTarget.style.boxShadow = '0 0 15px rgba(234, 179, 8, 0.3)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.color = isDark ? '#A3A3A3' : '#666666';
                 e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.boxShadow = 'none';
               }}
               aria-label="LinkedIn Profile"
             >
-              <FaLinkedin />
+              <FiLinkedin />
             </motion.a>
           </div>
 
@@ -252,8 +290,8 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
             whileTap={{ scale: 0.9 }}
             style={{
               background: 'rgba(234, 179, 8, 0.1)',
-              border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.3)' : 'rgba(234, 179, 8, 0.4)'}`,
-              borderRadius: '8px',
+              border: `1px solid rgba(234, 179, 8, 0.3)`,
+              borderRadius: '10px',
               width: '40px',
               height: '40px',
               display: 'flex',
@@ -277,33 +315,32 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
             }}
             aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
           >
-            {isDark ? <FaSun /> : <FaMoon />}
-          </motion.button>
-
-          {/* Mobile Menu Button */}
-          <motion.button
-            onClick={toggleMobileMenu}
-            whileTap={{ scale: 0.9 }}
-            style={{
-              display: window.innerWidth < 768 ? 'flex' : 'none',
-              background: 'rgba(234, 179, 8, 0.1)',
-              border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.3)' : 'rgba(234, 179, 8, 0.4)'}`,
-              borderRadius: '8px',
-              width: '40px',
-              height: '40px',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              color: '#EAB308',
-              fontSize: '18px',
-              marginLeft: '8px'
-            }}
-            aria-label="Toggle mobile menu"
-            aria-expanded={isMobileMenuOpen}
-          >
-            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+            {isDark ? <FiSun /> : <FiMoon />}
           </motion.button>
         </div>
+
+        {/* Mobile Menu Button */}
+        <motion.button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          whileTap={{ scale: 0.9 }}
+          style={{
+            display: window.innerWidth < 768 ? 'flex' : 'none',
+            background: 'rgba(234, 179, 8, 0.1)',
+            border: `1px solid rgba(234, 179, 8, 0.3)`,
+            borderRadius: '10px',
+            width: '40px',
+            height: '40px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: '#EAB308',
+            fontSize: '20px'
+          }}
+          aria-label="Toggle mobile menu"
+          aria-expanded={isMobileMenuOpen}
+        >
+          {isMobileMenuOpen ? <FiX /> : <FiMenu />}
+        </motion.button>
       </div>
 
       {/* Mobile Menu */}
@@ -313,15 +350,12 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: 0.3 }}
             style={{
               overflow: 'hidden',
-              background: isDark 
-                ? 'rgba(26, 26, 26, 0.95)' 
-                : 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              borderTop: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`
+              background: isDark ? 'rgba(26, 26, 26, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(10px)',
+              borderTop: `1px solid rgba(234, 179, 8, 0.2)`
             }}
           >
             <div style={{
@@ -330,43 +364,45 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
               flexDirection: 'column',
               gap: '8px'
             }}>
-              {NAV_LINKS.map((link, index) => (
-                <motion.button
-                  key={link.id}
-                  onClick={() => scrollToSection(link.id)}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  whileTap={{ scale: 0.98 }}
-                  style={{
-                    background: activeSection === link.id 
-                      ? 'rgba(234, 179, 8, 0.1)' 
-                      : 'transparent',
-                    border: 'none',
-                    padding: '12px 16px',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    fontSize: '16px',
-                    fontWeight: 500,
-                    color: activeSection === link.id 
-                      ? '#EAB308' 
-                      : isDark ? '#A3A3A3' : '#666666',
-                    textAlign: 'left',
-                    transition: 'all 0.2s ease',
-                    fontFamily: 'Inter, system-ui, sans-serif'
-                  }}
-                  aria-label={`Navigate to ${link.label}`}
-                >
-                  {link.label}
-                </motion.button>
-              ))}
+              {NAV_LINKS.map((link, index) => {
+                const Icon = link.icon;
+                return (
+                  <motion.button
+                    key={link.id}
+                    onClick={() => scrollToSection(link.id)}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{
+                      background: activeSection === link.id ? 'rgba(234, 179, 8, 0.1)' : 'transparent',
+                      border: 'none',
+                      padding: '12px 16px',
+                      borderRadius: '10px',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      fontWeight: 500,
+                      color: activeSection === link.id ? '#EAB308' : isDark ? '#A3A3A3' : '#666666',
+                      textAlign: 'left',
+                      transition: 'all 0.2s ease',
+                      fontFamily: 'Inter, system-ui, sans-serif',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px'
+                    }}
+                  >
+                    <Icon style={{ fontSize: '20px' }} />
+                    {link.label}
+                  </motion.button>
+                );
+              })}
 
               <div style={{
                 display: 'flex',
                 gap: '12px',
                 marginTop: '12px',
                 paddingTop: '12px',
-                borderTop: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`
+                borderTop: `1px solid rgba(234, 179, 8, 0.2)`
               }}>
                 <motion.a
                   href="https://github.com/JagdeepMohanty"
@@ -377,8 +413,8 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
                     flex: 1,
                     padding: '12px',
                     background: 'rgba(234, 179, 8, 0.1)',
-                    border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.3)' : 'rgba(234, 179, 8, 0.4)'}`,
-                    borderRadius: '8px',
+                    border: `1px solid rgba(234, 179, 8, 0.3)`,
+                    borderRadius: '10px',
                     color: '#EAB308',
                     fontSize: '16px',
                     display: 'flex',
@@ -386,12 +422,10 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
                     justifyContent: 'center',
                     gap: '8px',
                     textDecoration: 'none',
-                    fontWeight: 500,
-                    fontFamily: 'Inter, system-ui, sans-serif'
+                    fontWeight: 500
                   }}
-                  aria-label="GitHub Profile"
                 >
-                  <FaGithub /> GitHub
+                  <FiGithub /> GitHub
                 </motion.a>
 
                 <motion.a
@@ -403,8 +437,8 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
                     flex: 1,
                     padding: '12px',
                     background: 'rgba(234, 179, 8, 0.1)',
-                    border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.3)' : 'rgba(234, 179, 8, 0.4)'}`,
-                    borderRadius: '8px',
+                    border: `1px solid rgba(234, 179, 8, 0.3)`,
+                    borderRadius: '10px',
                     color: '#EAB308',
                     fontSize: '16px',
                     display: 'flex',
@@ -412,14 +446,34 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
                     justifyContent: 'center',
                     gap: '8px',
                     textDecoration: 'none',
-                    fontWeight: 500,
-                    fontFamily: 'Inter, system-ui, sans-serif'
+                    fontWeight: 500
                   }}
-                  aria-label="LinkedIn Profile"
                 >
-                  <FaLinkedin /> LinkedIn
+                  <FiLinkedin /> LinkedIn
                 </motion.a>
               </div>
+
+              <motion.button
+                onClick={toggleTheme}
+                whileTap={{ scale: 0.95 }}
+                style={{
+                  marginTop: '8px',
+                  padding: '12px',
+                  background: 'rgba(234, 179, 8, 0.1)',
+                  border: `1px solid rgba(234, 179, 8, 0.3)`,
+                  borderRadius: '10px',
+                  color: '#EAB308',
+                  fontSize: '16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                  fontWeight: 500
+                }}
+              >
+                {isDark ? <><FiSun /> Light Mode</> : <><FiMoon /> Dark Mode</>}
+              </motion.button>
             </div>
           </motion.div>
         )}

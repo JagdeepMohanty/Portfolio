@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { FaHtml5, FaCss3Alt, FaReact, FaJs, FaNodeJs, FaDatabase, FaPython, FaAws, FaDocker, FaGitAlt } from 'react-icons/fa';
+import { FaHtml5, FaCss3Alt, FaReact, FaJs, FaNodeJs, FaDatabase, FaPython, FaAws, FaDocker, FaGitAlt, FaDownload } from 'react-icons/fa';
 import { SiMongodb, SiFlask, SiNextdotjs, SiTypescript, SiC, SiCplusplus } from 'react-icons/si';
 import { IconType } from 'react-icons';
 
@@ -115,6 +115,48 @@ const AboutSection = memo<AboutSectionProps>(({ theme }) => {
             </p>
           </div>
 
+          {/* Download Resume Button */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: 'clamp(35px, 6vw, 50px)'
+          }}>
+            <motion.a
+              href="/resume.pdf"
+              download
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              style={{
+                background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
+                color: '#0C0C0C',
+                padding: '14px 32px',
+                borderRadius: '10px',
+                fontWeight: 600,
+                fontSize: '16px',
+                transition: 'all 0.3s ease',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '10px',
+                textDecoration: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 20px rgba(234, 179, 8, 0.3)',
+                fontFamily: 'Inter, system-ui, sans-serif'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 6px 30px rgba(234, 179, 8, 0.5)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(234, 179, 8, 0.3)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+              aria-label="Download Resume"
+            >
+              <FaDownload /> Download Resume
+            </motion.a>
+          </div>
+
           <div style={{
             marginBottom: 'clamp(25px, 5vw, 40px)'
           }}>
@@ -197,93 +239,120 @@ const AboutSection = memo<AboutSectionProps>(({ theme }) => {
             }}>
               Education
             </h2>
-            <motion.div
+            <div 
+              className="education-grid"
               style={{
-                background: isDark ? '#1A1A1A' : '#FFFFFF',
-                borderRadius: '12px',
-                padding: '20px',
-                border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: 'clamp(20px, 4vw, 30px)',
                 maxWidth: '900px',
                 margin: '0 auto'
               }}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              whileHover={{
-                scale: 1.02,
-                boxShadow: '0 0 15px rgba(234, 179, 8, 0.3)'
-              }}
             >
-              <div 
-                className="education-grid"
+              {/* Education Card 1 */}
+              <motion.div
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '30px',
-                  alignItems: 'start'
+                  background: isDark ? '#1A1A1A' : '#FFFFFF',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
+                  transition: 'all 0.3s ease'
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+                whileHover={{
+                  scale: 1.03,
+                  boxShadow: '0 8px 25px rgba(234, 179, 8, 0.3)'
                 }}
               >
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center'
+                <h3 style={{
+                  color: '#EAB308',
+                  fontSize: 'clamp(1.1rem, 2.5vw, 1.2rem)',
+                  fontWeight: 600,
+                  marginBottom: '12px',
+                  lineHeight: 1.3
                 }}>
-                  <h3 style={{
-                    color: '#EAB308',
-                    fontSize: 'clamp(1rem, 2.5vw, 1.1rem)',
-                    fontWeight: 600,
-                    marginBottom: '8px',
-                    lineHeight: 1.3
-                  }}>
-                    Senior Secondary
-                  </h3>
-                  <p style={{
-                    color: isDark ? '#FAFAFA' : '#1A1A1A',
-                    fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-                    marginBottom: '8px',
-                    lineHeight: 1.4
-                  }}>
-                    Kendriya Vidyalaya No.1 Balasore
-                  </p>
-                  <p style={{
-                    color: '#A3A3A3',
-                    fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)'
-                  }}>
-                    2021 – 2023
-                  </p>
-                </div>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center'
+                  Senior Secondary
+                </h3>
+                <p style={{
+                  color: isDark ? '#FAFAFA' : '#1A1A1A',
+                  fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+                  marginBottom: '8px',
+                  lineHeight: 1.4,
+                  fontWeight: 500
                 }}>
-                  <h3 style={{
-                    color: '#EAB308',
-                    fontSize: 'clamp(1rem, 2.5vw, 1.1rem)',
-                    fontWeight: 600,
-                    marginBottom: '8px',
-                    lineHeight: 1.3
-                  }}>
-                    Bachelor of Technology in Computer Science
-                  </h3>
-                  <p style={{
-                    color: isDark ? '#FAFAFA' : '#1A1A1A',
-                    fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-                    marginBottom: '8px',
-                    lineHeight: 1.4
-                  }}>
-                    Rai University Ahmedabad
-                  </p>
-                  <p style={{
-                    color: '#A3A3A3',
-                    fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)'
-                  }}>
-                    2023 – 2027
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+                  Kendriya Vidyalaya No.1 Balasore
+                </p>
+                <p style={{
+                  color: '#A3A3A3',
+                  fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)',
+                  marginBottom: '12px'
+                }}>
+                  2021 – 2023
+                </p>
+                <p style={{
+                  color: isDark ? '#A3A3A3' : '#666666',
+                  fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
+                  lineHeight: 1.5
+                }}>
+                  Completed senior secondary education with focus on Science and Mathematics.
+                </p>
+              </motion.div>
+
+              {/* Education Card 2 */}
+              <motion.div
+                style={{
+                  background: isDark ? '#1A1A1A' : '#FFFFFF',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
+                  transition: 'all 0.3s ease'
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{
+                  scale: 1.03,
+                  boxShadow: '0 8px 25px rgba(234, 179, 8, 0.3)'
+                }}
+              >
+                <h3 style={{
+                  color: '#EAB308',
+                  fontSize: 'clamp(1.1rem, 2.5vw, 1.2rem)',
+                  fontWeight: 600,
+                  marginBottom: '12px',
+                  lineHeight: 1.3
+                }}>
+                  Bachelor of Technology in Computer Science
+                </h3>
+                <p style={{
+                  color: isDark ? '#FAFAFA' : '#1A1A1A',
+                  fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+                  marginBottom: '8px',
+                  lineHeight: 1.4,
+                  fontWeight: 500
+                }}>
+                  Rai University Ahmedabad
+                </p>
+                <p style={{
+                  color: '#A3A3A3',
+                  fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)',
+                  marginBottom: '12px'
+                }}>
+                  2023 – 2027
+                </p>
+                <p style={{
+                  color: isDark ? '#A3A3A3' : '#666666',
+                  fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
+                  lineHeight: 1.5
+                }}>
+                  Pursuing B.Tech in Computer Science with specialization in Full Stack Development and Data Science.
+                </p>
+              </motion.div>
+            </div>
           </div>
         </motion.div>
       </div>
