@@ -1,11 +1,13 @@
 import { useState, useCallback } from 'react';
-import { validateForm, sanitizeInput, isSpam, contactFormRules, ValidationErrors } from '../utils/validation';
-import { errorTracker } from '../services/errorTracker';
 
 interface FormData {
   name: string;
   email: string;
   message: string;
+}
+
+interface ValidationErrors {
+  [key: string]: string;
 }
 
 interface UseContactFormReturn {
@@ -22,6 +24,14 @@ const initialFormData: FormData = {
   name: '',
   email: '',
   message: ''
+};
+
+const validateEmail = (email: string): boolean => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
+const sanitizeInput = (value: string): string => {
+  return value.trim().replace(/<[^>]*>/g, '');
 };
 
 export const useContactForm = (): UseContactFormReturn => {
@@ -46,25 +56,22 @@ export const useContactForm = (): UseContactFormReturn => {
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
-    errorTracker.addBreadcrumb('Contact form submission started', 'form');
+    const validationErrors: ValidationErrors = {};
     
-    const formDataObj: Record<string, string> = {
-      name: formData.name,
-      email: formData.email,
-      message: formData.message
-    };
+    if (!formData.name || formData.name.length < 2) {
+      validationErrors.name = 'Name must be at least 2 characters';
+    }
     
-    const validationErrors = validateForm(formDataObj, contactFormRules);
+    if (!formData.email || !validateEmail(formData.email)) {
+      validationErrors.email = 'Please enter a valid email';
+    }
+    
+    if (!formData.message || formData.message.length < 10) {
+      validationErrors.message = 'Message must be at least 10 characters';
+    }
     
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      errorTracker.captureMessage('Form validation failed', 'warning');
-      return;
-    }
-
-    if (isSpam(formData.message)) {
-      setErrors({ message: 'Your message appears to be spam. Please try again.' });
-      errorTracker.captureMessage('Spam detected in contact form', 'warning');
       return;
     }
 
@@ -86,19 +93,14 @@ export const useContactForm = (): UseContactFormReturn => {
 
       setIsSuccess(true);
       setFormData(initialFormData);
-      errorTracker.addBreadcrumb('Contact form submitted successfully', 'form');
       
       setTimeout(() => setIsSuccess(false), 5000);
     } catch (error) {
-      errorTracker.captureError(error as Error, {
-        tags: { form: 'contact' },
-        extra: { formData: { ...formData, message: '[REDACTED]' } }
-      });
       setErrors({ submit: 'Failed to send message. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
-  }, [formData]);
+  }, [formData, errors]);
 
   const resetForm = useCallback(() => {
     setFormData(initialFormData);

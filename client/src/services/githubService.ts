@@ -1,7 +1,5 @@
 import { GITHUB_API } from '../constants/config';
 import { GitHubProfile, GitHubRepo, GitHubStats } from '../types';
-import { errorTracker } from './errorTracker';
-import { ENV } from '../config/env';
 
 interface GitHubData {
   profile: GitHubProfile;
@@ -109,8 +107,6 @@ class GitHubService {
 
   async fetchGitHubData(username: string): Promise<GitHubData | null> {
     try {
-      errorTracker.addBreadcrumb('Fetching GitHub data', 'api', { username });
-      
       const [profileData, reposData] = await Promise.all([
         this.fetchUserProfile(username),
         this.fetchUserRepos(username)
@@ -123,11 +119,7 @@ class GitHubService {
         repos: reposData,
         stats
       };
-    } catch (error) {
-      errorTracker.captureError(error as Error, {
-        tags: { service: 'github', username },
-        extra: { endpoint: 'fetchGitHubData' }
-      });
+    } catch {
       return null;
     }
   }

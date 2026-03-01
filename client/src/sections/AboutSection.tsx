@@ -1,35 +1,58 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { FaHtml5, FaCss3Alt, FaReact, FaJs, FaNodeJs, FaDatabase, FaPython, FaAws, FaDocker, FaGitAlt, FaDownload } from 'react-icons/fa';
-import { SiMongodb, SiFlask, SiNextdotjs, SiTypescript, SiC, SiCplusplus } from 'react-icons/si';
+import { FaReact, FaNodeJs, FaDatabase, FaGitAlt, FaDocker, FaDownload } from 'react-icons/fa';
+import { SiMongodb, SiNextdotjs, SiTypescript, SiJavascript, SiPython, SiCplusplus, SiExpress, SiVite } from 'react-icons/si';
 import { IconType } from 'react-icons';
 
 interface AboutSectionProps {
   theme: 'dark' | 'light';
 }
 
-interface Skill {
-  name: string;
-  icon: IconType;
+interface SkillCategory {
+  title: string;
+  skills: { name: string; icon: IconType }[];
 }
 
-const SKILLS: Skill[] = [
-  { name: 'HTML', icon: FaHtml5 },
-  { name: 'CSS', icon: FaCss3Alt },
-  { name: 'React', icon: FaReact },
-  { name: 'JavaScript', icon: FaJs },
-  { name: 'Node.js', icon: FaNodeJs },
-  { name: 'SQL', icon: FaDatabase },
-  { name: 'MongoDB', icon: SiMongodb },
-  { name: 'Python', icon: FaPython },
-  { name: 'Flask', icon: SiFlask },
-  { name: 'AWS', icon: FaAws },
-  { name: 'Docker', icon: FaDocker },
-  { name: 'Git / GitHub', icon: FaGitAlt },
-  { name: 'C', icon: SiC },
-  { name: 'C++', icon: SiCplusplus },
-  { name: 'Next.js', icon: SiNextdotjs },
-  { name: 'TypeScript', icon: SiTypescript }
+const SKILL_CATEGORIES: SkillCategory[] = [
+  {
+    title: 'Frontend',
+    skills: [
+      { name: 'React', icon: FaReact },
+      { name: 'TypeScript', icon: SiTypescript },
+      { name: 'Next.js', icon: SiNextdotjs },
+      { name: 'JavaScript', icon: SiJavascript }
+    ]
+  },
+  {
+    title: 'Backend',
+    skills: [
+      { name: 'Node.js', icon: FaNodeJs },
+      { name: 'Express', icon: SiExpress }
+    ]
+  },
+  {
+    title: 'Database',
+    skills: [
+      { name: 'MongoDB', icon: SiMongodb },
+      { name: 'SQL', icon: FaDatabase }
+    ]
+  },
+  {
+    title: 'Programming',
+    skills: [
+      { name: 'JavaScript', icon: SiJavascript },
+      { name: 'Python', icon: SiPython },
+      { name: 'C++', icon: SiCplusplus }
+    ]
+  },
+  {
+    title: 'Tools',
+    skills: [
+      { name: 'Git', icon: FaGitAlt },
+      { name: 'Docker', icon: FaDocker },
+      { name: 'Vite', icon: SiVite }
+    ]
+  }
 ];
 
 const AboutSection = memo<AboutSectionProps>(({ theme }) => {
@@ -59,9 +82,9 @@ const AboutSection = memo<AboutSectionProps>(({ theme }) => {
         }
       `}</style>
       <div style={{
-        maxWidth: '1200px',
+        maxWidth: '1100px',
         margin: '0 auto',
-        padding: '0 15px'
+        padding: 'clamp(20px, 4vw, 40px)'
       }}>
         <h1 style={{
           fontSize: 'clamp(1.5rem, 4vw, 2rem)',
@@ -88,30 +111,13 @@ const AboutSection = memo<AboutSectionProps>(({ theme }) => {
             maxWidth: '900px',
             margin: '0 auto clamp(25px, 5vw, 40px) auto'
           }}>
-            <h2 style={{
-              fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
-              color: '#EAB308',
-              marginBottom: '20px',
-              fontWeight: 600
-            }}>
-              Software Engineer
-            </h2>
             <p style={{
               color: isDark ? '#A3A3A3' : '#666666',
-              marginBottom: '15px',
-              lineHeight: 1.6,
-              fontSize: 'clamp(0.9rem, 2vw, 1rem)'
+              lineHeight: 1.7,
+              fontSize: 'clamp(0.95rem, 2vw, 1.05rem)',
+              textAlign: 'center'
             }}>
-              I'm a Full-Stack Developer who enjoys building modern, scalable, and user-focused web applications that solve real-world problems. I specialize in technologies like React, Node.js, Python, Flask, and MongoDB, and I focus on creating clean interfaces backed by efficient and reliable systems. I enjoy turning ideas into practical products and continuously improving the quality and performance of my work.
-            </p>
-            <p style={{
-              color: isDark ? '#A3A3A3' : '#666666',
-              marginBottom: '15px',
-              marginTop: '12px',
-              lineHeight: 1.6,
-              fontSize: 'clamp(0.9rem, 2vw, 1rem)'
-            }}>
-              Alongside development, I have a strong interest in Data Analytics, Data Science, and Artificial Intelligence. I'm curious about how data can drive decisions and power intelligent solutions. I'm a hardworking and consistent learner who enjoys exploring new technologies, taking on challenges, and growing every day. My goal is to contribute to impactful projects, gain real-world experience, and evolve into a versatile software engineer capable of building meaningful and intelligent solutions.
+              I'm a Full-Stack Developer passionate about building scalable, high-performance web applications. With expertise in React, Node.js, TypeScript, and modern development tools, I create efficient solutions that solve real-world problems. I focus on clean code architecture, performance optimization, and delivering exceptional user experiences.
             </p>
           </div>
 
@@ -163,70 +169,80 @@ const AboutSection = memo<AboutSectionProps>(({ theme }) => {
             <h2 style={{
               fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
               color: '#EAB308',
-              marginBottom: 'clamp(20px, 4vw, 30px)',
+              marginBottom: 'clamp(25px, 4vw, 35px)',
               textAlign: 'center',
               fontWeight: 600
             }}>
               Technical Skills
             </h2>
-            <div 
-              className="skills-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-                gap: '15px',
-                maxWidth: '700px',
-                margin: '20px auto 0 auto'
-              }}
-            >
-              {SKILLS.map((skill, index) => {
-                const IconComponent = skill.icon;
-                return (
-                  <div
-                    key={index}
-                    style={{
-                      background: isDark ? '#1A1A1A' : '#FFFFFF',
-                      color: '#EAB308',
-                      padding: '12px 14px',
-                      borderRadius: '8px',
-                      textAlign: 'center',
-                      fontSize: '14px',
-                      fontWeight: 500,
-                      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.3)' : 'rgba(234, 179, 8, 0.4)'}`,
-                      cursor: 'default',
-                      transition: 'all 0.3s ease',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: '8px'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'scale(1.05)';
-                      e.currentTarget.style.backgroundColor = '#EAB308';
-                      e.currentTarget.style.color = '#000';
-                      const icon = e.currentTarget.querySelector('.skill-icon') as HTMLElement;
-                      if (icon) icon.style.color = '#000';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'scale(1)';
-                      e.currentTarget.style.backgroundColor = isDark ? '#1A1A1A' : '#FFFFFF';
-                      e.currentTarget.style.color = '#EAB308';
-                      const icon = e.currentTarget.querySelector('.skill-icon') as HTMLElement;
-                      if (icon) icon.style.color = '#EAB308';
-                    }}
-                  >
-                    <IconComponent 
-                      className="skill-icon"
-                      style={{
-                        fontSize: '28px',
-                        color: '#EAB308'
-                      }}
-                    />
-                    <span>{skill.name}</span>
-                  </div>
-                );
-              })}
-            </div>
+            
+            {SKILL_CATEGORIES.map((category, catIndex) => (
+              <div key={catIndex} style={{ marginBottom: 'clamp(25px, 4vw, 35px)' }}>
+                <h3 style={{
+                  fontSize: 'clamp(1rem, 2.2vw, 1.1rem)',
+                  color: isDark ? '#FAFAFA' : '#1A1A1A',
+                  marginBottom: '16px',
+                  fontWeight: 600,
+                  textAlign: 'center'
+                }}>
+                  {category.title}
+                </h3>
+                <div style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '12px',
+                  justifyContent: 'center',
+                  maxWidth: '600px',
+                  margin: '0 auto'
+                }}>
+                  {category.skills.map((skill, index) => {
+                    const IconComponent = skill.icon;
+                    return (
+                      <div
+                        key={index}
+                        style={{
+                          background: isDark ? '#1A1A1A' : '#FFFFFF',
+                          color: '#EAB308',
+                          padding: '10px 18px',
+                          borderRadius: '8px',
+                          fontSize: '14px',
+                          fontWeight: 500,
+                          border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.3)' : 'rgba(234, 179, 8, 0.4)'}`,
+                          cursor: 'default',
+                          transition: 'all 0.3s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                          e.currentTarget.style.backgroundColor = '#EAB308';
+                          e.currentTarget.style.color = '#000';
+                          const icon = e.currentTarget.querySelector('.skill-icon') as HTMLElement;
+                          if (icon) icon.style.color = '#000';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = 'scale(1)';
+                          e.currentTarget.style.backgroundColor = isDark ? '#1A1A1A' : '#FFFFFF';
+                          e.currentTarget.style.color = '#EAB308';
+                          const icon = e.currentTarget.querySelector('.skill-icon') as HTMLElement;
+                          if (icon) icon.style.color = '#EAB308';
+                        }}
+                      >
+                        <IconComponent 
+                          className="skill-icon"
+                          style={{
+                            fontSize: '20px',
+                            color: '#EAB308'
+                          }}
+                        />
+                        <span>{skill.name}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
 
           <div>
@@ -274,7 +290,7 @@ const AboutSection = memo<AboutSectionProps>(({ theme }) => {
                   marginBottom: '12px',
                   lineHeight: 1.3
                 }}>
-                  Senior Secondary
+                  Senior Secondary Education
                 </h3>
                 <p style={{
                   color: isDark ? '#FAFAFA' : '#1A1A1A',
@@ -283,21 +299,13 @@ const AboutSection = memo<AboutSectionProps>(({ theme }) => {
                   lineHeight: 1.4,
                   fontWeight: 500
                 }}>
-                  Kendriya Vidyalaya No.1 Balasore
+                  Kendriya Vidyalaya No.1, Balasore
                 </p>
                 <p style={{
                   color: '#A3A3A3',
-                  fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)',
-                  marginBottom: '12px'
+                  fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)'
                 }}>
                   2021 – 2023
-                </p>
-                <p style={{
-                  color: isDark ? '#A3A3A3' : '#666666',
-                  fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
-                  lineHeight: 1.5
-                }}>
-                  Completed senior secondary education with focus on Science and Mathematics.
                 </p>
               </motion.div>
 
@@ -326,7 +334,7 @@ const AboutSection = memo<AboutSectionProps>(({ theme }) => {
                   marginBottom: '12px',
                   lineHeight: 1.3
                 }}>
-                  Bachelor of Technology in Computer Science
+                  B.Tech in Computer Science
                 </h3>
                 <p style={{
                   color: isDark ? '#FAFAFA' : '#1A1A1A',
@@ -335,21 +343,13 @@ const AboutSection = memo<AboutSectionProps>(({ theme }) => {
                   lineHeight: 1.4,
                   fontWeight: 500
                 }}>
-                  Rai University Ahmedabad
+                  Rai University, Ahmedabad
                 </p>
                 <p style={{
                   color: '#A3A3A3',
-                  fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)',
-                  marginBottom: '12px'
+                  fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)'
                 }}>
                   2023 – 2027
-                </p>
-                <p style={{
-                  color: isDark ? '#A3A3A3' : '#666666',
-                  fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
-                  lineHeight: 1.5
-                }}>
-                  Pursuing B.Tech in Computer Science with specialization in Full Stack Development and Data Science.
                 </p>
               </motion.div>
             </div>

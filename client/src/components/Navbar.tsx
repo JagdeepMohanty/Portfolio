@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiHome, FiUser, FiCode, FiAward, FiGithub, FiMail, FiSun, FiMoon, FiMenu, FiX, FiLinkedin } from 'react-icons/fi';
+import { FiHome, FiUser, FiCode, FiGithub, FiMail, FiSun, FiMoon, FiMenu, FiX, FiLinkedin, FiAward } from 'react-icons/fi';
 
 interface NavbarProps {
   theme: 'dark' | 'light';
@@ -17,8 +17,8 @@ const NAV_LINKS: NavLink[] = [
   { id: 'home', label: 'Home', icon: FiHome },
   { id: 'about', label: 'About', icon: FiUser },
   { id: 'projects', label: 'Projects', icon: FiCode },
-  { id: 'certificates', label: 'Certificates', icon: FiAward },
   { id: 'github', label: 'GitHub', icon: FiGithub },
+  { id: 'achievements', label: 'Achievements', icon: FiAward },
   { id: 'contact', label: 'Contact', icon: FiMail }
 ];
 

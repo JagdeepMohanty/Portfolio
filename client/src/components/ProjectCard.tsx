@@ -15,8 +15,8 @@ const ProjectCard = memo<ProjectCardProps>(({ project, theme }) => {
     <motion.div
       style={{
         background: isDark ? '#1A1A1A' : '#FFFFFF',
-        borderRadius: '10px',
-        padding: '18px',
+        borderRadius: '12px',
+        padding: '20px',
         border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`,
         transition: 'all 0.3s ease',
         display: 'flex',
@@ -31,7 +31,7 @@ const ProjectCard = memo<ProjectCardProps>(({ project, theme }) => {
       viewport={{ once: true }}
       whileHover={{ 
         scale: 1.03,
-        boxShadow: '0 0 20px rgba(234, 179, 8, 0.5)',
+        boxShadow: '0 8px 30px rgba(234, 179, 8, 0.6)',
         borderColor: '#EAB308'
       }}
     >
@@ -42,9 +42,9 @@ const ProjectCard = memo<ProjectCardProps>(({ project, theme }) => {
         textAlign: 'left'
       }}>
         <h3 style={{
-          fontSize: 'clamp(1rem, 2vw, 1.1rem)',
+          fontSize: 'clamp(1.05rem, 2.2vw, 1.2rem)',
           color: '#EAB308',
-          marginBottom: '10px',
+          marginBottom: '12px',
           fontWeight: 600,
           lineHeight: 1.3
         }}>
@@ -52,10 +52,10 @@ const ProjectCard = memo<ProjectCardProps>(({ project, theme }) => {
         </h3>
         <p style={{
           color: isDark ? '#A3A3A3' : '#666666',
-          marginBottom: '12px',
+          marginBottom: '16px',
           flex: 1,
-          fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
-          lineHeight: 1.5
+          fontSize: 'clamp(0.9rem, 1.9vw, 0.95rem)',
+          lineHeight: 1.6
         }}>
           {project.description}
         </p>
@@ -83,8 +83,9 @@ const ProjectCard = memo<ProjectCardProps>(({ project, theme }) => {
         </div>
         <div style={{
           display: 'flex',
-          gap: '14px',
-          flexWrap: 'wrap'
+          gap: '16px',
+          flexWrap: 'wrap',
+          marginTop: '4px'
         }}>
           <a 
             href={project.github_link} 
@@ -96,7 +97,7 @@ const ProjectCard = memo<ProjectCardProps>(({ project, theme }) => {
               gap: '6px',
               color: '#EAB308',
               fontWeight: 600,
-              fontSize: 'clamp(0.8rem, 1.8vw, 0.85rem)',
+              fontSize: 'clamp(0.85rem, 1.9vw, 0.9rem)',
               transition: 'all 0.3s ease',
               textDecoration: 'none',
               cursor: 'pointer'
@@ -111,7 +112,7 @@ const ProjectCard = memo<ProjectCardProps>(({ project, theme }) => {
             }}
             aria-label={`View ${project.title} code on GitHub`}
           >
-            <FaGithub /> Code
+            <FaGithub style={{ fontSize: '18px' }} /> GitHub
           </a>
           {project.demo_link && (
             <a 
@@ -124,7 +125,7 @@ const ProjectCard = memo<ProjectCardProps>(({ project, theme }) => {
                 gap: '6px',
                 color: '#EAB308',
                 fontWeight: 600,
-                fontSize: 'clamp(0.8rem, 1.8vw, 0.85rem)',
+                fontSize: 'clamp(0.85rem, 1.9vw, 0.9rem)',
                 transition: 'all 0.3s ease',
                 textDecoration: 'none',
                 cursor: 'pointer'
@@ -139,7 +140,7 @@ const ProjectCard = memo<ProjectCardProps>(({ project, theme }) => {
               }}
               aria-label={`View ${project.title} live demo`}
             >
-              <FaExternalLinkAlt /> Demo
+              <FaExternalLinkAlt style={{ fontSize: '16px' }} /> Live Demo
             </a>
           )}
         </div>

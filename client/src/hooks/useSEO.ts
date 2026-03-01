@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { ENV } from '../config/env';
 
 interface SEOProps {
   title?: string;
@@ -11,7 +10,7 @@ interface SEOProps {
 
 export const useSEO = ({
   title = 'Jagdeep Mohanty - Software Engineer Portfolio',
-  description = 'B.Tech CSE student passionate about coding and data. Explore my projects, certificates, and GitHub contributions.',
+  description = 'B.Tech CSE student passionate about coding and data. Explore my projects and GitHub contributions.',
   image = '/og-image.jpg',
   url = 'https://jagdeepmohanty.netlify.app',
   type = 'website'
@@ -73,7 +72,10 @@ export const useSEO = ({
       "image": image,
       "jobTitle": "Software Engineer",
       "alumniOf": "Rai University",
-      "sameAs": [ENV.GITHUB_URL, ENV.LINKEDIN_URL]
+      "sameAs": [
+        "https://github.com/JagdeepMohanty",
+        "https://www.linkedin.com/in/jagdeepmohanty"
+      ]
     });
   }, [title, description, image, url, type]);
 };

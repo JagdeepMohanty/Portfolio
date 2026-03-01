@@ -161,9 +161,9 @@ const GitHubSection = memo<GitHubSectionProps>(({ theme }) => {
       padding: 'clamp(40px, 8vw, 60px) 20px'
     },
     container: {
-      maxWidth: '1200px',
+      maxWidth: '1100px',
       margin: '0 auto',
-      padding: '0 15px'
+      padding: 'clamp(20px, 4vw, 40px)'
     },
     sectionTitle: {
       fontSize: 'clamp(1.5rem, 4vw, 2rem)',

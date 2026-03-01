@@ -1,6 +1,6 @@
 import { useState, useCallback, memo } from 'react';
-import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaPaperPlane } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaPaperPlane, FaCheckCircle } from 'react-icons/fa';
 
 interface ContactSectionProps {
   theme: 'dark' | 'light';
@@ -49,6 +49,7 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const isDark = theme === 'dark';
 
@@ -59,8 +60,11 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
     setIsSubmitting(false);
+    setIsSuccess(true);
+    setFormData({ name: '', email: '', message: '' });
+    setTimeout(() => setIsSuccess(false), 3000);
   }, []);
 
   return (
@@ -75,9 +79,10 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
       }}
     >
       <div style={{
-        maxWidth: '1200px',
+        maxWidth: '1100px',
         margin: '0 auto',
-        width: '100%'
+        width: '100%',
+        padding: 'clamp(20px, 4vw, 40px)'
       }}>
         {/* Header */}
         <motion.div
@@ -112,35 +117,28 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
           </p>
         </motion.div>
 
-        {/* Main Content */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: window.innerWidth >= 768 ? '1fr 1.2fr' : '1fr',
-            gap: 'clamp(24px, 4vw, 32px)',
-            background: isDark 
-              ? 'rgba(26, 26, 26, 0.6)' 
-              : 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            borderRadius: '20px',
-            padding: 'clamp(24px, 5vw, 40px)',
-            border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`,
-            boxShadow: isDark 
-              ? '0 8px 32px rgba(0, 0, 0, 0.4)' 
-              : '0 8px 32px rgba(0, 0, 0, 0.1)'
-          }}
-        >
-          {/* Left: Contact Info */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '20px'
-          }}>
+        {/* Main Content - Two Separate Cards */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: window.innerWidth >= 768 ? '1fr 1.3fr' : '1fr',
+          gap: 'clamp(24px, 4vw, 32px)'
+        }}>
+          {/* Left Card: Contact Info */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            style={{
+              background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              borderRadius: '16px',
+              padding: 'clamp(24px, 4vw, 32px)',
+              border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+            }}
+          >
             <div style={{ marginBottom: '8px' }}>
               <h3 style={{
                 fontSize: 'clamp(20px, 3vw, 24px)',
@@ -244,21 +242,22 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
                 </div>
               </motion.a>
             ))}
-          </div>
+          </motion.div>
 
-          {/* Right: Contact Form */}
+          {/* Right Card: Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
             style={{
-              background: isDark 
-                ? 'rgba(26, 26, 26, 0.4)' 
-                : 'rgba(255, 255, 255, 0.4)',
+              background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
               borderRadius: '16px',
               padding: 'clamp(24px, 4vw, 32px)',
-              border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.15)'}`
+              border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
             }}
           >
             <h3 style={{
@@ -391,13 +390,15 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
               {/* Submit Button */}
               <motion.button
                 type="submit"
-                disabled={isSubmitting}
-                whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
-                whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                disabled={isSubmitting || isSuccess}
+                whileHover={{ scale: (isSubmitting || isSuccess) ? 1 : 1.02 }}
+                whileTap={{ scale: (isSubmitting || isSuccess) ? 1 : 0.98 }}
                 style={{
                   width: '100%',
                   padding: '16px',
-                  background: isSubmitting 
+                  background: isSuccess 
+                    ? 'linear-gradient(135deg, #10B981, #059669)'
+                    : isSubmitting 
                     ? 'rgba(234, 179, 8, 0.5)' 
                     : 'linear-gradient(135deg, #EAB308, #F59E0B)',
                   border: 'none',
@@ -406,30 +407,35 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
                   fontWeight: 600,
                   color: '#0C0C0C',
                   fontFamily: 'Inter, system-ui, sans-serif',
-                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  cursor: (isSubmitting || isSuccess) ? 'not-allowed' : 'pointer',
                   transition: 'all 0.3s ease',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  boxShadow: isSubmitting 
+                  boxShadow: (isSubmitting || isSuccess) 
                     ? 'none' 
                     : '0 4px 20px rgba(234, 179, 8, 0.3)'
                 }}
                 onMouseEnter={(e) => {
-                  if (!isSubmitting) {
+                  if (!isSubmitting && !isSuccess) {
                     e.currentTarget.style.boxShadow = '0 6px 30px rgba(234, 179, 8, 0.5)';
                     e.currentTarget.style.transform = 'translateY(-2px)';
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (!isSubmitting) {
+                  if (!isSubmitting && !isSuccess) {
                     e.currentTarget.style.boxShadow = '0 4px 20px rgba(234, 179, 8, 0.3)';
                     e.currentTarget.style.transform = 'translateY(0)';
                   }
                 }}
               >
-                {isSubmitting ? (
+                {isSuccess ? (
+                  <>
+                    <FaCheckCircle />
+                    Message Sent Successfully!
+                  </>
+                ) : isSubmitting ? (
                   <>
                     <motion.div
                       animate={{ rotate: 360 }}
@@ -453,7 +459,7 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
               </motion.button>
             </form>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

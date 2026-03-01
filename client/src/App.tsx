@@ -1,4 +1,4 @@
-import { lazy, Suspense, memo, useCallback, useEffect } from 'react';
+import { lazy, Suspense, memo, useCallback } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -7,15 +7,13 @@ import { useTheme } from './hooks/useTheme';
 import { useScroll } from './hooks/useScroll';
 import { useSEO } from './hooks/useSEO';
 import { COLORS, Z_INDEX } from './constants/theme';
-import { measurePerformance } from './utils/performance';
-import { errorTracker } from './services/errorTracker';
-import { validateEnv } from './config/env';
 
 const HomeSection = lazy(() => import('./sections/HomeSection'));
 const AboutSection = lazy(() => import('./sections/AboutSection'));
 const ProjectsSection = lazy(() => import('./sections/ProjectsSection'));
-const CertificatesSection = lazy(() => import('./sections/CertificatesSection'));
+const EngineeringHighlightsSection = lazy(() => import('./sections/EngineeringHighlightsSection'));
 const GitHubSection = lazy(() => import('./sections/GitHubSection'));
+const CertificatesSection = lazy(() => import('./sections/CertificatesSection'));
 const ContactSection = lazy(() => import('./sections/ContactSection'));
 
 const BackToTopButton = memo<{ show: boolean; onClick: () => void }>(({ show, onClick }) => {
@@ -71,13 +69,6 @@ function App() {
   
   useSEO();
 
-  useEffect(() => {
-    validateEnv();
-    errorTracker.init();
-    measurePerformance();
-    document.documentElement.style.scrollBehavior = 'smooth';
-  }, []);
-
   return (
     <>
       <style>{`
@@ -116,8 +107,9 @@ function App() {
           <HomeSection theme={theme} />
           <AboutSection theme={theme} />
           <ProjectsSection theme={theme} />
-          <CertificatesSection theme={theme} />
+          <EngineeringHighlightsSection theme={theme} />
           <GitHubSection theme={theme} />
+          <CertificatesSection theme={theme} />
           <ContactSection theme={theme} />
         </main>
       </Suspense>
