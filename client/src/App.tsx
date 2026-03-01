@@ -11,12 +11,12 @@ import { measurePerformance } from './utils/performance';
 import { errorTracker } from './services/errorTracker';
 import { validateEnv } from './config/env';
 
-const HomeSection = lazy(() => import(/* webpackChunkName: "home" */ './sections/HomeSection'));
-const AboutSection = lazy(() => import(/* webpackChunkName: "about" */ './sections/AboutSection'));
-const ProjectsSection = lazy(() => import(/* webpackChunkName: "projects" */ './sections/ProjectsSection'));
-const CertificatesSection = lazy(() => import(/* webpackChunkName: "certificates" */ './sections/CertificatesSection'));
-const GitHubSection = lazy(() => import(/* webpackChunkName: "github" */ './sections/GitHubSection'));
-const ContactSection = lazy(() => import(/* webpackChunkName: "contact" */ './sections/ContactSection'));
+const HomeSection = lazy(() => import('./sections/HomeSection'));
+const AboutSection = lazy(() => import('./sections/AboutSection'));
+const ProjectsSection = lazy(() => import('./sections/ProjectsSection'));
+const CertificatesSection = lazy(() => import('./sections/CertificatesSection'));
+const GitHubSection = lazy(() => import('./sections/GitHubSection'));
+const ContactSection = lazy(() => import('./sections/ContactSection'));
 
 const BackToTopButton = memo<{ show: boolean; onClick: () => void }>(({ show, onClick }) => {
   const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
@@ -48,7 +48,7 @@ const BackToTopButton = memo<{ show: boolean; onClick: () => void }>(({ show, on
         justifyContent: 'center',
         cursor: 'pointer',
         fontSize: 'clamp(20px, 3vw, 22px)',
-        transition: 'all 0.3s ease',
+        transition: 'all 0.25s ease',
         zIndex: Z_INDEX.fixed,
         boxShadow: '0 4px 20px rgba(234, 179, 8, 0.5)'
       }}
@@ -75,6 +75,7 @@ function App() {
     validateEnv();
     errorTracker.init();
     measurePerformance();
+    document.documentElement.style.scrollBehavior = 'smooth';
   }, []);
 
   return (
@@ -126,4 +127,4 @@ function App() {
   );
 }
 
-export default App;
+export default memo(App);
