@@ -1,11 +1,10 @@
 import { useState, useEffect, memo } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaStar, FaCode, FaCalendar } from 'react-icons/fa';
+import { FaGithub, FaStar, FaCodeBranch, FaBook } from 'react-icons/fa';
 import { Chart as ChartJS, ArcElement, Tooltip as ChartTooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import githubService from '../services/githubService';
-import { APP_CONFIG, EXTERNAL_APIS } from '../constants/config';
-import { COLORS } from '../constants/theme';
+import { APP_CONFIG } from '../constants/config';
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
@@ -15,14 +14,26 @@ interface GitHubSectionProps {
 
 interface DoughnutChartProps {
   data: [string, number][] | null;
-  isDark: boolean;
   title: string;
 }
 
-const DoughnutChart = memo<DoughnutChartProps>(({ data, isDark, title }) => {
-  if (!data || !Array.isArray(data) || data.length === 0) {
+const Skeleton = memo(() => (
+  <div style={{ 
+    background: 'linear-gradient(90deg, #1A1A1A 25%, #2A2A2A 50%, #1A1A1A 75%)',
+    backgroundSize: '200% 100%',
+    animation: 'shimmer 1.5s infinite',
+    borderRadius: '8px',
+    height: '100%',
+    minHeight: '100px'
+  }} />
+));
+
+Skeleton.displayName = 'Skeleton';
+
+const DoughnutChart = memo<DoughnutChartProps>(({ data, title }) => {
+  if (!data || data.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '20px', color: isDark ? '#A3A3A3' : '#666666', fontSize: '14px' }}>
+      <div style={{ textAlign: 'center', padding: '20px', color: '#A3A3A3', fontSize: '14px' }}>
         No data available
       </div>
     );
@@ -30,22 +41,20 @@ const DoughnutChart = memo<DoughnutChartProps>(({ data, isDark, title }) => {
 
   const chartData = {
     labels: data.map(([label]) => label),
-    datasets: [
-      {
-        data: data.map(([, value]) => value),
-        backgroundColor: ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'],
-        borderColor: isDark ? '#0C0C0C' : '#FFFFFF',
-        borderWidth: 2
-      }
-    ]
+    datasets: [{
+      data: data.map(([, value]) => value),
+      backgroundColor: ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'],
+      borderColor: '#0C0C0C',
+      borderWidth: 2
+    }]
   };
 
   const options = {
-    cutout: '70%',
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '65%',
     plugins: {
-      legend: {
-        display: false
-      },
+      legend: { display: false },
       tooltip: {
         backgroundColor: '#1A1A1A',
         titleColor: '#EAB308',
@@ -53,47 +62,46 @@ const DoughnutChart = memo<DoughnutChartProps>(({ data, isDark, title }) => {
         borderColor: '#EAB308',
         borderWidth: 1
       }
-    },
-    maintainAspectRatio: false
+    }
   };
 
   return (
     <div style={{ 
-      background: isDark ? '#1A1A1A' : '#FFFFFF',
+      background: '#1A1A1A',
       borderRadius: '12px',
       padding: '20px',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
-      height: '200px'
+      border: '1px solid rgba(234, 179, 8, 0.1)',
+      width: '100%',
+      maxWidth: '320px',
+      margin: '0 auto'
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', height: '100%' }} className="doughnut-chart-container">
-        <div style={{ flex: 1 }}>
-          <h3 style={{ 
-            fontSize: 'clamp(1rem, 2.5vw, 1.1rem)', 
-            color: '#EAB308', 
-            marginBottom: '15px',
-            fontWeight: 600
-          }}>
-            {title}
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {data.slice(0, 3).map(([label, value], index) => (
-              <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
-                <div style={{ 
-                  width: '12px', 
-                  height: '12px', 
-                  background: ['#EAB308', '#F59E0B', '#FCD34D'][index], 
-                  borderRadius: '3px' 
-                }}></div>
-                <span style={{ color: isDark ? '#FAFAFA' : '#1A1A1A', fontWeight: 500 }}>
-                  {label}: {value}
-                </span>
-              </div>
-            ))}
+      <h3 style={{ 
+        fontSize: '1rem', 
+        color: '#EAB308', 
+        marginBottom: '15px',
+        fontWeight: 600,
+        textAlign: 'center'
+      }}>
+        {title}
+      </h3>
+      <div style={{ width: '100%', maxWidth: '220px', height: '220px', margin: '0 auto 15px' }}>
+        <Doughnut data={chartData} options={options} />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        {data.slice(0, 3).map(([label, value], index) => (
+          <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px' }}>
+            <div style={{ 
+              width: '10px', 
+              height: '10px', 
+              background: ['#EAB308', '#F59E0B', '#FCD34D'][index], 
+              borderRadius: '2px',
+              flexShrink: 0
+            }} />
+            <span style={{ color: '#FAFAFA', fontWeight: 500 }}>
+              {label}: {value}
+            </span>
           </div>
-        </div>
-        <div style={{ width: '140px', height: '140px', flexShrink: 0 }}>
-          <Doughnut data={chartData} options={options} />
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -101,386 +109,225 @@ const DoughnutChart = memo<DoughnutChartProps>(({ data, isDark, title }) => {
 
 DoughnutChart.displayName = 'DoughnutChart';
 
-const GitHubSection = memo<GitHubSectionProps>(({ theme }) => {
+const GitHubSection = memo<GitHubSectionProps>(() => {
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [stats, setStats] = useState<any>(null);
 
   const username = APP_CONFIG.githubUsername;
-  const isDark = theme === 'dark';
 
   useEffect(() => {
     const styleSheet = document.createElement('style');
     styleSheet.innerText = `
+      @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
       @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
       }
-      .stat-card-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(234, 179, 8, 0.4);
-        border-color: #EAB308;
-      }
-      @media (max-width: 768px) {
-        .doughnut-chart-container {
-          flex-direction: column !important;
-          text-align: center;
-        }
-        .doughnut-chart-wrapper {
-          margin: 0 auto;
-        }
-        .profile-grid {
-          grid-template-columns: 1fr !important;
-          text-align: center;
-        }
-      }
     `;
     document.head.appendChild(styleSheet);
-
     return () => {
       document.head.removeChild(styleSheet);
     };
   }, []);
 
-  useEffect(() => {
-    const fetchGitHubData = async () => {
-      const data = await githubService.fetchGitHubData(username);
-      
-      if (data) {
-        setProfile(data.profile);
-        setStats(data.stats);
-      }
-      setLoading(false);
-    };
-
-    fetchGitHubData();
-  }, [username]);
-
-  const styles = {
-    section: {
-      padding: 'clamp(40px, 8vw, 60px) 20px'
-    },
-    container: {
-      maxWidth: '1100px',
-      margin: '0 auto',
-      padding: 'clamp(20px, 4vw, 40px)'
-    },
-    sectionTitle: {
-      fontSize: 'clamp(1.5rem, 4vw, 2rem)',
-      fontWeight: 700,
-      textAlign: 'center' as const,
-      marginBottom: 'clamp(25px, 5vw, 40px)',
-      color: '#EAB308'
-    },
-    loader: {
-      width: '40px',
-      height: '40px',
-      border: `3px solid ${isDark ? '#1A1A1A' : '#E5E5E5'}`,
-      borderTop: '3px solid #EAB308',
-      borderRadius: '50%',
-      animation: 'spin 1s linear infinite',
-      margin: '40px auto'
-    },
-    profileCard: {
-      background: isDark ? '#1A1A1A' : '#FFFFFF',
-      borderRadius: '12px',
-      padding: '20px',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
-      marginBottom: 'clamp(20px, 4vw, 30px)',
-      maxWidth: '600px',
-      margin: '0 auto clamp(20px, 4vw, 30px) auto',
-      transition: 'all 0.3s ease'
-    },
-    profileGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'auto 1fr',
-      gap: '20px',
-      alignItems: 'center'
-    },
-    profileLeft: {
-      display: 'flex',
-      flexDirection: 'column' as const,
-      alignItems: 'center',
-      gap: '8px'
-    },
-    profileRight: {
-      display: 'flex',
-      flexDirection: 'column' as const,
-      gap: '8px'
-    },
-    profileStatRow: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '4px 0'
-    },
-    avatar: {
-      width: '80px',
-      height: '80px',
-      borderRadius: '50%',
-      border: '3px solid #EAB308',
-      boxShadow: '0 0 15px rgba(234, 179, 8, 0.3)'
-    },
-    profileName: {
-      fontSize: 'clamp(0.95rem, 2.5vw, 1.05rem)',
-      color: '#EAB308',
-      fontWeight: 700,
-      margin: 0,
-      textAlign: 'center' as const
-    },
-    statLabel: {
-      fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
-      color: isDark ? '#A3A3A3' : '#666666',
-      fontWeight: 500
-    },
-    statValue: {
-      fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-      color: '#EAB308',
-      fontWeight: 700
-    },
-    subsectionTitle: {
-      fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
-      color: '#EAB308',
-      marginBottom: 'clamp(15px, 3vw, 25px)',
-      fontWeight: 600
-    },
-    contributionGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
-      gap: 'clamp(15px, 3vw, 20px)',
-      marginBottom: 'clamp(25px, 5vw, 40px)'
-    },
-    contributionCard: {
-      background: isDark ? '#1A1A1A' : '#FFFFFF',
-      borderRadius: '10px',
-      padding: '16px',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
-      transition: 'all 0.3s ease',
-      textAlign: 'center' as const
-    },
-    calendarContainer: {
-      background: isDark ? '#1A1A1A' : '#FFFFFF',
-      borderRadius: '12px',
-      padding: 'clamp(20px, 4vw, 30px)',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
-      marginBottom: 'clamp(25px, 5vw, 40px)',
-      overflow: 'auto'
-    },
-    statsGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-      gap: 'clamp(15px, 3vw, 20px)',
-      marginBottom: 'clamp(30px, 5vw, 40px)',
-      maxWidth: '1000px',
-      margin: '0 auto clamp(30px, 5vw, 40px) auto'
-    },
-    statCard: {
-      background: isDark ? '#1A1A1A' : '#FFFFFF',
-      borderRadius: '12px',
-      padding: '18px',
-      border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0.2)'}`,
-      transition: 'all 0.3s ease',
-      textAlign: 'center' as const
-    },
-    statIcon: {
-      fontSize: 'clamp(1.8rem, 4vw, 2.2rem)',
-      color: '#EAB308',
-      marginBottom: '10px'
-    },
-    statNumber: {
-      fontSize: 'clamp(1.5rem, 3vw, 2rem)',
-      color: '#EAB308',
-      fontWeight: 700,
-      display: 'block',
-      marginBottom: '5px'
-    },
-    statText: {
-      fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)',
-      color: isDark ? '#FAFAFA' : '#1A1A1A',
-      fontWeight: 500
-    },
-    languagesGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))',
-      gap: 'clamp(15px, 3vw, 20px)',
-      marginBottom: 'clamp(30px, 5vw, 40px)',
-      maxWidth: '1000px',
-      margin: '0 auto',
-      justifyItems: 'center'
-    },
+  const fetchData = async () => {
+    setLoading(true);
+    setError(false);
+    const data = await githubService.fetchGitHubData(username);
+    
+    if (data) {
+      setProfile(data.profile);
+      setStats(data.stats);
+    } else {
+      setError(true);
+    }
+    setLoading(false);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, [username]);
 
   if (loading) {
     return (
-      <section id="github" style={styles.section}>
-        <div style={styles.container}>
-          <h1 style={styles.sectionTitle}>GitHub Analysis Dashboard</h1>
-          <div style={styles.loader}></div>
+      <section style={{ padding: 'clamp(40px, 8vw, 60px) 0', background: '#0C0C0C' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 32px)' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 700, textAlign: 'center', marginBottom: '40px', color: '#EAB308' }}>
+            <FaGithub style={{ marginRight: '10px', verticalAlign: 'middle' }} />
+            GitHub Dashboard
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+            <Skeleton />
+            <Skeleton />
+            <Skeleton />
+          </div>
         </div>
       </section>
     );
   }
 
-  if (!profile || !stats) {
+  if (error || !profile || !stats) {
     return (
-      <section id="github" style={styles.section}>
-        <div style={styles.container}>
-          <h1 style={styles.sectionTitle}>GitHub Analysis Dashboard</h1>
-          <p style={{ textAlign: 'center', color: isDark ? '#A3A3A3' : '#666666' }}>
-            Unable to load GitHub data. Please try again later.
-          </p>
+      <section style={{ padding: 'clamp(40px, 8vw, 60px) 0', background: '#0C0C0C' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 32px)', textAlign: 'center' }}>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 700, marginBottom: '20px', color: '#EAB308' }}>
+            <FaGithub style={{ marginRight: '10px', verticalAlign: 'middle' }} />
+            GitHub Dashboard
+          </h2>
+          <p style={{ color: '#A3A3A3', marginBottom: '20px' }}>Failed to load GitHub data</p>
+          <button
+            onClick={fetchData}
+            style={{
+              background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
+              color: '#0C0C0C',
+              border: 'none',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              fontSize: '1rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'transform 0.2s'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          >
+            Retry
+          </button>
         </div>
       </section>
     );
   }
 
   return (
-    <section id="github" style={styles.section}>
-      <div style={styles.container}>
-        <h1 style={styles.sectionTitle}>GitHub Analysis Dashboard</h1>
-
-        <motion.div
-          style={styles.profileCard}
+    <section id="github" style={{ padding: 'clamp(40px, 8vw, 60px) 0', background: '#0C0C0C' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 clamp(16px, 4vw, 32px)' }}>
+        <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
+          style={{ fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 700, textAlign: 'center', marginBottom: '40px', color: '#EAB308' }}
         >
-          <div style={styles.profileGrid} className="profile-grid">
-            <div style={styles.profileLeft}>
-              <img src={profile.avatar_url} alt={profile.name} style={styles.avatar} loading="lazy" decoding="async" />
-              <h2 style={styles.profileName}>{profile.name || username}</h2>
-            </div>
-            <div style={styles.profileRight}>
-              <div style={styles.profileStatRow}>
-                <span style={styles.statLabel}>Followers:</span>
-                <span style={styles.statValue}>{profile.followers}</span>
+          <FaGithub style={{ marginRight: '10px', verticalAlign: 'middle' }} />
+          GitHub Dashboard
+        </motion.h2>
+
+        {/* Instagram-style Profile Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          style={{
+            background: '#1A1A1A',
+            borderRadius: '12px',
+            padding: '24px',
+            border: '1px solid rgba(234, 179, 8, 0.2)',
+            marginBottom: '30px',
+            maxWidth: '400px',
+            margin: '0 auto 30px'
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+            <img
+              src={profile.avatar_url}
+              alt={profile.name}
+              style={{
+                width: '100px',
+                height: '100px',
+                borderRadius: '50%',
+                border: '3px solid #EAB308',
+                boxShadow: '0 0 20px rgba(234, 179, 8, 0.3)'
+              }}
+            />
+            <h3 style={{ fontSize: '1.2rem', color: '#FAFAFA', fontWeight: 700, margin: 0 }}>
+              {profile.name || profile.login}
+            </h3>
+            <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', width: '100%', marginTop: '8px' }}>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '1.3rem', color: '#EAB308', fontWeight: 700 }}>{profile.followers}</div>
+                <div style={{ fontSize: '0.85rem', color: '#A3A3A3' }}>Followers</div>
               </div>
-              <div style={styles.profileStatRow}>
-                <span style={styles.statLabel}>Following:</span>
-                <span style={styles.statValue}>{profile.following}</span>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '1.3rem', color: '#EAB308', fontWeight: 700 }}>{profile.following}</div>
+                <div style={{ fontSize: '0.85rem', color: '#A3A3A3' }}>Following</div>
               </div>
-              <div style={styles.profileStatRow}>
-                <span style={styles.statLabel}>Repositories:</span>
-                <span style={styles.statValue}>{profile.public_repos}</span>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '1.3rem', color: '#EAB308', fontWeight: 700 }}>{profile.public_repos}</div>
+                <div style={{ fontSize: '0.85rem', color: '#A3A3A3' }}>Repos</div>
               </div>
             </div>
           </div>
         </motion.div>
 
+        {/* Stats Cards */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '20px',
+            marginBottom: '30px'
+          }}
         >
-          <h2 style={styles.subsectionTitle}>Contribution Graph</h2>
           <div style={{
             background: '#1A1A1A',
             borderRadius: '12px',
             padding: '20px',
-            marginBottom: '20px',
-            border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`
+            border: '1px solid rgba(234, 179, 8, 0.1)',
+            textAlign: 'center',
+            transition: 'all 0.3s ease'
           }}>
-            <img 
-              src={EXTERNAL_APIS.githubGraph(username)}
-              alt="GitHub Contribution Graph"
-              loading="lazy"
-              decoding="async"
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '8px',
-                display: 'block'
-              }}
-            />
+            <FaStar style={{ fontSize: '2rem', color: '#EAB308', marginBottom: '10px' }} />
+            <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700, marginBottom: '5px' }}>{stats.totalStars}</div>
+            <div style={{ fontSize: '0.9rem', color: '#A3A3A3' }}>Total Stars</div>
           </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <h2 style={styles.subsectionTitle}>Contribution Calendar</h2>
           <div style={{
             background: '#1A1A1A',
-            padding: '20px',
             borderRadius: '12px',
-            border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.2)'}`,
-            marginBottom: 'clamp(25px, 5vw, 40px)',
-            overflow: 'auto'
+            padding: '20px',
+            border: '1px solid rgba(234, 179, 8, 0.1)',
+            textAlign: 'center',
+            transition: 'all 0.3s ease'
           }}>
-            <img 
-              src={EXTERNAL_APIS.githubCalendar(username)}
-              alt="GitHub Contribution Calendar"
-              loading="lazy"
-              decoding="async"
-              style={{
-                width: '100%',
-                height: 'auto',
-                borderRadius: '8px',
-                display: 'block'
-              }}
-            />
+            <FaCodeBranch style={{ fontSize: '2rem', color: '#EAB308', marginBottom: '10px' }} />
+            <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700, marginBottom: '5px' }}>{stats.totalForks}</div>
+            <div style={{ fontSize: '0.9rem', color: '#A3A3A3' }}>Total Forks</div>
+          </div>
+          <div style={{
+            background: '#1A1A1A',
+            borderRadius: '12px',
+            padding: '20px',
+            border: '1px solid rgba(234, 179, 8, 0.1)',
+            textAlign: 'center',
+            transition: 'all 0.3s ease'
+          }}>
+            <FaBook style={{ fontSize: '2rem', color: '#EAB308', marginBottom: '10px' }} />
+            <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700, marginBottom: '5px' }}>{stats.totalRepos}</div>
+            <div style={{ fontSize: '0.9rem', color: '#A3A3A3' }}>Public Repos</div>
           </div>
         </motion.div>
 
+        {/* Charts */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '20px'
+          }}
         >
-          <h2 style={styles.subsectionTitle}>GitHub Statistics</h2>
-          <div style={styles.statsGrid}>
-            <div style={styles.statCard} className="stat-card-hover">
-              <FaStar style={styles.statIcon} />
-              <span style={styles.statNumber}>{stats.totalStars}</span>
-              <span style={styles.statText}>Total Stars</span>
-            </div>
-            <div style={styles.statCard} className="stat-card-hover">
-              <FaCalendar style={styles.statIcon} />
-              <span style={styles.statNumber}>{stats.totalCommits}</span>
-              <span style={styles.statText}>Total Commits</span>
-            </div>
-            <div style={styles.statCard} className="stat-card-hover">
-              <FaCode style={styles.statIcon} />
-              <span style={styles.statNumber}>{stats.totalRepos}</span>
-              <span style={styles.statText}>Total Repositories</span>
-            </div>
-            <div style={styles.statCard} className="stat-card-hover">
-              <FaGithub style={styles.statIcon} />
-              <span style={styles.statNumber}>{stats.totalLanguages}</span>
-              <span style={styles.statText}>Total Languages Used</span>
-            </div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <h2 style={styles.subsectionTitle}>Top Languages</h2>
-          <div style={styles.languagesGrid}>
-            {stats.languageCounts && stats.languageCounts.length > 0 && (
-              <DoughnutChart 
-                data={stats.languageCounts} 
-                isDark={isDark} 
-                title="By Repository Count"
-              />
-            )}
-            {stats.languageActivity && stats.languageActivity.length > 0 && (
-              <DoughnutChart 
-                data={stats.languageActivity} 
-                isDark={isDark} 
-                title="By Commit Activity"
-              />
-            )}
-          </div>
+          <DoughnutChart data={stats.languageCounts} title="Top Languages" />
+          <DoughnutChart data={stats.languageActivity} title="Most Active Languages" />
         </motion.div>
       </div>
     </section>

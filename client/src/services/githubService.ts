@@ -94,7 +94,7 @@ class GitHubService {
   }
 
   async fetchUserRepos(username: string): Promise<GitHubRepo[]> {
-    const endpoint = `${GITHUB_API.reposEndpoint(username)}?per_page=${GITHUB_API.perPage}`;
+    const endpoint = `${GITHUB_API.reposEndpoint(username)}?per_page=100`;
     const cacheKey = this.getCacheKey(endpoint);
     
     const cached = this.getFromCache<GitHubRepo[]>(cacheKey);

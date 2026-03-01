@@ -52,9 +52,9 @@ const EngineeringHighlightsSection = memo<EngineeringHighlightsSectionProps>(({ 
       }}
     >
       <div style={{
-        maxWidth: '1100px',
+        maxWidth: '1200px',
         margin: '0 auto',
-        padding: 'clamp(20px, 4vw, 40px)'
+        padding: '0 clamp(16px, 4vw, 32px)'
       }}>
         <h2 style={{
           fontSize: 'clamp(1.8rem, 4.5vw, 2.2rem)',

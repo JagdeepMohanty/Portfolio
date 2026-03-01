@@ -21,7 +21,7 @@ const CertificatesSection = memo<CertificatesSectionProps>(({ theme }) => {
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: 'clamp(20px, 4vw, 40px)'
+        padding: '0 clamp(16px, 4vw, 32px)'
       }}>
         {/* Header */}
         <motion.div
@@ -76,8 +76,10 @@ const CertificatesSection = memo<CertificatesSectionProps>(({ theme }) => {
             </motion.h3>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: 'clamp(20px, 4vw, 30px)'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: 'clamp(16px, 3vw, 24px)',
+              justifyItems: 'center',
+              width: '100%'
             }}>
               {technicalCertificates.map((certificate, index) => (
                 <CertificateCard
@@ -111,8 +113,10 @@ const CertificatesSection = memo<CertificatesSectionProps>(({ theme }) => {
             </motion.h3>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: 'clamp(20px, 4vw, 30px)'
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: 'clamp(16px, 3vw, 24px)',
+              justifyItems: 'center',
+              width: '100%'
             }}>
               {otherCertificates.map((certificate, index) => (
                 <CertificateCard

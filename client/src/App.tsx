@@ -6,7 +6,6 @@ import LoadingScreen from './components/LoadingScreen';
 import { useTheme } from './hooks/useTheme';
 import { useScroll } from './hooks/useScroll';
 import { useSEO } from './hooks/useSEO';
-import { COLORS, Z_INDEX } from './constants/theme';
 
 const HomeSection = lazy(() => import('./sections/HomeSection'));
 const AboutSection = lazy(() => import('./sections/AboutSection'));
@@ -37,8 +36,8 @@ const BackToTopButton = memo<{ show: boolean; onClick: () => void }>(({ show, on
         right: 'clamp(20px, 4vw, 30px)',
         width: 'clamp(50px, 8vw, 55px)',
         height: 'clamp(50px, 8vw, 55px)',
-        background: `linear-gradient(135deg, ${COLORS.primary}, ${COLORS.primaryDark})`,
-        color: COLORS.backgroundDark,
+        background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
+        color: '#0C0C0C',
         border: 'none',
         borderRadius: '50%',
         display: 'flex',
@@ -47,7 +46,7 @@ const BackToTopButton = memo<{ show: boolean; onClick: () => void }>(({ show, on
         cursor: 'pointer',
         fontSize: 'clamp(20px, 3vw, 22px)',
         transition: 'all 0.25s ease',
-        zIndex: Z_INDEX.fixed,
+        zIndex: 999,
         boxShadow: '0 4px 20px rgba(234, 179, 8, 0.5)'
       }}
       onClick={onClick}
@@ -77,13 +76,14 @@ function App() {
           padding: 0;
           box-sizing: border-box;
         }
-        html {
+        html, body {
+          overflow-x: hidden;
+          width: 100%;
           scroll-behavior: smooth;
         }
         body {
           margin: 0;
           padding: 0;
-          overflow-x: hidden;
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
           line-height: 1.6;
           transition: background-color 0.3s ease, color 0.3s ease;
@@ -99,6 +99,8 @@ function App() {
         #root {
           margin: 0;
           padding: 0;
+          overflow-x: hidden;
+          width: 100%;
         }
       `}</style>
       <Navbar theme={theme} toggleTheme={toggleTheme} />

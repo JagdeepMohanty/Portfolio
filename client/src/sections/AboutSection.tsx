@@ -82,9 +82,9 @@ const AboutSection = memo<AboutSectionProps>(({ theme }) => {
         }
       `}</style>
       <div style={{
-        maxWidth: '1100px',
+        maxWidth: '1200px',
         margin: '0 auto',
-        padding: 'clamp(20px, 4vw, 40px)'
+        padding: '0 clamp(16px, 4vw, 32px)'
       }}>
         <h1 style={{
           fontSize: 'clamp(1.5rem, 4vw, 2rem)',

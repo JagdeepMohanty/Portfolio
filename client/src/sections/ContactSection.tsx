@@ -1,5 +1,5 @@
 import { useState, useCallback, memo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaPaperPlane, FaCheckCircle } from 'react-icons/fa';
 
 interface ContactSectionProps {
@@ -11,7 +11,6 @@ interface ContactInfo {
   label: string;
   value: string;
   link: string;
-  color: string;
 }
 
 const CONTACT_INFO: ContactInfo[] = [
@@ -19,39 +18,33 @@ const CONTACT_INFO: ContactInfo[] = [
     icon: FaEnvelope,
     label: 'Email',
     value: 'jagdeepmohanty1807@gmail.com',
-    link: 'mailto:jagdeepmohanty1807@gmail.com',
-    color: '#EA4335'
+    link: 'mailto:jagdeepmohanty1807@gmail.com'
   },
   {
     icon: FaLinkedin,
     label: 'LinkedIn',
     value: 'Connect with me',
-    link: 'https://www.linkedin.com/in/jagdeepmohanty',
-    color: '#0A66C2'
+    link: 'https://www.linkedin.com/in/jagdeepmohanty'
   },
   {
     icon: FaGithub,
     label: 'GitHub',
     value: '@JagdeepMohanty',
-    link: 'https://github.com/JagdeepMohanty',
-    color: '#FAFAFA'
+    link: 'https://github.com/JagdeepMohanty'
   },
   {
     icon: FaMapMarkerAlt,
     label: 'Location',
     value: 'India',
-    link: '#',
-    color: '#EAB308'
+    link: '#'
   }
 ];
 
-const ContactSection = memo<ContactSectionProps>(({ theme }) => {
+const ContactSection = memo<ContactSectionProps>(() => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-
-  const isDark = theme === 'dark';
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -71,20 +64,19 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
     <section
       id="contact"
       style={{
-        padding: 'clamp(60px, 10vw, 100px) clamp(20px, 5vw, 40px)',
-        background: isDark ? '#0C0C0C' : '#F5F5F5',
+        padding: 'clamp(60px, 10vw, 100px) 0',
+        background: '#0C0C0C',
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center'
       }}
     >
       <div style={{
-        maxWidth: '1100px',
+        maxWidth: '1200px',
         margin: '0 auto',
         width: '100%',
-        padding: 'clamp(20px, 4vw, 40px)'
+        padding: '0 clamp(16px, 4vw, 32px)'
       }}>
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -96,178 +88,179 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
           }}
         >
           <h2 style={{
-            fontSize: 'clamp(32px, 5vw, 48px)',
+            fontSize: 'clamp(2rem, 5vw, 3rem)',
             fontWeight: 700,
             color: '#EAB308',
             marginBottom: '16px',
-            fontFamily: 'Inter, system-ui, sans-serif',
             letterSpacing: '-1px'
           }}>
             Get In Touch
           </h2>
           <p style={{
-            fontSize: 'clamp(16px, 2.5vw, 18px)',
-            color: isDark ? '#A3A3A3' : '#666666',
+            fontSize: 'clamp(1rem, 2.5vw, 1.125rem)',
+            color: '#A3A3A3',
             maxWidth: '600px',
             margin: '0 auto',
-            lineHeight: 1.6,
-            fontFamily: 'Inter, system-ui, sans-serif'
+            lineHeight: 1.6
           }}>
-            Have a project, opportunity, or idea? Let's connect and build something impactful together.
+            Have a project or opportunity? Let's connect and build something amazing together.
           </p>
         </motion.div>
 
-        {/* Main Content - Two Separate Cards */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: window.innerWidth >= 768 ? '1fr 1.3fr' : '1fr',
+          gridTemplateColumns: window.innerWidth >= 768 ? '1fr 1.5fr' : '1fr',
           gap: 'clamp(24px, 4vw, 32px)'
         }}>
-          {/* Left Card: Contact Info */}
+          {/* Left: Contact Info Card */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
             style={{
-              background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
+              background: 'rgba(26, 26, 26, 0.6)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
               borderRadius: '16px',
               padding: 'clamp(24px, 4vw, 32px)',
-              border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+              border: '1px solid rgba(234, 179, 8, 0.3)',
+              boxShadow: '0 0 20px rgba(234, 179, 8, 0.15)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '0 0 30px rgba(234, 179, 8, 0.25)';
+              e.currentTarget.style.transform = 'translateY(-4px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '0 0 20px rgba(234, 179, 8, 0.15)';
+              e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
-            <div style={{ marginBottom: '8px' }}>
-              <h3 style={{
-                fontSize: 'clamp(20px, 3vw, 24px)',
-                fontWeight: 600,
-                color: isDark ? '#FAFAFA' : '#1A1A1A',
-                marginBottom: '8px',
-                fontFamily: 'Inter, system-ui, sans-serif'
-              }}>
-                Contact Information
-              </h3>
-              <p style={{
-                fontSize: '14px',
-                color: isDark ? '#A3A3A3' : '#666666',
-                fontFamily: 'Inter, system-ui, sans-serif'
-              }}>
-                Feel free to reach out through any of these channels
-              </p>
-            </div>
+            <h3 style={{
+              fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
+              fontWeight: 600,
+              color: '#FAFAFA',
+              marginBottom: '8px'
+            }}>
+              Contact Info
+            </h3>
+            <p style={{
+              fontSize: '0.875rem',
+              color: '#A3A3A3',
+              marginBottom: '24px'
+            }}>
+              Reach out through any channel
+            </p>
 
-            {CONTACT_INFO.map((info, index) => (
-              <motion.a
-                key={info.label}
-                href={info.link}
-                target={info.link.startsWith('http') ? '_blank' : undefined}
-                rel={info.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ 
-                  scale: 1.02,
-                  x: 4
-                }}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '16px',
-                  padding: '16px',
-                  background: isDark 
-                    ? 'rgba(26, 26, 26, 0.4)' 
-                    : 'rgba(255, 255, 255, 0.4)',
-                  borderRadius: '12px',
-                  border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.15)'}`,
-                  textDecoration: 'none',
-                  cursor: info.link === '#' ? 'default' : 'pointer',
-                  transition: 'all 0.3s ease',
-                  pointerEvents: info.link === '#' ? 'none' : 'auto'
-                }}
-                onMouseEnter={(e) => {
-                  if (info.link !== '#') {
-                    e.currentTarget.style.borderColor = 'rgba(234, 179, 8, 0.4)';
-                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(234, 179, 8, 0.15)';
-                    const icon = e.currentTarget.querySelector('svg');
-                    if (icon) icon.style.color = info.color;
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(234, 179, 8, 0.15)';
-                  e.currentTarget.style.boxShadow = 'none';
-                  const icon = e.currentTarget.querySelector('svg');
-                  if (icon) icon.style.color = '#EAB308';
-                }}
-              >
-                <div style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '10px',
-                  background: 'rgba(234, 179, 8, 0.1)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0
-                }}>
-                  <info.icon style={{
-                    fontSize: '20px',
-                    color: '#EAB308',
-                    transition: 'color 0.3s ease'
-                  }} />
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {CONTACT_INFO.map((info, index) => (
+                <motion.a
+                  key={info.label}
+                  href={info.link}
+                  target={info.link.startsWith('http') ? '_blank' : undefined}
+                  rel={info.link.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ scale: 1.02, x: 4 }}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '16px',
+                    padding: '16px',
+                    background: 'rgba(26, 26, 26, 0.4)',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(234, 179, 8, 0.1)',
+                    textDecoration: 'none',
+                    cursor: info.link === '#' ? 'default' : 'pointer',
+                    transition: 'all 0.3s ease',
+                    pointerEvents: info.link === '#' ? 'none' : 'auto'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (info.link !== '#') {
+                      e.currentTarget.style.borderColor = 'rgba(234, 179, 8, 0.4)';
+                      e.currentTarget.style.boxShadow = '0 4px 20px rgba(234, 179, 8, 0.15)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(234, 179, 8, 0.1)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
                   <div style={{
-                    fontSize: '12px',
-                    color: isDark ? '#A3A3A3' : '#666666',
-                    marginBottom: '2px',
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: 500
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '10px',
+                    background: 'rgba(234, 179, 8, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
                   }}>
-                    {info.label}
+                    <info.icon style={{
+                      fontSize: '20px',
+                      color: '#EAB308'
+                    }} />
                   </div>
-                  <div style={{
-                    fontSize: '14px',
-                    color: isDark ? '#FAFAFA' : '#1A1A1A',
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontWeight: 500,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    {info.value}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{
+                      fontSize: '0.75rem',
+                      color: '#A3A3A3',
+                      marginBottom: '2px',
+                      fontWeight: 500
+                    }}>
+                      {info.label}
+                    </div>
+                    <div style={{
+                      fontSize: '0.875rem',
+                      color: '#FAFAFA',
+                      fontWeight: 500,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
+                    }}>
+                      {info.value}
+                    </div>
                   </div>
-                </div>
-              </motion.a>
-            ))}
+                </motion.a>
+              ))}
+            </div>
           </motion.div>
 
-          {/* Right Card: Contact Form */}
+          {/* Right: Send Message Card */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
             style={{
-              background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
+              background: 'rgba(26, 26, 26, 0.6)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
               borderRadius: '16px',
               padding: 'clamp(24px, 4vw, 32px)',
-              border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+              border: '1px solid rgba(234, 179, 8, 0.3)',
+              boxShadow: '0 0 20px rgba(234, 179, 8, 0.15)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '0 0 30px rgba(234, 179, 8, 0.25)';
+              e.currentTarget.style.transform = 'translateY(-4px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '0 0 20px rgba(234, 179, 8, 0.15)';
+              e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
             <h3 style={{
-              fontSize: 'clamp(20px, 3vw, 24px)',
+              fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
               fontWeight: 600,
-              color: isDark ? '#FAFAFA' : '#1A1A1A',
-              marginBottom: '24px',
-              fontFamily: 'Inter, system-ui, sans-serif'
+              color: '#FAFAFA',
+              marginBottom: '24px'
             }}>
-              Send a Message
+              Send Message
             </h3>
 
             <form 
@@ -283,8 +276,7 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
             >
               <input type="hidden" name="form-name" value="contact" />
 
-              {/* Name Input */}
-              <div style={{ position: 'relative' }}>
+              <div>
                 <input
                   type="text"
                   id="name"
@@ -297,28 +289,20 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
                   style={{
                     width: '100%',
                     padding: '14px 16px',
-                    background: isDark ? 'rgba(12, 12, 12, 0.6)' : 'rgba(245, 245, 245, 0.8)',
-                    border: `2px solid ${
-                      focusedField === 'name' 
-                        ? '#EAB308' 
-                        : isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.25)'
-                    }`,
+                    background: 'rgba(12, 12, 12, 0.6)',
+                    border: `2px solid ${focusedField === 'name' ? '#EAB308' : 'rgba(234, 179, 8, 0.2)'}`,
                     borderRadius: '10px',
                     fontSize: '15px',
-                    color: isDark ? '#FAFAFA' : '#1A1A1A',
-                    fontFamily: 'Inter, system-ui, sans-serif',
+                    color: '#FAFAFA',
                     outline: 'none',
                     transition: 'all 0.3s ease',
-                    boxShadow: focusedField === 'name' 
-                      ? '0 0 0 4px rgba(234, 179, 8, 0.1)' 
-                      : 'none'
+                    boxShadow: focusedField === 'name' ? '0 0 0 4px rgba(234, 179, 8, 0.1)' : 'none'
                   }}
                   placeholder="Your Name"
                 />
               </div>
 
-              {/* Email Input */}
-              <div style={{ position: 'relative' }}>
+              <div>
                 <input
                   type="email"
                   id="email"
@@ -331,28 +315,20 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
                   style={{
                     width: '100%',
                     padding: '14px 16px',
-                    background: isDark ? 'rgba(12, 12, 12, 0.6)' : 'rgba(245, 245, 245, 0.8)',
-                    border: `2px solid ${
-                      focusedField === 'email' 
-                        ? '#EAB308' 
-                        : isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.25)'
-                    }`,
+                    background: 'rgba(12, 12, 12, 0.6)',
+                    border: `2px solid ${focusedField === 'email' ? '#EAB308' : 'rgba(234, 179, 8, 0.2)'}`,
                     borderRadius: '10px',
                     fontSize: '15px',
-                    color: isDark ? '#FAFAFA' : '#1A1A1A',
-                    fontFamily: 'Inter, system-ui, sans-serif',
+                    color: '#FAFAFA',
                     outline: 'none',
                     transition: 'all 0.3s ease',
-                    boxShadow: focusedField === 'email' 
-                      ? '0 0 0 4px rgba(234, 179, 8, 0.1)' 
-                      : 'none'
+                    boxShadow: focusedField === 'email' ? '0 0 0 4px rgba(234, 179, 8, 0.1)' : 'none'
                   }}
                   placeholder="your.email@example.com"
                 />
               </div>
 
-              {/* Message Textarea */}
-              <div style={{ position: 'relative' }}>
+              <div>
                 <textarea
                   id="message"
                   name="message"
@@ -365,29 +341,21 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
                   style={{
                     width: '100%',
                     padding: '14px 16px',
-                    background: isDark ? 'rgba(12, 12, 12, 0.6)' : 'rgba(245, 245, 245, 0.8)',
-                    border: `2px solid ${
-                      focusedField === 'message' 
-                        ? '#EAB308' 
-                        : isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.25)'
-                    }`,
+                    background: 'rgba(12, 12, 12, 0.6)',
+                    border: `2px solid ${focusedField === 'message' ? '#EAB308' : 'rgba(234, 179, 8, 0.2)'}`,
                     borderRadius: '10px',
                     fontSize: '15px',
-                    color: isDark ? '#FAFAFA' : '#1A1A1A',
-                    fontFamily: 'Inter, system-ui, sans-serif',
+                    color: '#FAFAFA',
                     outline: 'none',
                     transition: 'all 0.3s ease',
                     resize: 'vertical',
                     minHeight: '120px',
-                    boxShadow: focusedField === 'message' 
-                      ? '0 0 0 4px rgba(234, 179, 8, 0.1)' 
-                      : 'none'
+                    boxShadow: focusedField === 'message' ? '0 0 0 4px rgba(234, 179, 8, 0.1)' : 'none'
                   }}
                   placeholder="Your message..."
                 />
               </div>
 
-              {/* Submit Button */}
               <motion.button
                 type="submit"
                 disabled={isSubmitting || isSuccess}
@@ -406,16 +374,13 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
                   fontSize: '16px',
                   fontWeight: 600,
                   color: '#0C0C0C',
-                  fontFamily: 'Inter, system-ui, sans-serif',
                   cursor: (isSubmitting || isSuccess) ? 'not-allowed' : 'pointer',
                   transition: 'all 0.3s ease',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
-                  boxShadow: (isSubmitting || isSuccess) 
-                    ? 'none' 
-                    : '0 4px 20px rgba(234, 179, 8, 0.3)'
+                  boxShadow: (isSubmitting || isSuccess) ? 'none' : '0 4px 20px rgba(234, 179, 8, 0.3)'
                 }}
                 onMouseEnter={(e) => {
                   if (!isSubmitting && !isSuccess) {
@@ -433,7 +398,7 @@ const ContactSection = memo<ContactSectionProps>(({ theme }) => {
                 {isSuccess ? (
                   <>
                     <FaCheckCircle />
-                    Message Sent Successfully!
+                    Message Sent!
                   </>
                 ) : isSubmitting ? (
                   <>

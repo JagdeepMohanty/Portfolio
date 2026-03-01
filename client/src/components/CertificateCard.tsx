@@ -41,7 +41,13 @@ const CertificateCard = memo<CertificateCardProps>(({ certificate, theme, index 
           transition: 'all 0.3s ease',
           cursor: 'pointer',
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          width: '100%',
+          maxWidth: '340px',
+          margin: '0 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
         }}
         onClick={() => setShowModal(true)}
       >
