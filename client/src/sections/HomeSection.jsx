@@ -49,9 +49,19 @@ const HomeSection = memo(({ theme }) => {
             color: isDark ? '#FAFAFA' : '#1A1A1A',
             marginBottom: '24px',
             fontWeight: 600,
-            lineHeight: 1.4
+            lineHeight: 1.4,
+            display: 'flex',
+            flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: window.innerWidth < 768 ? '8px' : '0',
+            flexWrap: 'wrap'
           }}>
-            Software Engineer | Full-Stack Developer | Data Analytics Enthusiast
+            <span style={{ whiteSpace: 'nowrap' }}>Software Engineer</span>
+            {window.innerWidth >= 768 && <span style={{ margin: '0 8px' }}>|</span>}
+            <span style={{ whiteSpace: 'nowrap' }}>Full-Stack Developer</span>
+            {window.innerWidth >= 768 && <span style={{ margin: '0 8px' }}>|</span>}
+            <span style={{ whiteSpace: 'nowrap' }}>Data Analytics Enthusiast</span>
           </h2>
           <p style={{
             fontSize: 'clamp(1rem, 2.2vw, 1.15rem)',

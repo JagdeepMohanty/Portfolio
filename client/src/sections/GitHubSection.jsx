@@ -52,11 +52,11 @@ const LanguageChart = memo(({ data, title, isDark }) => {
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
       borderRadius: '16px',
-      padding: '24px',
+      padding: '20px',
       border: '1px solid rgba(234, 179, 8, 0.2)',
       display: 'flex',
       flexDirection: window.innerWidth < 768 ? 'column' : 'row',
-      gap: '24px',
+      gap: '20px',
       alignItems: 'center'
     }}>
       <div style={{ flex: 1, minWidth: '200px' }}>
@@ -235,37 +235,37 @@ const GitHubSection = memo(({ theme }) => {
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
             borderRadius: '16px',
-            padding: '30px',
+            padding: '20px',
             border: '1px solid rgba(234, 179, 8, 0.2)',
-            marginBottom: '30px',
+            marginBottom: '24px',
             display: 'flex',
             flexDirection: window.innerWidth < 768 ? 'column' : 'row',
-            gap: '30px',
+            gap: '20px',
             alignItems: 'center'
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
             <img
               src={profile.avatar}
               alt={profile.name}
               style={{
-                width: '120px',
-                height: '120px',
+                width: '100px',
+                height: '100px',
                 borderRadius: '50%',
-                border: '4px solid #EAB308',
-                boxShadow: '0 0 30px rgba(234, 179, 8, 0.4)'
+                border: '3px solid #EAB308',
+                boxShadow: '0 0 25px rgba(234, 179, 8, 0.4)'
               }}
             />
-            <h3 style={{ fontSize: '1.3rem', color: isDark ? '#FAFAFA' : '#1A1A1A', fontWeight: 700, margin: 0, textAlign: 'center' }}>
+            <h3 style={{ fontSize: '1.2rem', color: isDark ? '#FAFAFA' : '#1A1A1A', fontWeight: 700, margin: 0, textAlign: 'center' }}>
               {profile.name}
             </h3>
           </div>
 
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '18px', width: '100%' }}>
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '20px'
+              gap: '16px'
             }}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{profile.publicRepos}</div>
@@ -348,13 +348,13 @@ const GitHubSection = memo(({ theme }) => {
             background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
             backdropFilter: 'blur(12px)',
             borderRadius: '16px',
-            padding: '24px',
+            padding: '18px',
             border: '1px solid rgba(234, 179, 8, 0.2)',
-            marginBottom: '30px',
+            marginBottom: '24px',
             overflow: 'hidden'
           }}
         >
-          <h3 style={{ fontSize: '1.2rem', color: '#EAB308', marginBottom: '20px', fontWeight: 600 }}>
+          <h3 style={{ fontSize: '1.1rem', color: '#EAB308', marginBottom: '16px', fontWeight: 600 }}>
             Contribution Graph
           </h3>
           <img
@@ -372,9 +372,9 @@ const GitHubSection = memo(({ theme }) => {
             background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
             backdropFilter: 'blur(12px)',
             borderRadius: '16px',
-            padding: '24px',
+            padding: '18px',
             border: '1px solid rgba(234, 179, 8, 0.2)',
-            marginBottom: '30px',
+            marginBottom: '24px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -382,7 +382,7 @@ const GitHubSection = memo(({ theme }) => {
           }}
         >
           <div style={{ width: '100%', maxWidth: '900px' }}>
-            <h3 style={{ fontSize: '1.2rem', color: '#EAB308', marginBottom: '20px', fontWeight: 600, textAlign: 'center' }}>
+            <h3 style={{ fontSize: '1.1rem', color: '#EAB308', marginBottom: '16px', fontWeight: 600, textAlign: 'center' }}>
               Contribution Calendar
             </h3>
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'hidden' }}>
@@ -394,10 +394,10 @@ const GitHubSection = memo(({ theme }) => {
                   maxWidth: '100%',
                   height: 'auto',
                   display: 'block',
-                  filter: isDark ? 'invert(0.9) hue-rotate(180deg) brightness(0.9)' : 'none',
-                  background: isDark ? '#0C0C0C' : 'transparent',
+                  filter: isDark ? 'invert(0.92) hue-rotate(180deg) brightness(0.85) contrast(1.1)' : 'none',
+                  background: isDark ? '#0a0a0a' : 'transparent',
                   borderRadius: '8px',
-                  padding: '10px'
+                  padding: '8px'
                 }}
               />
             </div>
@@ -410,15 +410,14 @@ const GitHubSection = memo(({ theme }) => {
           viewport={{ once: true }}
           style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth < 768 ? 'repeat(2, 1fr)' : window.innerWidth < 1024 ? 'repeat(3, 1fr)' : 'repeat(5, 1fr)',
-            gap: '20px',
-            marginBottom: '30px'
+            gridTemplateColumns: window.innerWidth < 768 ? 'repeat(2, 1fr)' : window.innerWidth < 1024 ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+            gap: '16px',
+            marginBottom: '24px'
           }}
         >
           {[
             { icon: FaBook, value: profile.publicRepos, label: 'Total Repositories' },
             { icon: FaStar, value: totalStars, label: 'Total Stars' },
-            { icon: FaCodeBranch, value: totalForks, label: 'Total Forks' },
             { icon: FaUsers, value: profile.followers, label: 'Followers' },
             { icon: FaUserFriends, value: profile.following, label: 'Following' }
           ].map((stat, index) => (
@@ -429,7 +428,7 @@ const GitHubSection = memo(({ theme }) => {
                 background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
                 backdropFilter: 'blur(12px)',
                 borderRadius: '16px',
-                padding: '24px',
+                padding: '18px',
                 border: '1px solid rgba(234, 179, 8, 0.2)',
                 textAlign: 'center',
                 transition: 'all 0.3s ease',
@@ -438,9 +437,9 @@ const GitHubSection = memo(({ theme }) => {
               onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 8px 30px rgba(234, 179, 8, 0.3)'}
               onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 4px 15px rgba(234, 179, 8, 0.1)'}
             >
-              <stat.icon style={{ fontSize: '2.2rem', color: '#EAB308', marginBottom: '12px' }} />
-              <div style={{ fontSize: '2rem', color: '#EAB308', fontWeight: 700, marginBottom: '8px' }}>{stat.value}</div>
-              <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>{stat.label}</div>
+              <stat.icon style={{ fontSize: '2rem', color: '#EAB308', marginBottom: '10px' }} />
+              <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700, marginBottom: '6px' }}>{stat.value}</div>
+              <div style={{ fontSize: '0.8rem', color: isDark ? '#A3A3A3' : '#666' }}>{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -453,8 +452,8 @@ const GitHubSection = memo(({ theme }) => {
             style={{
               display: 'grid',
               gridTemplateColumns: window.innerWidth < 1024 ? '1fr' : 'repeat(2, 1fr)',
-              gap: '24px',
-              marginBottom: '30px'
+              gap: '20px',
+              marginBottom: '24px'
             }}
           >
             <LanguageChart data={languageStats.languagesByRepo} title="Top Languages by Repos" isDark={isDark} />
@@ -470,7 +469,7 @@ const GitHubSection = memo(({ theme }) => {
             background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
             backdropFilter: 'blur(12px)',
             borderRadius: '16px',
-            padding: '24px',
+            padding: '18px',
             border: '1px solid rgba(234, 179, 8, 0.2)',
             display: 'flex',
             justifyContent: 'center',
@@ -478,7 +477,7 @@ const GitHubSection = memo(({ theme }) => {
           }}
         >
           <div style={{ width: '100%', maxWidth: '900px' }}>
-            <h3 style={{ fontSize: '1.2rem', color: '#EAB308', marginBottom: '20px', fontWeight: 600, textAlign: 'center' }}>
+            <h3 style={{ fontSize: '1.1rem', color: '#EAB308', marginBottom: '16px', fontWeight: 600, textAlign: 'center' }}>
               GitHub Streak Stats
             </h3>
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>

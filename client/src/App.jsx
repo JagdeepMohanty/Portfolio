@@ -1,5 +1,5 @@
 import { lazy, Suspense, memo, useCallback } from 'react';
-import { FaArrowUp } from 'react-icons/fa';
+import { AiFillHome } from 'react-icons/ai';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import LoadingScreen from './components/LoadingScreen';
@@ -34,8 +34,8 @@ const BackToTopButton = memo(({ show, onClick }) => {
         position: 'fixed',
         bottom: 'clamp(20px, 4vw, 30px)',
         right: 'clamp(20px, 4vw, 30px)',
-        width: 'clamp(50px, 8vw, 55px)',
-        height: 'clamp(50px, 8vw, 55px)',
+        width: 'clamp(45px, 7vw, 50px)',
+        height: 'clamp(45px, 7vw, 50px)',
         background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
         color: '#0C0C0C',
         border: 'none',
@@ -44,7 +44,7 @@ const BackToTopButton = memo(({ show, onClick }) => {
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        fontSize: 'clamp(20px, 3vw, 22px)',
+        fontSize: 'clamp(18px, 2.5vw, 20px)',
         transition: 'all 0.25s ease',
         zIndex: 999,
         boxShadow: '0 4px 20px rgba(234, 179, 8, 0.5)'
@@ -52,10 +52,10 @@ const BackToTopButton = memo(({ show, onClick }) => {
       onClick={onClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      aria-label="Scroll back to top of page"
-      title="Back to top"
+      aria-label="Back to home"
+      title="Back to home"
     >
-      <FaArrowUp aria-hidden="true" />
+      <AiFillHome aria-hidden="true" />
     </button>
   );
 });
@@ -105,7 +105,7 @@ function App() {
       `}</style>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <Suspense fallback={<LoadingScreen />}>
-        <main style={{ paddingTop: '60px' }} role="main" aria-label="Main content">
+        <main style={{ paddingTop: '80px' }} role="main" aria-label="Main content">
           <HomeSection theme={theme} />
           <AboutSection theme={theme} />
           <ProjectsSection theme={theme} />
