@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { FaReact, FaNodeJs, FaDatabase, FaGitAlt, FaDocker, FaDownload } from 'react-icons/fa';
-import { SiMongodb, SiNextdotjs, SiTypescript, SiJavascript, SiPython, SiCplusplus, SiExpress, SiVite } from 'react-icons/si';
+import { FaReact, FaNodeJs, FaDatabase, FaGitAlt, FaDocker, FaDownload, FaChartBar, FaFileWord } from 'react-icons/fa';
+import { SiMongodb, SiNextdotjs, SiTypescript, SiJavascript, SiPython, SiCplusplus, SiExpress, SiVite, SiC } from 'react-icons/si';
 
 const SKILL_CATEGORIES = [
   {
@@ -18,13 +18,15 @@ const SKILL_CATEGORIES = [
     title: 'Backend',
     skills: [
       { name: 'Node.js', icon: FaNodeJs },
-      { name: 'Express', icon: SiExpress }
+      { name: 'Express', icon: SiExpress },
+      { name: 'Python', icon: SiPython }
     ]
   },
   {
     title: 'Database',
     skills: [
       { name: 'MongoDB', icon: SiMongodb },
+      { name: 'MongoDB Atlas', icon: SiMongodb },
       { name: 'SQL', icon: FaDatabase }
     ]
   },
@@ -33,7 +35,7 @@ const SKILL_CATEGORIES = [
     skills: [
       { name: 'JavaScript', icon: SiJavascript },
       { name: 'TypeScript', icon: SiTypescript },
-      { name: 'Python', icon: SiPython },
+      { name: 'C', icon: SiC },
       { name: 'C++', icon: SiCplusplus }
     ]
   },
@@ -41,7 +43,9 @@ const SKILL_CATEGORIES = [
     title: 'Tools',
     skills: [
       { name: 'Git', icon: FaGitAlt },
-      { name: 'Docker', icon: FaDocker }
+      { name: 'Docker', icon: FaDocker },
+      { name: 'Power BI', icon: FaChartBar },
+      { name: 'MS Office', icon: FaFileWord }
     ]
   }
 ];
@@ -256,7 +260,7 @@ const AboutSection = memo(({ theme }) => {
                 margin: '0 auto'
               }}
             >
-              {/* Education Card 1 */}
+              {/* Education Card 1 - B.Tech */}
               <motion.div
                 style={{
                   background: isDark ? '#1A1A1A' : '#FFFFFF',
@@ -268,50 +272,6 @@ const AboutSection = memo(({ theme }) => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-                whileHover={{
-                  scale: 1.03,
-                  boxShadow: '0 8px 25px rgba(234, 179, 8, 0.3)'
-                }}
-              >
-                <h3 style={{
-                  color: '#EAB308',
-                  fontSize: 'clamp(1.1rem, 2.5vw, 1.2rem)',
-                  fontWeight: 600,
-                  marginBottom: '12px',
-                  lineHeight: 1.3
-                }}>
-                  Senior Secondary Education
-                </h3>
-                <p style={{
-                  color: isDark ? '#FAFAFA' : '#1A1A1A',
-                  fontSize: 'clamp(0.95rem, 2vw, 1rem)',
-                  marginBottom: '8px',
-                  lineHeight: 1.4,
-                  fontWeight: 500
-                }}>
-                  Kendriya Vidyalaya No.1, Balasore
-                </p>
-                <p style={{
-                  color: '#A3A3A3',
-                  fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)'
-                }}>
-                  2021 – 2023
-                </p>
-              </motion.div>
-
-              {/* Education Card 2 */}
-              <motion.div
-                style={{
-                  background: isDark ? '#1A1A1A' : '#FFFFFF',
-                  borderRadius: '12px',
-                  padding: '24px',
-                  border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
-                  transition: 'all 0.3s ease'
-                }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{
                   scale: 1.03,
@@ -341,6 +301,50 @@ const AboutSection = memo(({ theme }) => {
                   fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)'
                 }}>
                   2023 – 2027
+                </p>
+              </motion.div>
+
+              {/* Education Card 2 - Senior Secondary */}
+              <motion.div
+                style={{
+                  background: isDark ? '#1A1A1A' : '#FFFFFF',
+                  borderRadius: '12px',
+                  padding: '24px',
+                  border: `1px solid ${isDark ? 'rgba(234, 179, 8, 0.2)' : 'rgba(234, 179, 8, 0.3)'}`,
+                  transition: 'all 0.3s ease'
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{
+                  scale: 1.03,
+                  boxShadow: '0 8px 25px rgba(234, 179, 8, 0.3)'
+                }}
+              >
+                <h3 style={{
+                  color: '#EAB308',
+                  fontSize: 'clamp(1.1rem, 2.5vw, 1.2rem)',
+                  fontWeight: 600,
+                  marginBottom: '12px',
+                  lineHeight: 1.3
+                }}>
+                  Senior Secondary Education
+                </h3>
+                <p style={{
+                  color: isDark ? '#FAFAFA' : '#1A1A1A',
+                  fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+                  marginBottom: '8px',
+                  lineHeight: 1.4,
+                  fontWeight: 500
+                }}>
+                  Kendriya Vidyalaya No.1, Balasore
+                </p>
+                <p style={{
+                  color: '#A3A3A3',
+                  fontSize: 'clamp(0.85rem, 1.8vw, 0.95rem)'
+                }}>
+                  2021 – 2023
                 </p>
               </motion.div>
             </div>
