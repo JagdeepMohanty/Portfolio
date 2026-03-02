@@ -1,27 +1,27 @@
 import { useState, useEffect, memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaStar, FaCodeBranch, FaBook, FaUsers, FaUserFriends } from 'react-icons/fa';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 import githubService from '../services/githubService';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-const LanguageChart = memo(({ data, title }) => {
+const LanguageChart = memo(({ data, title, isDark }) => {
   const chartData = useMemo(() => ({
     labels: data.map(([label]) => label),
     datasets: [{
       data: data.map(([, value]) => value),
       backgroundColor: ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'],
-      borderColor: '#0C0C0C',
+      borderColor: isDark ? '#0C0C0C' : '#F5F5F5',
       borderWidth: 2
     }]
-  }), [data]);
+  }), [data, isDark]);
 
   const options = {
+    indexAxis: 'y',
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '65%',
     plugins: {
       legend: { display: false },
       tooltip: {
@@ -31,6 +31,16 @@ const LanguageChart = memo(({ data, title }) => {
         borderColor: '#EAB308',
         borderWidth: 1
       }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(234, 179, 8, 0.1)' },
+        ticks: { color: isDark ? '#A3A3A3' : '#666' }
+      },
+      y: {
+        grid: { display: false },
+        ticks: { color: isDark ? '#FAFAFA' : '#1A1A1A' }
+      }
     }
   };
 
@@ -38,7 +48,7 @@ const LanguageChart = memo(({ data, title }) => {
 
   return (
     <div style={{
-      background: 'rgba(26, 26, 26, 0.6)',
+      background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
       backdropFilter: 'blur(12px)',
       WebkitBackdropFilter: 'blur(12px)',
       borderRadius: '16px',
@@ -63,7 +73,7 @@ const LanguageChart = memo(({ data, title }) => {
                   background: ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'][index],
                   borderRadius: '2px'
                 }} />
-                <span style={{ color: '#FAFAFA', fontSize: '14px' }}>{label}</span>
+                <span style={{ color: isDark ? '#FAFAFA' : '#1A1A1A', fontSize: '14px' }}>{label}</span>
               </div>
               <span style={{ color: '#EAB308', fontSize: '14px', fontWeight: 600 }}>
                 {Math.round((value / total) * 100)}%
@@ -72,8 +82,8 @@ const LanguageChart = memo(({ data, title }) => {
           ))}
         </div>
       </div>
-      <div style={{ width: '200px', height: '200px', flexShrink: 0 }}>
-        <Doughnut data={chartData} options={options} />
+      <div style={{ width: '300px', height: '200px', flexShrink: 0 }}>
+        <Bar data={chartData} options={options} />
       </div>
     </div>
   );
@@ -137,7 +147,7 @@ const GitHubSection = memo(({ theme }) => {
             backdropFilter: 'blur(12px)',
             borderRadius: '16px',
             padding: '40px',
-            border: `1px solid rgba(234, 179, 8, 0.2)`
+            border: '1px solid rgba(234, 179, 8, 0.2)'
           }}>
             <div style={{
               width: '50px',
@@ -169,9 +179,9 @@ const GitHubSection = memo(({ theme }) => {
             backdropFilter: 'blur(12px)',
             borderRadius: '16px',
             padding: '40px',
-            border: `1px solid rgba(234, 179, 8, 0.2)`
+            border: '1px solid rgba(234, 179, 8, 0.2)'
           }}>
-            <p style={{ color: isDark ? '#A3A3A3' : '#666', marginBottom: '20px' }}>Unable to load GitHub data.</p>
+            <p style={{ color: isDark ? '#A3A3A3' : '#666', marginBottom: '20px' }}>Unable to load GitHub data</p>
             <button
               onClick={retry}
               style={{
@@ -183,10 +193,17 @@ const GitHubSection = memo(({ theme }) => {
                 fontSize: '14px',
                 fontWeight: 600,
                 cursor: 'pointer',
-                transition: 'transform 0.2s'
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 15px rgba(234, 179, 8, 0.3)'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-              onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 25px rgba(234, 179, 8, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(234, 179, 8, 0.3)';
+              }}
             >
               Retry
             </button>
@@ -218,14 +235,13 @@ const GitHubSection = memo(({ theme }) => {
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
             borderRadius: '16px',
-            padding: '24px',
+            padding: '30px',
             border: '1px solid rgba(234, 179, 8, 0.2)',
             marginBottom: '30px',
             display: 'flex',
             flexDirection: window.innerWidth < 768 ? 'column' : 'row',
-            gap: '24px',
-            alignItems: 'center',
-            position: 'relative'
+            gap: '30px',
+            alignItems: 'center'
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
@@ -233,58 +249,92 @@ const GitHubSection = memo(({ theme }) => {
               src={profile.avatar}
               alt={profile.name}
               style={{
-                width: '100px',
-                height: '100px',
+                width: '120px',
+                height: '120px',
                 borderRadius: '50%',
-                border: '3px solid #EAB308',
-                boxShadow: '0 0 20px rgba(234, 179, 8, 0.3)'
+                border: '4px solid #EAB308',
+                boxShadow: '0 0 30px rgba(234, 179, 8, 0.4)'
               }}
             />
-            <h3 style={{ fontSize: '1.2rem', color: isDark ? '#FAFAFA' : '#1A1A1A', fontWeight: 700, margin: 0, textAlign: 'center' }}>
+            <h3 style={{ fontSize: '1.3rem', color: isDark ? '#FAFAFA' : '#1A1A1A', fontWeight: 700, margin: 0, textAlign: 'center' }}>
               {profile.name}
             </h3>
           </div>
 
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px', width: '100%' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
             <div style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '16px'
+              gap: '20px'
             }}>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.6rem', color: '#EAB308', fontWeight: 700 }}>{profile.publicRepos}</div>
-                <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>Public Repos</div>
+                <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{profile.publicRepos}</div>
+                <div style={{ fontSize: '0.9rem', color: isDark ? '#A3A3A3' : '#666' }}>Public Repos</div>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.6rem', color: '#EAB308', fontWeight: 700 }}>{profile.followers}</div>
-                <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>Followers</div>
+                <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{profile.followers}</div>
+                <div style={{ fontSize: '0.9rem', color: isDark ? '#A3A3A3' : '#666' }}>Followers</div>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.6rem', color: '#EAB308', fontWeight: 700 }}>{profile.following}</div>
-                <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>Following</div>
+                <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{profile.following}</div>
+                <div style={{ fontSize: '0.9rem', color: isDark ? '#A3A3A3' : '#666' }}>Following</div>
               </div>
             </div>
             
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
               <a
-                href={profile.profileUrl}
+                href={`https://github.com/${username}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
                   display: 'inline-block',
                   background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
                   color: '#0C0C0C',
-                  padding: '10px 24px',
+                  padding: '12px 28px',
                   borderRadius: '8px',
                   fontSize: '14px',
                   fontWeight: 600,
                   textDecoration: 'none',
-                  transition: 'transform 0.2s'
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 15px rgba(234, 179, 8, 0.3)'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 25px rgba(234, 179, 8, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(234, 179, 8, 0.3)';
+                }}
               >
                 View GitHub Profile
+              </a>
+              <a
+                href={`https://github.com/${username}?tab=followers`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
+                  color: '#0C0C0C',
+                  padding: '12px 28px',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 15px rgba(234, 179, 8, 0.3)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 25px rgba(234, 179, 8, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(234, 179, 8, 0.3)';
+                }}
+              >
+                Follow on GitHub
               </a>
             </div>
           </div>
@@ -298,17 +348,17 @@ const GitHubSection = memo(({ theme }) => {
             background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
             backdropFilter: 'blur(12px)',
             borderRadius: '16px',
-            padding: '20px',
+            padding: '24px',
             border: '1px solid rgba(234, 179, 8, 0.2)',
             marginBottom: '30px',
             overflow: 'hidden'
           }}
         >
-          <h3 style={{ fontSize: '1.1rem', color: '#EAB308', marginBottom: '16px', fontWeight: 600 }}>
+          <h3 style={{ fontSize: '1.2rem', color: '#EAB308', marginBottom: '20px', fontWeight: 600 }}>
             Contribution Graph
           </h3>
           <img
-            src={`https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=github-dark&bg_color=0C0C0C&color=EAB308&line=F59E0B&point=EAB308&area=true&hide_border=true`}
+            src={`https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=github-dark&bg_color=${isDark ? '0C0C0C' : '1A1A1A'}&color=EAB308&line=F59E0B&point=EAB308&area=true&hide_border=true`}
             alt="Contribution Graph"
             style={{ width: '100%', borderRadius: '8px', display: 'block' }}
           />
@@ -322,27 +372,20 @@ const GitHubSection = memo(({ theme }) => {
             background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
             backdropFilter: 'blur(12px)',
             borderRadius: '16px',
-            padding: '20px',
+            padding: '24px',
             border: '1px solid rgba(234, 179, 8, 0.2)',
             marginBottom: '30px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            overflow: 'hidden',
-            maxWidth: '100%'
+            overflow: 'hidden'
           }}
         >
           <div style={{ width: '100%', maxWidth: '900px' }}>
-            <h3 style={{ fontSize: '1.1rem', color: '#EAB308', marginBottom: '16px', fontWeight: 600, textAlign: 'center' }}>
+            <h3 style={{ fontSize: '1.2rem', color: '#EAB308', marginBottom: '20px', fontWeight: 600, textAlign: 'center' }}>
               Contribution Calendar
             </h3>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              overflow: 'hidden'
-            }}>
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'hidden' }}>
               <img
                 src={`https://ghchart.rshah.org/EAB308/${username}`}
                 alt="Contribution Calendar"
@@ -372,66 +415,34 @@ const GitHubSection = memo(({ theme }) => {
             marginBottom: '30px'
           }}
         >
-          <div style={{
-            background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '16px',
-            padding: '20px',
-            border: '1px solid rgba(234, 179, 8, 0.2)',
-            textAlign: 'center'
-          }}>
-            <FaBook style={{ fontSize: '2rem', color: '#EAB308', marginBottom: '10px' }} />
-            <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{profile.publicRepos}</div>
-            <div style={{ fontSize: '0.9rem', color: isDark ? '#A3A3A3' : '#666' }}>Total Repositories</div>
-          </div>
-          <div style={{
-            background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '16px',
-            padding: '20px',
-            border: '1px solid rgba(234, 179, 8, 0.2)',
-            textAlign: 'center'
-          }}>
-            <FaStar style={{ fontSize: '2rem', color: '#EAB308', marginBottom: '10px' }} />
-            <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{totalStars}</div>
-            <div style={{ fontSize: '0.9rem', color: isDark ? '#A3A3A3' : '#666' }}>Total Stars</div>
-          </div>
-          <div style={{
-            background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '16px',
-            padding: '20px',
-            border: '1px solid rgba(234, 179, 8, 0.2)',
-            textAlign: 'center'
-          }}>
-            <FaCodeBranch style={{ fontSize: '2rem', color: '#EAB308', marginBottom: '10px' }} />
-            <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{totalForks}</div>
-            <div style={{ fontSize: '0.9rem', color: isDark ? '#A3A3A3' : '#666' }}>Total Forks</div>
-          </div>
-          <div style={{
-            background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '16px',
-            padding: '20px',
-            border: '1px solid rgba(234, 179, 8, 0.2)',
-            textAlign: 'center'
-          }}>
-            <FaUsers style={{ fontSize: '2rem', color: '#EAB308', marginBottom: '10px' }} />
-            <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{profile.followers}</div>
-            <div style={{ fontSize: '0.9rem', color: isDark ? '#A3A3A3' : '#666' }}>Followers</div>
-          </div>
-          <div style={{
-            background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '16px',
-            padding: '20px',
-            border: '1px solid rgba(234, 179, 8, 0.2)',
-            textAlign: 'center'
-          }}>
-            <FaUserFriends style={{ fontSize: '2rem', color: '#EAB308', marginBottom: '10px' }} />
-            <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{profile.following}</div>
-            <div style={{ fontSize: '0.9rem', color: isDark ? '#A3A3A3' : '#666' }}>Following</div>
-          </div>
+          {[
+            { icon: FaBook, value: profile.publicRepos, label: 'Total Repositories' },
+            { icon: FaStar, value: totalStars, label: 'Total Stars' },
+            { icon: FaCodeBranch, value: totalForks, label: 'Total Forks' },
+            { icon: FaUsers, value: profile.followers, label: 'Followers' },
+            { icon: FaUserFriends, value: profile.following, label: 'Following' }
+          ].map((stat, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ y: -5 }}
+              style={{
+                background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
+                backdropFilter: 'blur(12px)',
+                borderRadius: '16px',
+                padding: '24px',
+                border: '1px solid rgba(234, 179, 8, 0.2)',
+                textAlign: 'center',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 15px rgba(234, 179, 8, 0.1)'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 8px 30px rgba(234, 179, 8, 0.3)'}
+              onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 4px 15px rgba(234, 179, 8, 0.1)'}
+            >
+              <stat.icon style={{ fontSize: '2.2rem', color: '#EAB308', marginBottom: '12px' }} />
+              <div style={{ fontSize: '2rem', color: '#EAB308', fontWeight: 700, marginBottom: '8px' }}>{stat.value}</div>
+              <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>{stat.label}</div>
+            </motion.div>
+          ))}
         </motion.div>
 
         {languageStats.languagesByRepo.length > 0 && (
@@ -442,13 +453,43 @@ const GitHubSection = memo(({ theme }) => {
             style={{
               display: 'grid',
               gridTemplateColumns: window.innerWidth < 1024 ? '1fr' : 'repeat(2, 1fr)',
-              gap: '24px'
+              gap: '24px',
+              marginBottom: '30px'
             }}
           >
-            <LanguageChart data={languageStats.languagesByRepo} title="Top Languages by Repos" />
-            <LanguageChart data={languageStats.languagesByUsage} title="Top Languages by Usage" />
+            <LanguageChart data={languageStats.languagesByRepo} title="Top Languages by Repos" isDark={isDark} />
+            <LanguageChart data={languageStats.languagesByUsage} title="Top Languages by Usage" isDark={isDark} />
           </motion.div>
         )}
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          style={{
+            background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
+            backdropFilter: 'blur(12px)',
+            borderRadius: '16px',
+            padding: '24px',
+            border: '1px solid rgba(234, 179, 8, 0.2)',
+            display: 'flex',
+            justifyContent: 'center',
+            overflow: 'hidden'
+          }}
+        >
+          <div style={{ width: '100%', maxWidth: '900px' }}>
+            <h3 style={{ fontSize: '1.2rem', color: '#EAB308', marginBottom: '20px', fontWeight: 600, textAlign: 'center' }}>
+              GitHub Streak Stats
+            </h3>
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <img
+                src={`https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=dark&background=0C0C0C&ring=EAB308&fire=F59E0B&currStreakLabel=EAB308&sideLabels=EAB308&currStreakNum=FAFAFA&sideNums=FAFAFA&dates=A3A3A3&stroke=EAB308&border=EAB308`}
+                alt="GitHub Streak Stats"
+                style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block', borderRadius: '8px' }}
+              />
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

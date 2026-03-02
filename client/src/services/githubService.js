@@ -78,37 +78,6 @@ export const getGitHubRepos = async (username) => {
   return allRepos;
 };
 
-export const getTotalCommits = async (username, repos) => {
-  const cacheKey = `commits_${username}`;
-  const cached = getFromCache(cacheKey);
-  if (cached) return cached;
-
-  let total = 0;
-  const limit = Math.min(repos.length, 10);
-  
-  for (let i = 0; i < limit; i++) {
-    try {
-      const url = `${BASE_URL}/repos/${username}/${repos[i].name}/commits?per_page=1`;
-      const response = await fetch(url);
-      if (response.ok) {
-        const link = response.headers.get('Link');
-        if (link) {
-          const match = link.match(/page=(\d+)>; rel="last"/);
-          if (match) total += parseInt(match[1]);
-        } else {
-          const commits = await response.json();
-          total += commits.length;
-        }
-      }
-    } catch {
-      continue;
-    }
-  }
-  
-  setCache(cacheKey, total);
-  return total;
-};
-
 export const getLanguageStats = (repos) => {
   const languagesByRepo = {};
   const languagesByUsage = {};
@@ -137,7 +106,6 @@ export const getLanguageStats = (repos) => {
 const githubService = {
   getGitHubProfile,
   getGitHubRepos,
-  getTotalCommits,
   getLanguageStats
 };
 
