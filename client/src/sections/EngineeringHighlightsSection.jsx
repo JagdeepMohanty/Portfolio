@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { FaCode, FaRocket, FaServer, FaTachometerAlt, FaMobile } from 'react-icons/fa';
+import { FaCode, FaRocket, FaServer, FaTachometerAlt, FaMobile, FaChartBar } from 'react-icons/fa';
 
 const HIGHLIGHTS = [
   {
@@ -27,6 +27,11 @@ const HIGHLIGHTS = [
     icon: FaMobile,
     title: 'Responsive UI Design',
     description: 'Creating pixel-perfect, mobile-first interfaces that work across all devices'
+  },
+  {
+    icon: FaChartBar,
+    title: 'Data Visualization & Analytics',
+    description: 'Built interactive dashboards and visual reports to present complex data clearly using modern visualization tools'
   }
 ];
 
