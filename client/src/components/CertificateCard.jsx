@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FaEye, FaTimes, FaAward } from 'react-icons/fa';
 
 const CertificateCard = memo(({ certificate, theme, index }) => {
