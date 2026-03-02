@@ -29,11 +29,13 @@ const CONTACT_INFO = [
   }
 ];
 
-const ContactSection = memo(() => {
+const ContactSection = memo(({ theme }) => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [focusedField, setFocusedField] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const isDark = theme === 'dark';
 
   const handleInputChange = useCallback((e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -54,7 +56,7 @@ const ContactSection = memo(() => {
       id="contact"
       style={{
         padding: 'clamp(60px, 10vw, 100px) 0',
-        background: '#0C0C0C',
+        background: isDark ? '#0C0C0C' : '#F5F5F5',
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center'
@@ -101,19 +103,18 @@ const ContactSection = memo(() => {
           gridTemplateColumns: window.innerWidth >= 768 ? '1fr 1.5fr' : '1fr',
           gap: 'clamp(24px, 4vw, 32px)'
         }}>
-          {/* Left: Contact Info Card */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
             style={{
-              background: 'rgba(26, 26, 26, 0.6)',
+              background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
               backdropFilter: 'blur(12px)',
               WebkitBackdropFilter: 'blur(12px)',
               borderRadius: '16px',
               padding: 'clamp(24px, 4vw, 32px)',
-              border: '1px solid rgba(234, 179, 8, 0.3)',
+              border: isDark ? '1px solid rgba(234, 179, 8, 0.3)' : '1px solid rgba(234, 179, 8, 0.2)',
               boxShadow: '0 0 20px rgba(234, 179, 8, 0.15)',
               transition: 'all 0.3s ease'
             }}
@@ -129,7 +130,7 @@ const ContactSection = memo(() => {
             <h3 style={{
               fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
               fontWeight: 600,
-              color: '#FAFAFA',
+              color: isDark ? '#FAFAFA' : '#1A1A1A',
               marginBottom: '8px'
             }}>
               Contact Info
@@ -159,7 +160,7 @@ const ContactSection = memo(() => {
                     alignItems: 'center',
                     gap: '16px',
                     padding: '16px',
-                    background: 'rgba(26, 26, 26, 0.4)',
+                    background: isDark ? 'rgba(26, 26, 26, 0.4)' : 'rgba(255, 255, 255, 0.4)',
                     borderRadius: '12px',
                     border: '1px solid rgba(234, 179, 8, 0.1)',
                     textDecoration: 'none',
@@ -204,7 +205,7 @@ const ContactSection = memo(() => {
                     </div>
                     <div style={{
                       fontSize: '0.875rem',
-                      color: '#FAFAFA',
+                      color: isDark ? '#FAFAFA' : '#1A1A1A',
                       fontWeight: 500,
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
@@ -218,19 +219,18 @@ const ContactSection = memo(() => {
             </div>
           </motion.div>
 
-          {/* Right: Send Message Card */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
             style={{
-              background: 'rgba(26, 26, 26, 0.6)',
+              background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
               backdropFilter: 'blur(12px)',
               WebkitBackdropFilter: 'blur(12px)',
               borderRadius: '16px',
               padding: 'clamp(24px, 4vw, 32px)',
-              border: '1px solid rgba(234, 179, 8, 0.3)',
+              border: isDark ? '1px solid rgba(234, 179, 8, 0.3)' : '1px solid rgba(234, 179, 8, 0.2)',
               boxShadow: '0 0 20px rgba(234, 179, 8, 0.15)',
               transition: 'all 0.3s ease'
             }}
@@ -246,7 +246,7 @@ const ContactSection = memo(() => {
             <h3 style={{
               fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
               fontWeight: 600,
-              color: '#FAFAFA',
+              color: isDark ? '#FAFAFA' : '#1A1A1A',
               marginBottom: '24px'
             }}>
               Send Message
@@ -278,11 +278,11 @@ const ContactSection = memo(() => {
                   style={{
                     width: '100%',
                     padding: '14px 16px',
-                    background: 'rgba(12, 12, 12, 0.6)',
+                    background: isDark ? 'rgba(12, 12, 12, 0.6)' : 'rgba(255, 255, 255, 0.8)',
                     border: `2px solid ${focusedField === 'name' ? '#EAB308' : 'rgba(234, 179, 8, 0.2)'}`,
                     borderRadius: '10px',
                     fontSize: '15px',
-                    color: '#FAFAFA',
+                    color: isDark ? '#FAFAFA' : '#1A1A1A',
                     outline: 'none',
                     transition: 'all 0.3s ease',
                     boxShadow: focusedField === 'name' ? '0 0 0 4px rgba(234, 179, 8, 0.1)' : 'none'
@@ -304,11 +304,11 @@ const ContactSection = memo(() => {
                   style={{
                     width: '100%',
                     padding: '14px 16px',
-                    background: 'rgba(12, 12, 12, 0.6)',
+                    background: isDark ? 'rgba(12, 12, 12, 0.6)' : 'rgba(255, 255, 255, 0.8)',
                     border: `2px solid ${focusedField === 'email' ? '#EAB308' : 'rgba(234, 179, 8, 0.2)'}`,
                     borderRadius: '10px',
                     fontSize: '15px',
-                    color: '#FAFAFA',
+                    color: isDark ? '#FAFAFA' : '#1A1A1A',
                     outline: 'none',
                     transition: 'all 0.3s ease',
                     boxShadow: focusedField === 'email' ? '0 0 0 4px rgba(234, 179, 8, 0.1)' : 'none'
@@ -330,11 +330,11 @@ const ContactSection = memo(() => {
                   style={{
                     width: '100%',
                     padding: '14px 16px',
-                    background: 'rgba(12, 12, 12, 0.6)',
+                    background: isDark ? 'rgba(12, 12, 12, 0.6)' : 'rgba(255, 255, 255, 0.8)',
                     border: `2px solid ${focusedField === 'message' ? '#EAB308' : 'rgba(234, 179, 8, 0.2)'}`,
                     borderRadius: '10px',
                     fontSize: '15px',
-                    color: '#FAFAFA',
+                    color: isDark ? '#FAFAFA' : '#1A1A1A',
                     outline: 'none',
                     transition: 'all 0.3s ease',
                     resize: 'vertical',
