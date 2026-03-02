@@ -59,9 +59,23 @@ export const getGitHubRepos = async (username) => {
   const cached = getFromCache(cacheKey);
   if (cached) return cached;
 
-  const data = await fetchWithRetry(`${BASE_URL}/users/${username}/repos?per_page=100`);
-  setCache(cacheKey, data);
-  return data || [];
+  let allRepos = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore) {
+    const data = await fetchWithRetry(`${BASE_URL}/users/${username}/repos?per_page=100&page=${page}`);
+    if (data.length === 0) {
+      hasMore = false;
+    } else {
+      allRepos = [...allRepos, ...data];
+      page++;
+      if (data.length < 100) hasMore = false;
+    }
+  }
+
+  setCache(cacheKey, allRepos);
+  return allRepos;
 };
 
 export const getTotalCommits = async (username, repos) => {
