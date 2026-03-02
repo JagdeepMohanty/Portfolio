@@ -1,10 +1,20 @@
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaEye, FaTimes, FaAward } from 'react-icons/fa';
+import { FaTimes, FaAward } from 'react-icons/fa';
 
 const CertificateCard = memo(({ certificate, theme, index }) => {
   const [showModal, setShowModal] = useState(false);
   const isDark = theme === 'dark';
+
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') setShowModal(false);
+    };
+    if (showModal) {
+      window.addEventListener('keydown', handleEscape);
+      return () => window.removeEventListener('keydown', handleEscape);
+    }
+  }, [showModal]);
 
   const isHackathon = certificate.title.toLowerCase().includes('hackathon') || 
                       certificate.issuer.toLowerCase().includes('hackathon');
@@ -24,7 +34,8 @@ const CertificateCard = memo(({ certificate, theme, index }) => {
         viewport={{ once: true }}
         whileHover={{
           y: -6,
-          boxShadow: '0 12px 40px rgba(234, 179, 8, 0.4)'
+          boxShadow: '0 12px 40px rgba(234, 179, 8, 0.4)',
+          transition: { duration: 0.15 }
         }}
         style={{
           background: isDark ? '#1A1A1A' : '#FFFFFF',
@@ -79,28 +90,11 @@ const CertificateCard = memo(({ certificate, theme, index }) => {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              transition: 'transform 0.3s ease'
+              transition: 'transform 0.15s ease'
             }}
             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
             onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
           />
-          <div style={{
-            position: 'absolute',
-            bottom: '12px',
-            right: '12px',
-            background: 'rgba(234, 179, 8, 0.95)',
-            color: '#000',
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '18px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
-          }}>
-            <FaEye />
-          </div>
         </div>
 
         {/* Content */}
@@ -135,7 +129,7 @@ const CertificateCard = memo(({ certificate, theme, index }) => {
 
         {/* View Button */}
         <motion.button
-          whileHover={{ scale: 1.02 }}
+          whileHover={{ scale: 1.02, transition: { duration: 0.15 } }}
           whileTap={{ scale: 0.98 }}
           style={{
             marginTop: '16px',
@@ -148,7 +142,7 @@ const CertificateCard = memo(({ certificate, theme, index }) => {
             fontSize: '14px',
             fontWeight: 600,
             cursor: 'pointer',
-            transition: 'all 0.3s ease'
+            transition: 'all 0.15s ease'
           }}
           onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 20px rgba(234, 179, 8, 0.5)'}
           onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'none'}
@@ -164,6 +158,7 @@ const CertificateCard = memo(({ certificate, theme, index }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
             style={{
               position: 'fixed',
               top: 0,
@@ -180,13 +175,20 @@ const CertificateCard = memo(({ certificate, theme, index }) => {
             onClick={() => setShowModal(false)}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
               style={{
                 position: 'relative',
-                maxWidth: '90vw',
-                maxHeight: '90vh',
+                maxWidth: '95vw',
+                maxHeight: '85vh',
+                background: 'rgba(20, 20, 20, 0.7)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(234, 179, 8, 0.3)',
+                borderRadius: '16px',
+                padding: '20px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
@@ -194,7 +196,7 @@ const CertificateCard = memo(({ certificate, theme, index }) => {
               onClick={(e) => e.stopPropagation()}
             >
               <motion.button
-                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileHover={{ scale: 1.1, rotate: 90, transition: { duration: 0.15 } }}
                 whileTap={{ scale: 0.9 }}
                 style={{
                   position: 'absolute',
@@ -211,7 +213,7 @@ const CertificateCard = memo(({ certificate, theme, index }) => {
                   justifyContent: 'center',
                   cursor: 'pointer',
                   fontSize: '20px',
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.15s ease',
                   zIndex: 10000
                 }}
                 onClick={() => setShowModal(false)}
@@ -223,13 +225,12 @@ const CertificateCard = memo(({ certificate, theme, index }) => {
                 src={certificate.image_url}
                 alt={certificate.title}
                 style={{
-                  maxWidth: '100%',
-                  maxHeight: '90vh',
-                  width: 'auto',
+                  width: '100%',
                   height: 'auto',
+                  maxWidth: '100%',
+                  maxHeight: '75vh',
                   objectFit: 'contain',
                   borderRadius: '8px',
-                  border: '2px solid #EAB308',
                   boxShadow: '0 8px 40px rgba(234, 179, 8, 0.3)'
                 }}
               />
