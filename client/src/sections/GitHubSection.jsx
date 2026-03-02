@@ -8,15 +8,6 @@ import { APP_CONFIG } from '../constants/config';
 
 ChartJS.register(ArcElement, ChartTooltip, Legend);
 
-interface GitHubSectionProps {
-  theme: 'dark' | 'light';
-}
-
-interface DoughnutChartProps {
-  data: [string, number][] | null;
-  title: string;
-}
-
 const Skeleton = memo(() => (
   <div style={{ 
     background: 'linear-gradient(90deg, #1A1A1A 25%, #2A2A2A 50%, #1A1A1A 75%)',
@@ -30,7 +21,7 @@ const Skeleton = memo(() => (
 
 Skeleton.displayName = 'Skeleton';
 
-const DoughnutChart = memo<DoughnutChartProps>(({ data, title }) => {
+const DoughnutChart = memo(({ data, title }) => {
   if (!data || data.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '20px', color: '#A3A3A3', fontSize: '14px' }}>
@@ -109,13 +100,27 @@ const DoughnutChart = memo<DoughnutChartProps>(({ data, title }) => {
 
 DoughnutChart.displayName = 'DoughnutChart';
 
-const GitHubSection = memo<GitHubSectionProps>(() => {
-  const [profile, setProfile] = useState<any>(null);
+const GitHubSection = memo(() => {
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState(null);
 
   const username = APP_CONFIG.githubUsername;
+
+  const handleRetry = async () => {
+    setLoading(true);
+    setError(false);
+    const data = await githubService.fetchGitHubData(username);
+    
+    if (data) {
+      setProfile(data.profile);
+      setStats(data.stats);
+    } else {
+      setError(true);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     const styleSheet = document.createElement('style');
@@ -135,21 +140,21 @@ const GitHubSection = memo<GitHubSectionProps>(() => {
     };
   }, []);
 
-  const fetchData = async () => {
-    setLoading(true);
-    setError(false);
-    const data = await githubService.fetchGitHubData(username);
-    
-    if (data) {
-      setProfile(data.profile);
-      setStats(data.stats);
-    } else {
-      setError(true);
-    }
-    setLoading(false);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(false);
+      const data = await githubService.fetchGitHubData(username);
+      
+      if (data) {
+        setProfile(data.profile);
+        setStats(data.stats);
+      } else {
+        setError(true);
+      }
+      setLoading(false);
+    };
+
     fetchData();
   }, [username]);
 
@@ -181,7 +186,7 @@ const GitHubSection = memo<GitHubSectionProps>(() => {
           </h2>
           <p style={{ color: '#A3A3A3', marginBottom: '20px' }}>Failed to load GitHub data</p>
           <button
-            onClick={fetchData}
+            onClick={handleRetry}
             style={{
               background: 'linear-gradient(135deg, #EAB308, #F59E0B)',
               color: '#0C0C0C',
@@ -216,7 +221,6 @@ const GitHubSection = memo<GitHubSectionProps>(() => {
           GitHub Dashboard
         </motion.h2>
 
-        {/* Instagram-style Profile Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -263,7 +267,6 @@ const GitHubSection = memo<GitHubSectionProps>(() => {
           </div>
         </motion.div>
 
-        {/* Stats Cards */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -314,7 +317,6 @@ const GitHubSection = memo<GitHubSectionProps>(() => {
           </div>
         </motion.div>
 
-        {/* Charts */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -3,11 +3,7 @@ import { motion } from 'framer-motion';
 import ProjectCard from '../components/ProjectCard';
 import { projects } from '../data/projects';
 
-interface ProjectsSectionProps {
-  theme: 'dark' | 'light';
-}
-
-const ProjectsSection = memo<ProjectsSectionProps>(({ theme }) => {
+const ProjectsSection = memo(({ theme }) => {
   const isDark = theme === 'dark';
   const featuredProjects = projects.slice(0, 4);
   

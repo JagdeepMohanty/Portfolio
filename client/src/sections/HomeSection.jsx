@@ -1,11 +1,7 @@
-import { memo, useCallback } from 'react';
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 
-interface HomeSectionProps {
-  theme: 'dark' | 'light';
-}
-
-const HomeSection = memo<HomeSectionProps>(({ theme }) => {
+const HomeSection = memo(({ theme }) => {
   const isDark = theme === 'dark';
 
   return (

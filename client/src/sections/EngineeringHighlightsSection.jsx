@@ -2,17 +2,7 @@ import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { FaCode, FaRocket, FaServer, FaTachometerAlt, FaMobile } from 'react-icons/fa';
 
-interface EngineeringHighlightsSectionProps {
-  theme: 'dark' | 'light';
-}
-
-interface Highlight {
-  icon: typeof FaCode;
-  title: string;
-  description: string;
-}
-
-const HIGHLIGHTS: Highlight[] = [
+const HIGHLIGHTS = [
   {
     icon: FaCode,
     title: 'Clean Code Structure',
@@ -40,7 +30,7 @@ const HIGHLIGHTS: Highlight[] = [
   }
 ];
 
-const EngineeringHighlightsSection = memo<EngineeringHighlightsSectionProps>(({ theme }) => {
+const EngineeringHighlightsSection = memo(({ theme }) => {
   const isDark = theme === 'dark';
 
   return (

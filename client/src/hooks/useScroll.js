@@ -1,12 +1,7 @@
 import { useState, useEffect } from 'react';
 import { SCROLL_CONFIG } from '../constants/config';
 
-interface UseScrollReturn {
-  showBackToTop: boolean;
-  scrollToTop: () => void;
-}
-
-export const useScroll = (threshold: number = SCROLL_CONFIG.backToTopThreshold): UseScrollReturn => {
+export const useScroll = (threshold = SCROLL_CONFIG.backToTopThreshold) => {
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
@@ -21,7 +16,7 @@ export const useScroll = (threshold: number = SCROLL_CONFIG.backToTopThreshold):
   const scrollToTop = () => {
     window.scrollTo({ 
       top: 0, 
-      behavior: SCROLL_CONFIG.smoothScrollBehavior as ScrollBehavior
+      behavior: SCROLL_CONFIG.smoothScrollBehavior
     });
   };
 

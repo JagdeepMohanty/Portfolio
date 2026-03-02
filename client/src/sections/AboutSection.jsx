@@ -2,25 +2,16 @@ import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { FaReact, FaNodeJs, FaDatabase, FaGitAlt, FaDocker, FaDownload } from 'react-icons/fa';
 import { SiMongodb, SiNextdotjs, SiTypescript, SiJavascript, SiPython, SiCplusplus, SiExpress, SiVite } from 'react-icons/si';
-import { IconType } from 'react-icons';
 
-interface AboutSectionProps {
-  theme: 'dark' | 'light';
-}
-
-interface SkillCategory {
-  title: string;
-  skills: { name: string; icon: IconType }[];
-}
-
-const SKILL_CATEGORIES: SkillCategory[] = [
+const SKILL_CATEGORIES = [
   {
     title: 'Frontend',
     skills: [
       { name: 'React', icon: FaReact },
-      { name: 'TypeScript', icon: SiTypescript },
       { name: 'Next.js', icon: SiNextdotjs },
-      { name: 'JavaScript', icon: SiJavascript }
+      { name: 'TypeScript', icon: SiTypescript },
+      { name: 'JavaScript', icon: SiJavascript },
+      { name: 'Vite', icon: SiVite }
     ]
   },
   {
@@ -41,6 +32,7 @@ const SKILL_CATEGORIES: SkillCategory[] = [
     title: 'Programming',
     skills: [
       { name: 'JavaScript', icon: SiJavascript },
+      { name: 'TypeScript', icon: SiTypescript },
       { name: 'Python', icon: SiPython },
       { name: 'C++', icon: SiCplusplus }
     ]
@@ -49,13 +41,12 @@ const SKILL_CATEGORIES: SkillCategory[] = [
     title: 'Tools',
     skills: [
       { name: 'Git', icon: FaGitAlt },
-      { name: 'Docker', icon: FaDocker },
-      { name: 'Vite', icon: SiVite }
+      { name: 'Docker', icon: FaDocker }
     ]
   }
 ];
 
-const AboutSection = memo<AboutSectionProps>(({ theme }) => {
+const AboutSection = memo(({ theme }) => {
   const isDark = theme === 'dark';
 
   return (
@@ -218,14 +209,14 @@ const AboutSection = memo<AboutSectionProps>(({ theme }) => {
                           e.currentTarget.style.transform = 'scale(1.05)';
                           e.currentTarget.style.backgroundColor = '#EAB308';
                           e.currentTarget.style.color = '#000';
-                          const icon = e.currentTarget.querySelector('.skill-icon') as HTMLElement;
+                          const icon = e.currentTarget.querySelector('.skill-icon');
                           if (icon) icon.style.color = '#000';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.transform = 'scale(1)';
                           e.currentTarget.style.backgroundColor = isDark ? '#1A1A1A' : '#FFFFFF';
                           e.currentTarget.style.color = '#EAB308';
-                          const icon = e.currentTarget.querySelector('.skill-icon') as HTMLElement;
+                          const icon = e.currentTarget.querySelector('.skill-icon');
                           if (icon) icon.style.color = '#EAB308';
                         }}
                       >

@@ -1,14 +1,8 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
-import { Project } from '../types';
 
-interface ProjectCardProps {
-  project: Project;
-  theme: 'dark' | 'light';
-}
-
-const ProjectCard = memo<ProjectCardProps>(({ project, theme }) => {
+const ProjectCard = memo(({ project, theme }) => {
   const isDark = theme === 'dark';
 
   return (

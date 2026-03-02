@@ -1,15 +1,8 @@
 import { memo, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { FaEye, FaTimes, FaAward } from 'react-icons/fa';
-import { Certificate } from '../types';
 
-interface CertificateCardProps {
-  certificate: Certificate;
-  theme: 'dark' | 'light';
-  index: number;
-}
-
-const CertificateCard = memo<CertificateCardProps>(({ certificate, theme, index }) => {
+const CertificateCard = memo(({ certificate, theme, index }) => {
   const [showModal, setShowModal] = useState(false);
   const isDark = theme === 'dark';
 

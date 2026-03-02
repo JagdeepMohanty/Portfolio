@@ -1,42 +1,19 @@
 import { GITHUB_API } from '../constants/config';
-import { GitHubProfile, GitHubRepo, GitHubStats } from '../types';
-
-interface GitHubData {
-  profile: GitHubProfile;
-  repos: GitHubRepo[];
-  stats: GitHubStats & {
-    totalCommits: number;
-    totalLanguages: number;
-    languageCounts: [string, number][];
-    languageActivity: [string, number][];
-    totalContributions: number;
-    currentStreak: number;
-    longestStreak: number;
-  };
-}
-
-interface CacheEntry<T> {
-  data: T;
-  timestamp: number;
-}
 
 class GitHubService {
-  private baseUrl: string;
-  private cache: Map<string, CacheEntry<any>>;
-  private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-  private readonly MAX_RETRIES = 3;
-  private readonly RETRY_DELAY = 1000;
-
   constructor() {
     this.baseUrl = GITHUB_API.baseUrl;
     this.cache = new Map();
+    this.CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+    this.MAX_RETRIES = 3;
+    this.RETRY_DELAY = 1000;
   }
 
-  private getCacheKey(endpoint: string): string {
+  getCacheKey(endpoint) {
     return `${this.baseUrl}${endpoint}`;
   }
 
-  private getFromCache<T>(key: string): T | null {
+  getFromCache(key) {
     const entry = this.cache.get(key);
     if (!entry) return null;
 
@@ -46,20 +23,17 @@ class GitHubService {
       return null;
     }
 
-    return entry.data as T;
+    return entry.data;
   }
 
-  private setCache<T>(key: string, data: T): void {
+  setCache(key, data) {
     this.cache.set(key, {
       data,
       timestamp: Date.now()
     });
   }
 
-  private async fetchWithRetry<T>(
-    url: string,
-    retries = this.MAX_RETRIES
-  ): Promise<T> {
+  async fetchWithRetry(url, retries = this.MAX_RETRIES) {
     try {
       const response = await fetch(url);
       
@@ -75,37 +49,37 @@ class GitHubService {
     } catch (error) {
       if (retries > 0) {
         await new Promise(resolve => setTimeout(resolve, this.RETRY_DELAY));
-        return this.fetchWithRetry<T>(url, retries - 1);
+        return this.fetchWithRetry(url, retries - 1);
       }
       throw error;
     }
   }
 
-  async fetchUserProfile(username: string): Promise<GitHubProfile> {
+  async fetchUserProfile(username) {
     const endpoint = GITHUB_API.userEndpoint(username);
     const cacheKey = this.getCacheKey(endpoint);
     
-    const cached = this.getFromCache<GitHubProfile>(cacheKey);
+    const cached = this.getFromCache(cacheKey);
     if (cached) return cached;
 
-    const data = await this.fetchWithRetry<GitHubProfile>(`${this.baseUrl}${endpoint}`);
+    const data = await this.fetchWithRetry(`${this.baseUrl}${endpoint}`);
     this.setCache(cacheKey, data);
     return data;
   }
 
-  async fetchUserRepos(username: string): Promise<GitHubRepo[]> {
+  async fetchUserRepos(username) {
     const endpoint = `${GITHUB_API.reposEndpoint(username)}?per_page=100`;
     const cacheKey = this.getCacheKey(endpoint);
     
-    const cached = this.getFromCache<GitHubRepo[]>(cacheKey);
+    const cached = this.getFromCache(cacheKey);
     if (cached) return cached;
 
-    const data = await this.fetchWithRetry<GitHubRepo[]>(`${this.baseUrl}${endpoint}`);
+    const data = await this.fetchWithRetry(`${this.baseUrl}${endpoint}`);
     this.setCache(cacheKey, data);
     return data;
   }
 
-  async fetchGitHubData(username: string): Promise<GitHubData | null> {
+  async fetchGitHubData(username) {
     try {
       const [profileData, reposData] = await Promise.all([
         this.fetchUserProfile(username),
@@ -124,13 +98,13 @@ class GitHubService {
     }
   }
 
-  calculateStats(repos: GitHubRepo[]) {
+  calculateStats(repos) {
     const totalStars = repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
     const totalForks = repos.reduce((sum, repo) => sum + repo.forks_count, 0);
     const totalCommits = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
 
-    const languageCounts: Record<string, number> = {};
-    const languageActivity: Record<string, number> = {};
+    const languageCounts = {};
+    const languageActivity = {};
 
     repos.forEach(repo => {
       if (repo.language) {
@@ -164,7 +138,7 @@ class GitHubService {
     };
   }
 
-  clearCache(): void {
+  clearCache() {
     this.cache.clear();
   }
 }

@@ -1,6 +1,4 @@
-import { Certificate } from '../types';
-
-export const technicalCertificates: Certificate[] = [
+export const technicalCertificates = [
   {
     id: 1,
     title: "NEW INDIA VIBRANT HACKATHON-2023",
@@ -45,7 +43,7 @@ export const technicalCertificates: Certificate[] = [
   }
 ];
 
-export const otherCertificates: Certificate[] = [
+export const otherCertificates = [
    {
     id: 7,
     title: "Gujarat Youth Parliament",
@@ -104,6 +102,6 @@ export const otherCertificates: Certificate[] = [
   }
 ];
 
-export const certificates: Certificate[] = [...technicalCertificates, ...otherCertificates];
+export const certificates = [...technicalCertificates, ...otherCertificates];
 
 export default certificates;

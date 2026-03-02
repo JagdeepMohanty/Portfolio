@@ -3,11 +3,7 @@ import { motion } from 'framer-motion';
 import CertificateCard from '../components/CertificateCard';
 import { technicalCertificates, otherCertificates } from '../data/certificates';
 
-interface CertificatesSectionProps {
-  theme: 'dark' | 'light';
-}
-
-const CertificatesSection = memo<CertificatesSectionProps>(({ theme }) => {
+const CertificatesSection = memo(({ theme }) => {
   const isDark = theme === 'dark';
 
   return (

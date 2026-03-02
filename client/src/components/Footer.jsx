@@ -1,11 +1,7 @@
 import { memo } from 'react';
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
-interface FooterProps {
-  theme: 'dark' | 'light';
-}
-
-const Footer = memo<FooterProps>(({ theme }) => {
+const Footer = memo(({ theme }) => {
   const isDark = theme === 'dark';
 
   return (

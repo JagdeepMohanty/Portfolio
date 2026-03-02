@@ -1,26 +1,18 @@
 import { useEffect } from 'react';
 
-interface SEOProps {
-  title?: string;
-  description?: string;
-  image?: string;
-  url?: string;
-  type?: string;
-}
-
 export const useSEO = ({
   title = 'Jagdeep Mohanty - Software Engineer Portfolio',
   description = 'B.Tech CSE student passionate about coding and data. Explore my projects and GitHub contributions.',
   image = '/og-image.jpg',
   url = 'https://jagdeepmohanty.netlify.app',
   type = 'website'
-}: SEOProps = {}) => {
+} = {}) => {
   useEffect(() => {
     const fullTitle = title.includes('Jagdeep') ? title : `${title} | Jagdeep Mohanty`;
     
     document.title = fullTitle;
     
-    const updateMeta = (name: string, content: string, property = false) => {
+    const updateMeta = (name, content, property = false) => {
       const attr = property ? 'property' : 'name';
       let meta = document.querySelector(`meta[${attr}="${name}"]`);
       
@@ -50,7 +42,7 @@ export const useSEO = ({
     updateMeta('twitter:image', image);
     updateMeta('twitter:creator', '@JagdeepMohanty');
     
-    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement('link');
       canonical.rel = 'canonical';
@@ -58,7 +50,7 @@ export const useSEO = ({
     }
     canonical.href = url;
     
-    let jsonLd = document.querySelector('script[type="application/ld+json"]') as HTMLScriptElement;
+    let jsonLd = document.querySelector('script[type="application/ld+json"]');
     if (!jsonLd) {
       jsonLd = document.createElement('script');
       jsonLd.type = 'application/ld+json';

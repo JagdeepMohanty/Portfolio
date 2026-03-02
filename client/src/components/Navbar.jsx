@@ -2,18 +2,7 @@ import { useState, useEffect, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiHome, FiUser, FiCode, FiGithub, FiMail, FiSun, FiMoon, FiMenu, FiX, FiAward } from 'react-icons/fi';
 
-interface NavbarProps {
-  theme: 'dark' | 'light';
-  toggleTheme: () => void;
-}
-
-interface NavLink {
-  id: string;
-  label: string;
-  icon: typeof FiHome;
-}
-
-const NAV_LINKS: NavLink[] = [
+const NAV_LINKS = [
   { id: 'home', label: 'Home', icon: FiHome },
   { id: 'about', label: 'About', icon: FiUser },
   { id: 'projects', label: 'Projects', icon: FiCode },
@@ -22,12 +11,12 @@ const NAV_LINKS: NavLink[] = [
   { id: 'contact', label: 'Contact', icon: FiMail }
 ];
 
-const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
+const Navbar = memo(({ theme, toggleTheme }) => {
   const [activeSection, setActiveSection] = useState('home');
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
+  const [hoveredIcon, setHoveredIcon] = useState(null);
 
   const isDark = theme === 'dark';
 
@@ -65,7 +54,7 @@ const Navbar = memo<NavbarProps>(({ theme, toggleTheme }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
-  const scrollToSection = useCallback((id: string) => {
+  const scrollToSection = useCallback((id) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });

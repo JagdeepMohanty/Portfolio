@@ -7,7 +7,13 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
-    emptyOutDir: true,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    },
     rollupOptions: {
       output: {
         manualChunks: {
@@ -18,15 +24,13 @@ export default defineConfig({
         }
       }
     },
-    commonjsOptions: {
-      transformMixedEsModules: true
-    },
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true
-      }
-    }
+    chunkSizeWarningLimit: 1000
+  },
+  server: {
+    port: 5173,
+    open: true
+  },
+  preview: {
+    port: 4173
   }
 });

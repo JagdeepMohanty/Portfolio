@@ -1,6 +1,4 @@
-import { Project } from '../types';
-
-export const projects: Project[] = [
+export const projects = [
   {
     id: 1,
     title: "EasyXpense - Expense Tracker",

@@ -2,18 +2,7 @@ import { useState, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaPaperPlane, FaCheckCircle } from 'react-icons/fa';
 
-interface ContactSectionProps {
-  theme: 'dark' | 'light';
-}
-
-interface ContactInfo {
-  icon: typeof FaEnvelope;
-  label: string;
-  value: string;
-  link: string;
-}
-
-const CONTACT_INFO: ContactInfo[] = [
+const CONTACT_INFO = [
   {
     icon: FaEnvelope,
     label: 'Email',
@@ -40,17 +29,17 @@ const CONTACT_INFO: ContactInfo[] = [
   }
 ];
 
-const ContactSection = memo<ContactSectionProps>(() => {
+const ContactSection = memo(() => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [focusedField, setFocusedField] = useState<string | null>(null);
+  const [focusedField, setFocusedField] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = useCallback((e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }, []);
 
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     await new Promise(resolve => setTimeout(resolve, 1500));

@@ -15,13 +15,13 @@ const GitHubSection = lazy(() => import('./sections/GitHubSection'));
 const CertificatesSection = lazy(() => import('./sections/CertificatesSection'));
 const ContactSection = lazy(() => import('./sections/ContactSection'));
 
-const BackToTopButton = memo<{ show: boolean; onClick: () => void }>(({ show, onClick }) => {
-  const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+const BackToTopButton = memo(({ show, onClick }) => {
+  const handleMouseEnter = useCallback((e) => {
     e.currentTarget.style.transform = 'scale(1.15) translateY(-3px)';
     e.currentTarget.style.boxShadow = '0 8px 30px rgba(234, 179, 8, 0.7)';
   }, []);
 
-  const handleMouseLeave = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMouseLeave = useCallback((e) => {
     e.currentTarget.style.transform = 'scale(1)';
     e.currentTarget.style.boxShadow = '0 4px 20px rgba(234, 179, 8, 0.5)';
   }, []);
