@@ -1,12 +1,12 @@
 {
-  "name": "portfolio-backend",
+  "name": "portfolio-server",
   "version": "1.0.0",
   "type": "module",
   "description": "Backend for portfolio contact form",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js"
+    "start": "node index.js",
+    "dev": "node --watch index.js"
   },
   "keywords": ["express", "nodemailer", "contact-form"],
   "author": "Jagdeep Mohanty",

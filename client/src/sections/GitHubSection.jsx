@@ -1,4 +1,4 @@
-import { useState, useEffect, memo, useMemo } from 'react';
+import { useState, useEffect, memo, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaStar, FaBook, FaUsers, FaCode, FaBriefcase } from 'react-icons/fa';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
@@ -8,11 +8,9 @@ import ContributionCalendar from '../components/ContributionCalendar';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-const LanguageChart = memo(({ data, title, isDark }) => {
-  const chartData = useMemo(() => ({
-    labels: data.map(([label]) => label),
-    datasets: [{
-      data: data.map(([, value]) => value),
+const LanguageChart = memo(({ data, title, isDark, isMobile }) => {
+  const chartData = useMemo(() => ({\n    labels: data.map(([label]) => label),
+    datasets: [{\n      data: data.map(([, value]) => value),
       backgroundColor: isDark ? ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'] : ['#d97706', '#f59e0b', '#facc15', '#fde68a', '#fef3c7'],
       borderColor: isDark ? '#0C0C0C' : '#F5F5F5',
       borderWidth: 2
@@ -56,7 +54,7 @@ const LanguageChart = memo(({ data, title, isDark }) => {
       padding: '20px',
       border: '1px solid rgba(234, 179, 8, 0.2)',
       display: 'flex',
-      flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+      flexDirection: isMobile ? 'column' : 'row',
       gap: '20px',
       alignItems: 'center'
     }}>
@@ -97,9 +95,28 @@ const GitHubSection = memo(({ theme }) => {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth < 1024);
+  const resizeTimeoutRef = useRef(null);
 
   const username = 'JagdeepMohanty';
   const isDark = theme === 'dark';
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
+      resizeTimeoutRef.current = setTimeout(() => {
+        setIsMobile(window.innerWidth < 768);
+        setIsTablet(window.innerWidth < 1024);
+      }, 150);
+    };
+
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
+    };
+  }, []);
 
   const languageStats = useMemo(() => {
     if (repos.length === 0) return { languagesByRepo: [], languagesByUsage: [], primaryLanguage: 'JavaScript' };
@@ -113,7 +130,6 @@ const GitHubSection = memo(({ theme }) => {
   }, [profile]);
 
   const totalStars = useMemo(() => repos.reduce((sum, repo) => sum + repo.stargazers_count, 0), [repos]);
-  const totalForks = useMemo(() => repos.reduce((sum, repo) => sum + repo.forks_count, 0), [repos]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -246,7 +262,7 @@ const GitHubSection = memo(({ theme }) => {
             border: '1px solid rgba(234, 179, 8, 0.2)',
             marginBottom: '20px',
             display: 'flex',
-            flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+            flexDirection: isMobile ? 'column' : 'row',
             gap: '20px',
             alignItems: 'center'
           }}
@@ -398,7 +414,7 @@ const GitHubSection = memo(({ theme }) => {
           viewport={{ once: true }}
           style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth < 768 ? 'repeat(2, 1fr)' : window.innerWidth < 1024 ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+            gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : isTablet ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
             gap: '16px',
             marginBottom: '24px'
           }}
@@ -439,13 +455,13 @@ const GitHubSection = memo(({ theme }) => {
             viewport={{ once: true }}
             style={{
               display: 'grid',
-              gridTemplateColumns: window.innerWidth < 1024 ? '1fr' : 'repeat(2, 1fr)',
+              gridTemplateColumns: isTablet ? '1fr' : 'repeat(2, 1fr)',
               gap: '20px',
               marginBottom: '24px'
             }}
           >
-            <LanguageChart data={languageStats.languagesByRepo} title="Top Languages by Repos" isDark={isDark} />
-            <LanguageChart data={languageStats.languagesByUsage} title="Top Languages by Usage" isDark={isDark} />
+            <LanguageChart data={languageStats.languagesByRepo} title="Top Languages by Repos" isDark={isDark} isMobile={isMobile} />
+            <LanguageChart data={languageStats.languagesByUsage} title="Top Languages by Usage" isDark={isDark} isMobile={isMobile} />
           </motion.div>
         )}
 
@@ -484,4 +500,4 @@ const GitHubSection = memo(({ theme }) => {
 
 GitHubSection.displayName = 'GitHubSection';
 
-export default GitHubSection;
+export default memo(GitHubSection);

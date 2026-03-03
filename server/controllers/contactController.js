@@ -6,14 +6,17 @@ const validateEmail = (email) => {
 };
 
 const sanitizeInput = (input) => {
-  return input.trim().slice(0, 500);
+  return input.trim().slice(0, 500).replace(/[\r\n]/g, '');
+};
+
+const preventHeaderInjection = (input) => {
+  return input.replace(/[\r\n]/g, '').replace(/[<>]/g, '');
 };
 
 export const sendContactEmail = async (req, res) => {
   try {
     const { name, email, message } = req.body;
 
-    // Validate required fields
     if (!name || !email || !message) {
       return res.status(400).json({
         success: false,
@@ -21,7 +24,6 @@ export const sendContactEmail = async (req, res) => {
       });
     }
 
-    // Validate email format
     if (!validateEmail(email)) {
       return res.status(400).json({
         success: false,
@@ -29,12 +31,10 @@ export const sendContactEmail = async (req, res) => {
       });
     }
 
-    // Sanitize inputs
-    const sanitizedName = sanitizeInput(name);
+    const sanitizedName = preventHeaderInjection(sanitizeInput(name));
     const sanitizedEmail = email.toLowerCase().trim();
-    const sanitizedMessage = sanitizeInput(message);
+    const sanitizedMessage = preventHeaderInjection(sanitizeInput(message));
 
-    // Create HTML email template
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #EAB308;">New Contact Form Submission</h2>
@@ -53,7 +53,6 @@ export const sendContactEmail = async (req, res) => {
       </div>
     `;
 
-    // Send email
     await sendEmail(
       process.env.GMAIL_USER,
       `New Contact: ${sanitizedName}`,

@@ -1,4 +1,4 @@
-import { useState, useCallback, memo } from 'react';
+import { useState, useCallback, memo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaPaperPlane, FaCheckCircle } from 'react-icons/fa';
 
@@ -35,8 +35,25 @@ const ContactSection = memo(({ theme }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const resizeTimeoutRef = useRef(null);
 
   const isDark = theme === 'dark';
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
+      resizeTimeoutRef.current = setTimeout(() => {
+        setIsMobile(window.innerWidth < 768);
+      }, 150);
+    };
+
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (resizeTimeoutRef.current) clearTimeout(resizeTimeoutRef.current);
+    };
+  }, []);
 
   const handleInputChange = useCallback((e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -121,7 +138,7 @@ const ContactSection = memo(({ theme }) => {
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: window.innerWidth >= 768 ? '1fr 1.5fr' : '1fr',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1.5fr',
           gap: 'clamp(24px, 4vw, 32px)'
         }}>
           <motion.div
@@ -477,4 +494,4 @@ const ContactSection = memo(({ theme }) => {
 
 ContactSection.displayName = 'ContactSection';
 
-export default ContactSection;
+export default memo(ContactSection);
