@@ -13,7 +13,7 @@ const LanguageChart = memo(({ data, title, isDark }) => {
     labels: data.map(([label]) => label),
     datasets: [{
       data: data.map(([, value]) => value),
-      backgroundColor: ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'],
+      backgroundColor: isDark ? ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'] : ['#d97706', '#f59e0b', '#facc15', '#fde68a', '#fef3c7'],
       borderColor: isDark ? '#0C0C0C' : '#F5F5F5',
       borderWidth: 2
     }]
@@ -26,16 +26,16 @@ const LanguageChart = memo(({ data, title, isDark }) => {
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: '#1A1A1A',
-        titleColor: '#EAB308',
-        bodyColor: '#FAFAFA',
-        borderColor: '#EAB308',
+        backgroundColor: isDark ? '#1A1A1A' : '#FFFFFF',
+        titleColor: isDark ? '#EAB308' : '#d97706',
+        bodyColor: isDark ? '#FAFAFA' : '#1A1A1A',
+        borderColor: isDark ? '#EAB308' : '#d97706',
         borderWidth: 1
       }
     },
     scales: {
       x: {
-        grid: { color: 'rgba(234, 179, 8, 0.1)' },
+        grid: { color: isDark ? 'rgba(234, 179, 8, 0.1)' : 'rgba(217, 119, 6, 0.1)' },
         ticks: { color: isDark ? '#A3A3A3' : '#666' }
       },
       y: {
@@ -71,12 +71,12 @@ const LanguageChart = memo(({ data, title, isDark }) => {
                 <div style={{
                   width: '12px',
                   height: '12px',
-                  background: ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'][index],
+                  background: isDark ? ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'][index] : ['#d97706', '#f59e0b', '#facc15', '#fde68a', '#fef3c7'][index],
                   borderRadius: '2px'
                 }} />
                 <span style={{ color: isDark ? '#FAFAFA' : '#1A1A1A', fontSize: '14px' }}>{label}</span>
               </div>
-              <span style={{ color: '#EAB308', fontSize: '14px', fontWeight: 600 }}>
+              <span style={{ color: isDark ? '#EAB308' : '#d97706', fontSize: '14px', fontWeight: 600 }}>
                 {Math.round((value / total) * 100)}%
               </span>
             </div>
@@ -365,7 +365,7 @@ const GitHubSection = memo(({ theme }) => {
             Contribution Graph
           </h3>
           <img
-            src={`https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=github-dark&bg_color=${isDark ? '0C0C0C' : '1A1A1A'}&color=EAB308&line=F59E0B&point=EAB308&area=true&hide_border=true`}
+            src={`https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=${isDark ? 'github-dark' : 'github-light'}&bg_color=${isDark ? '0C0C0C' : 'F5F5F5'}&color=${isDark ? 'EAB308' : 'd97706'}&line=${isDark ? 'F59E0B' : 'd97706'}&point=${isDark ? 'EAB308' : 'd97706'}&area=true&hide_border=true`}
             alt="Contribution Graph"
             style={{ width: '100%', borderRadius: '8px', display: 'block' }}
           />
@@ -389,7 +389,7 @@ const GitHubSection = memo(({ theme }) => {
           <h3 style={{ fontSize: '1.2rem', color: '#EAB308', marginBottom: '20px', fontWeight: 600, textAlign: 'center' }}>
             Contribution Calendar
           </h3>
-          <ContributionCalendar username={username} isDark={isDark} />
+          <ContributionCalendar username={username} isDark={isDark} theme={theme} />
         </motion.div>
 
         <motion.div
@@ -425,9 +425,9 @@ const GitHubSection = memo(({ theme }) => {
               onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 8px 30px rgba(234, 179, 8, 0.3)'}
               onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 4px 15px rgba(234, 179, 8, 0.1)'}
             >
-              <stat.icon style={{ fontSize: '2rem', color: '#EAB308', marginBottom: '10px' }} />
-              <div style={{ fontSize: stat.isText ? '1.1rem' : '1.8rem', color: '#EAB308', fontWeight: 700, marginBottom: '6px', lineHeight: stat.isText ? 1.3 : 1 }}>{stat.value}</div>
-              <div style={{ fontSize: '0.8rem', color: isDark ? '#A3A3A3' : '#666' }}>{stat.label}</div>
+              <stat.icon style={{ fontSize: '2rem', color: isDark ? '#EAB308' : '#d97706', marginBottom: '10px' }} />
+              <div style={{ fontSize: stat.isText ? '1.1rem' : '1.8rem', color: isDark ? '#EAB308' : '#b45309', fontWeight: 700, marginBottom: '6px', lineHeight: stat.isText ? 1.3 : 1 }}>{stat.value}</div>
+              <div style={{ fontSize: '0.8rem', color: isDark ? '#A3A3A3' : '#78350f' }}>{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>
@@ -470,7 +470,7 @@ const GitHubSection = memo(({ theme }) => {
             </h3>
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
               <img
-                src={`https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=dark&background=0C0C0C&ring=EAB308&fire=F59E0B&currStreakLabel=EAB308&sideLabels=EAB308&currStreakNum=FAFAFA&sideNums=FAFAFA&dates=A3A3A3&stroke=EAB308&border=EAB308`}
+                src={`https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=${isDark ? 'dark' : 'light'}&background=${isDark ? '0C0C0C' : 'F5F5F5'}&ring=${isDark ? 'EAB308' : 'd97706'}&fire=${isDark ? 'F59E0B' : 'd97706'}&currStreakLabel=${isDark ? 'EAB308' : 'd97706'}&sideLabels=${isDark ? 'EAB308' : 'd97706'}&currStreakNum=${isDark ? 'FAFAFA' : '1A1A1A'}&sideNums=${isDark ? 'FAFAFA' : '1A1A1A'}&dates=${isDark ? 'A3A3A3' : '666666'}&stroke=${isDark ? 'EAB308' : 'd97706'}&border=${isDark ? 'EAB308' : 'd97706'}`}
                 alt="GitHub Streak Stats"
                 style={{ width: '100%', maxWidth: '100%', height: 'auto', display: 'block', borderRadius: '8px' }}
               />

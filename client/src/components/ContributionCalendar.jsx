@@ -1,6 +1,6 @@
 import { memo, useState, useEffect, useMemo } from 'react';
 
-const ContributionCalendar = memo(({ username, isDark }) => {
+const ContributionCalendar = memo(({ username, isDark, theme }) => {
   const [contributionData, setContributionData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -38,7 +38,9 @@ const ContributionCalendar = memo(({ username, isDark }) => {
     fetchContributions();
   }, [username]);
 
-  const colors = ['#0d0d0d', '#2a2000', '#5c4500', '#a67c00', '#eab308'];
+  const colors = isDark 
+    ? ['#0d0d0d', '#2a2000', '#5c4500', '#a67c00', '#eab308']
+    : ['#f3f4f6', '#fde68a', '#facc15', '#f59e0b', '#d97706'];
   
   const getColorLevel = (count) => {
     if (count === 0) return 0;
@@ -55,6 +57,7 @@ const ContributionCalendar = memo(({ username, isDark }) => {
   const getSquareSize = () => {
     if (typeof window === 'undefined') return 14;
     const width = window.innerWidth;
+    if (width < 480) return 7;
     if (width < 640) return 8;
     if (width < 1024) return 11;
     return 14;
@@ -63,6 +66,7 @@ const ContributionCalendar = memo(({ username, isDark }) => {
   const getGap = () => {
     if (typeof window === 'undefined') return 4;
     const width = window.innerWidth;
+    if (width < 480) return 1.5;
     if (width < 640) return 2;
     if (width < 1024) return 3;
     return 4;
@@ -127,7 +131,7 @@ const ContributionCalendar = memo(({ username, isDark }) => {
           marginBottom: '8px',
           paddingLeft: `${squareSize + gap + 24}px`,
           fontSize: `${squareSize > 10 ? '14px' : '11px'}`,
-          color: '#eab308',
+          color: isDark ? '#eab308' : '#92400e',
           fontWeight: 500
         }}>
           {months.map((month, index) => (
@@ -163,7 +167,7 @@ const ContributionCalendar = memo(({ username, isDark }) => {
                 key={index}
                 style={{
                   fontSize: `${squareSize > 10 ? '12px' : '10px'}`,
-                  color: 'rgba(234, 179, 8, 0.6)',
+                  color: isDark ? 'rgba(234, 179, 8, 0.6)' : 'rgba(146, 64, 14, 0.6)',
                   height: `${squareSize}px`,
                   display: 'flex',
                   alignItems: 'center'
@@ -176,36 +180,30 @@ const ContributionCalendar = memo(({ username, isDark }) => {
 
           {/* Contribution squares */}
           <div style={{ 
-            display: 'flex', 
+            display: 'grid',
+            gridTemplateColumns: `repeat(53, minmax(0, 1fr))`,
             gap: `${gap}px`,
-            flexWrap: 'nowrap',
+            width: '100%',
             maxWidth: '100%'
           }}>
             {contributionData.slice(0, 53).map((week, weekIndex) => (
-              <div key={weekIndex} style={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: `${gap}px`,
-                flexShrink: 0
-              }}>
-                {week.slice(0, 7).map((count, dayIndex) => {
-                  const level = getColorLevel(count);
-                  return (
-                    <div
-                      key={`${weekIndex}-${dayIndex}`}
-                      className="contribution-square"
-                      style={{
-                        width: `${squareSize}px`,
-                        height: `${squareSize}px`,
-                        backgroundColor: colors[level],
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                      }}
-                      title={`${count} contributions`}
-                    />
-                  );
-                })}
-              </div>
+              week.slice(0, 7).map((count, dayIndex) => {
+                const level = getColorLevel(count);
+                return (
+                  <div
+                    key={`${weekIndex}-${dayIndex}`}
+                    className="contribution-square"
+                    style={{
+                      width: '100%',
+                      aspectRatio: '1',
+                      backgroundColor: colors[level],
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}
+                    title={`${count} contributions`}
+                  />
+                );
+              })
             ))}
           </div>
         </div>
@@ -218,7 +216,7 @@ const ContributionCalendar = memo(({ username, isDark }) => {
           marginTop: '16px',
           gap: `${gap + 2}px`,
           fontSize: `${squareSize > 10 ? '12px' : '10px'}`,
-          color: 'rgba(234, 179, 8, 0.7)',
+          color: isDark ? 'rgba(234, 179, 8, 0.7)' : 'rgba(146, 64, 14, 0.7)',
           paddingRight: '4px'
         }}>
           <span>Less</span>
