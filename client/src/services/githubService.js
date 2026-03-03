@@ -1,10 +1,9 @@
 const BASE_URL = 'https://api.github.com';
-const CACHE_DURATION = 10 * 60 * 1000;
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 1000;
+const CACHE_DURATION = 15 * 60 * 1000;
+const MAX_RETRIES = 2;
+const RETRY_DELAY = 800;
 
 const cache = new Map();
-let lastContributionFetch = 0;
 
 const getFromCache = (key) => {
   const entry = cache.get(key);
@@ -81,16 +80,12 @@ export const getGitHubRepos = async (username) => {
 
 export const getContributions = async (username) => {
   const cacheKey = `contributions_${username}`;
-  const now = Date.now();
-  
-  if (now - lastContributionFetch < CACHE_DURATION) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
+  const cached = getFromCache(cacheKey);
+  if (cached) return cached;
 
   try {
     const response = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
-    if (!response.ok) throw new Error('Primary API failed');
+    if (!response.ok) throw new Error('API failed');
     
     const data = await response.json();
     if (!data.contributions || data.contributions.length === 0) throw new Error('No data');
@@ -106,29 +101,11 @@ export const getContributions = async (username) => {
       }
     });
     
-    lastContributionFetch = now;
     setCache(cacheKey, weeks);
     return weeks;
   } catch (error) {
     console.error('Contribution fetch failed:', error);
-    const weeks = [];
-    const today = new Date();
-    let currentWeek = [];
-    
-    for (let i = 89; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
-      const dayOfWeek = date.getDay();
-      const count = Math.floor(Math.random() * 5);
-      
-      currentWeek.push(count);
-      if (dayOfWeek === 6 || i === 0) {
-        weeks.push([...currentWeek]);
-        currentWeek = [];
-      }
-    }
-    
-    return weeks;
+    return [];
   }
 };
 

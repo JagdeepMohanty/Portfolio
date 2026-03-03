@@ -1,13 +1,13 @@
-import { memo, useState, useEffect, useMemo } from 'react';
+import { memo, useState, useEffect, useMemo, useCallback } from 'react';
 import githubService from '../services/githubService';
 
 const ContributionCalendar = memo(({ username, isDark, theme }) => {
   const [weeks, setWeeks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -22,38 +22,39 @@ const ContributionCalendar = memo(({ username, isDark, theme }) => {
     fetchData();
   }, [username]);
 
+  const isMobile = windowWidth < 640;
+  const isTablet = windowWidth < 1024;
+
   const colors = useMemo(() => isDark 
     ? ['#0d0d0d', '#2a2000', '#5c4500', '#a67c00', '#eab308']
     : ['#f3f4f6', '#fde68a', '#facc15', '#f59e0b', '#d97706'], [isDark]);
 
-  const getColorLevel = (count) => {
+  const getColorLevel = useCallback((count) => {
     if (count === 0) return 0;
     if (count <= 2) return 1;
     if (count <= 5) return 2;
     if (count <= 9) return 3;
     return 4;
-  };
+  }, []);
 
-  const displayWeeks = useMemo(() => {
-    if (isMobile && weeks.length > 12) {
-      return weeks.slice(-12);
+  const { displayWeeks, squareSize, gap } = useMemo(() => {
+    let size, spacing;
+    
+    if (isMobile) {
+      size = 7;
+      spacing = 1.5;
+    } else if (isTablet) {
+      size = 10;
+      spacing = 2;
+    } else {
+      size = 13;
+      spacing = 3;
     }
-    return weeks.slice(0, 53);
-  }, [weeks, isMobile]);
 
-  const squareSize = useMemo(() => {
-    if (isMobile) return 7;
-    if (window.innerWidth < 768) return 9;
-    if (window.innerWidth < 1024) return 11;
-    return 13;
-  }, [isMobile]);
-
-  const gap = useMemo(() => {
-    if (isMobile) return 1.5;
-    if (window.innerWidth < 768) return 2;
-    if (window.innerWidth < 1024) return 2.5;
-    return 3;
-  }, [isMobile]);
+    const display = isMobile && weeks.length > 12 ? weeks.slice(-12) : weeks.slice(0, 53);
+    
+    return { displayWeeks: display, squareSize: size, gap: spacing };
+  }, [weeks, isMobile, isTablet]);
 
   if (loading) {
     return (
