@@ -1,4 +1,4 @@
-const CONTRIBUTIONS_API = 'https://github-contributions-api.jogruber.de/v4';
+const BASE_URL = 'https://api.github.com';
 const CACHE_DURATION = 10 * 60 * 1000;
 const cache = new Map();
 
@@ -16,6 +16,114 @@ const setCache = (key, data) => {
   cache.set(key, { data, timestamp: Date.now() });
 };
 
+const fetchGitHub = async (url) => {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'application/vnd.github+json'
+      },
+      cache: 'no-store'
+    });
+
+    if (response.status === 403) {
+      console.error('GitHub API rate limited');
+      return null;
+    }
+
+    if (!response.ok) {
+      console.error(`GitHub API error: ${response.status}`);
+      return null;
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('GitHub fetch failed:', error);
+    return null;
+  }
+};
+
+export const getGitHubProfile = async (username) => {
+  const cacheKey = `profile_${username}`;
+  const cached = getFromCache(cacheKey);
+  if (cached) return cached;
+
+  const data = await fetchGitHub(`${BASE_URL}/users/${username}`);
+  
+  const profile = {
+    avatar: data?.avatar_url || '',
+    name: data?.name || data?.login || username,
+    username: data?.login || username,
+    bio: data?.bio || '',
+    publicRepos: data?.public_repos || 0,
+    followers: data?.followers || 0,
+    following: data?.following || 0,
+    profileUrl: data?.html_url || `https://github.com/${username}`
+  };
+
+  setCache(cacheKey, profile);
+  return profile;
+};
+
+export const getGitHubRepos = async (username) => {
+  const cacheKey = `repos_${username}`;
+  const cached = getFromCache(cacheKey);
+  if (cached) return cached;
+
+  let allRepos = [];
+  let page = 1;
+  let hasMore = true;
+
+  while (hasMore && page <= 5) {
+    const data = await fetchGitHub(`${BASE_URL}/users/${username}/repos?per_page=100&page=${page}&sort=updated`);
+    
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      hasMore = false;
+    } else {
+      allRepos = [...allRepos, ...data];
+      page++;
+      if (data.length < 100) hasMore = false;
+    }
+  }
+
+  setCache(cacheKey, allRepos);
+  return allRepos;
+};
+
+export const getLanguageStats = (repos) => {
+  if (!Array.isArray(repos) || repos.length === 0) {
+    return {
+      languagesByRepo: [],
+      languagesByUsage: []
+    };
+  }
+
+  const languagesByRepo = {};
+  const languagesByUsage = {};
+
+  repos.forEach(repo => {
+    if (repo && repo.language) {
+      languagesByRepo[repo.language] = (languagesByRepo[repo.language] || 0) + 1;
+      languagesByUsage[repo.language] = (languagesByUsage[repo.language] || 0) + (repo.size || 0);
+    }
+  });
+
+  const sortByRepo = Object.entries(languagesByRepo)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5);
+
+  const sortByUsage = Object.entries(languagesByUsage)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5);
+
+  return {
+    languagesByRepo: sortByRepo,
+    languagesByUsage: sortByUsage
+  };
+};
+
+const CONTRIBUTIONS_API = 'https://github-contributions-api.jogruber.de/v4';
+
 export const getContributionData = async (username) => {
   const cacheKey = `contributions_${username}`;
   const cached = getFromCache(cacheKey);
@@ -26,15 +134,18 @@ export const getContributionData = async (username) => {
       cache: 'no-store'
     });
 
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      console.error(`Contributions API error: ${response.status}`);
+      return { weeks: [], totalContributions: 0 };
+    }
     
     const data = await response.json();
     
-    if (!data.contributions || data.contributions.length === 0) {
-      throw new Error('No contribution data');
+    if (!data.contributions || !Array.isArray(data.contributions) || data.contributions.length === 0) {
+      console.error('No contribution data');
+      return { weeks: [], totalContributions: 0 };
     }
 
-    // Transform flat array into weeks (7 days per week)
     const weeks = [];
     for (let i = 0; i < data.contributions.length; i += 7) {
       weeks.push(data.contributions.slice(i, i + 7));
@@ -53,4 +164,11 @@ export const getContributionData = async (username) => {
   }
 };
 
-export default { getContributionData };
+const githubService = {
+  getGitHubProfile,
+  getGitHubRepos,
+  getLanguageStats,
+  getContributionData
+};
+
+export default githubService;
