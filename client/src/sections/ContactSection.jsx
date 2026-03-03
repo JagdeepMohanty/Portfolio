@@ -30,26 +30,47 @@ const CONTACT_INFO = [
 ];
 
 const ContactSection = memo(({ theme }) => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [focusedField, setFocusedField] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   const isDark = theme === 'dark';
 
   const handleInputChange = useCallback((e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setError('');
   }, []);
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setFormData({ name: '', email: '', message: '' });
-    setTimeout(() => setIsSuccess(false), 3000);
-  }, []);
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+
+      setIsSuccess(true);
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setTimeout(() => setIsSuccess(false), 3000);
+    } catch (err) {
+      console.error('Submit error:', err);
+      setError(err.message || 'Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [formData]);
 
   return (
     <section
@@ -255,9 +276,6 @@ const ContactSection = memo(({ theme }) => {
             </h3>
 
             <form 
-              name="contact" 
-              method="POST" 
-              data-netlify="true"
               onSubmit={handleSubmit}
               style={{
                 display: 'flex',
@@ -265,8 +283,6 @@ const ContactSection = memo(({ theme }) => {
                 gap: '20px'
               }}
             >
-              <input type="hidden" name="form-name" value="contact" />
-
               <div>
                 <input
                   type="text"
@@ -320,6 +336,31 @@ const ContactSection = memo(({ theme }) => {
               </div>
 
               <div>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleInputChange}
+                  onFocus={() => setFocusedField('subject')}
+                  onBlur={() => setFocusedField(null)}
+                  style={{
+                    width: '100%',
+                    padding: '14px 16px',
+                    background: isDark ? 'rgba(12, 12, 12, 0.6)' : 'rgba(255, 255, 255, 0.8)',
+                    border: `2px solid ${focusedField === 'subject' ? '#EAB308' : 'rgba(234, 179, 8, 0.2)'}`,
+                    borderRadius: '10px',
+                    fontSize: '15px',
+                    color: isDark ? '#FAFAFA' : '#1A1A1A',
+                    outline: 'none',
+                    transition: 'all 0.3s ease',
+                    boxShadow: focusedField === 'subject' ? '0 0 0 4px rgba(234, 179, 8, 0.1)' : 'none'
+                  }}
+                  placeholder="Subject (optional)"
+                />
+              </div>
+
+              <div>
                 <textarea
                   id="message"
                   name="message"
@@ -346,6 +387,19 @@ const ContactSection = memo(({ theme }) => {
                   placeholder="Your message..."
                 />
               </div>
+
+              {error && (
+                <div style={{
+                  padding: '12px 16px',
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  borderRadius: '8px',
+                  color: '#EF4444',
+                  fontSize: '14px'
+                }}>
+                  {error}
+                </div>
+              )}
 
               <motion.button
                 type="submit"
