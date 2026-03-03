@@ -1,42 +1,111 @@
-import { memo, useMemo } from 'react';
+import { memo, useState, useEffect, useMemo } from 'react';
 
 const ContributionCalendar = memo(({ username, isDark }) => {
-  // Generate mock contribution data (in production, fetch from GitHub API)
-  const contributionData = useMemo(() => {
-    const weeks = 53;
-    const data = [];
-    for (let week = 0; week < weeks; week++) {
-      const weekData = [];
-      for (let day = 0; day < 7; day++) {
-        // Random contribution level (0-4)
-        const level = Math.floor(Math.random() * 5);
-        weekData.push(level);
+  const [contributionData, setContributionData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContributions = async () => {
+      try {
+        // Fetch from GitHub API (public endpoint for contribution data)
+        const response = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
+        const data = await response.json();
+        
+        if (data.contributions) {
+          // Transform data into weeks format
+          const weeks = [];
+          let currentWeek = [];
+          
+          data.contributions.forEach((day, index) => {
+            currentWeek.push(day.count);
+            if ((index + 1) % 7 === 0 || index === data.contributions.length - 1) {
+              weeks.push([...currentWeek]);
+              currentWeek = [];
+            }
+          });
+          
+          setContributionData(weeks);
+        }
+      } catch (error) {
+        console.error('Failed to fetch contributions:', error);
+        // Fallback to empty data
+        setContributionData([]);
+      } finally {
+        setLoading(false);
       }
-      data.push(weekData);
-    }
-    return data;
-  }, []);
+    };
+
+    fetchContributions();
+  }, [username]);
 
   const colors = ['#0d0d0d', '#2a2000', '#5c4500', '#a67c00', '#eab308'];
+  
+  const getColorLevel = (count) => {
+    if (count === 0) return 0;
+    if (count <= 2) return 1;
+    if (count <= 5) return 2;
+    if (count <= 9) return 3;
+    return 4;
+  };
+
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const days = ['Mon', 'Wed', 'Fri'];
 
-  const squareSize = window.innerWidth < 768 ? 10 : window.innerWidth < 1024 ? 12 : 14;
-  const gap = window.innerWidth < 768 ? 3 : 4;
+  // Responsive square sizes
+  const getSquareSize = () => {
+    if (typeof window === 'undefined') return 14;
+    const width = window.innerWidth;
+    if (width < 640) return 8;
+    if (width < 1024) return 11;
+    return 14;
+  };
+
+  const getGap = () => {
+    if (typeof window === 'undefined') return 4;
+    const width = window.innerWidth;
+    if (width < 640) return 2;
+    if (width < 1024) return 3;
+    return 4;
+  };
+
+  const [squareSize, setSquareSize] = useState(getSquareSize());
+  const [gap, setGap] = useState(getGap());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setSquareSize(getSquareSize());
+      setGap(getGap());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', padding: '40px', color: 'rgba(234, 179, 8, 0.7)' }}>
+        Loading contributions...
+      </div>
+    );
+  }
+
+  if (contributionData.length === 0) {
+    return (
+      <div style={{ textAlign: 'center', padding: '40px', color: 'rgba(234, 179, 8, 0.7)' }}>
+        No contribution data available
+      </div>
+    );
+  }
 
   return (
     <div style={{
       width: '100%',
-      overflowX: 'auto',
-      overflowY: 'hidden',
-      msOverflowStyle: 'none',
-      scrollbarWidth: 'none',
-      WebkitOverflowScrolling: 'touch'
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      overflow: 'hidden'
     }}>
       <style>{`
-        .calendar-container::-webkit-scrollbar {
-          display: none;
-        }
         .contribution-square {
           transition: all 0.2s ease;
         }
@@ -44,29 +113,30 @@ const ContributionCalendar = memo(({ username, isDark }) => {
           transform: scale(1.15);
           box-shadow: 0 0 12px rgba(234, 179, 8, 0.6);
           z-index: 10;
+          position: relative;
         }
       `}</style>
       
-      <div className="calendar-container" style={{
+      <div style={{
         display: 'inline-block',
-        minWidth: '100%',
-        padding: '12px 0'
+        maxWidth: '100%'
       }}>
         {/* Month labels */}
         <div style={{
           display: 'flex',
           marginBottom: '8px',
-          paddingLeft: '32px'
+          paddingLeft: `${squareSize + gap + 24}px`,
+          fontSize: `${squareSize > 10 ? '14px' : '11px'}`,
+          color: '#eab308',
+          fontWeight: 500
         }}>
           {months.map((month, index) => (
             <div
               key={month}
               style={{
-                fontSize: '14px',
-                color: '#eab308',
-                fontWeight: 500,
                 width: `${(squareSize + gap) * 4.33}px`,
-                textAlign: 'left'
+                textAlign: 'left',
+                flexShrink: 0
               }}
             >
               {month}
@@ -75,7 +145,11 @@ const ContributionCalendar = memo(({ username, isDark }) => {
         </div>
 
         {/* Calendar grid */}
-        <div style={{ display: 'flex', gap: `${gap}px` }}>
+        <div style={{ 
+          display: 'flex', 
+          gap: `${gap}px`,
+          justifyContent: 'center'
+        }}>
           {/* Day labels */}
           <div style={{
             display: 'flex',
@@ -84,41 +158,53 @@ const ContributionCalendar = memo(({ username, isDark }) => {
             paddingRight: '8px',
             height: `${(squareSize + gap) * 7 - gap}px`
           }}>
-            {days.map((day, index) => (
+            {[0, 2, 4].map((index) => (
               <div
-                key={day}
+                key={index}
                 style={{
-                  fontSize: '12px',
+                  fontSize: `${squareSize > 10 ? '12px' : '10px'}`,
                   color: 'rgba(234, 179, 8, 0.6)',
                   height: `${squareSize}px`,
                   display: 'flex',
                   alignItems: 'center'
                 }}
               >
-                {day}
+                {days[index / 2]}
               </div>
             ))}
           </div>
 
           {/* Contribution squares */}
-          <div style={{ display: 'flex', gap: `${gap}px` }}>
-            {contributionData.map((week, weekIndex) => (
-              <div key={weekIndex} style={{ display: 'flex', flexDirection: 'column', gap: `${gap}px` }}>
-                {week.map((level, dayIndex) => (
-                  <div
-                    key={`${weekIndex}-${dayIndex}`}
-                    className="contribution-square"
-                    style={{
-                      width: `${squareSize}px`,
-                      height: `${squareSize}px`,
-                      backgroundColor: colors[level],
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      position: 'relative'
-                    }}
-                    title={`${level} contributions`}
-                  />
-                ))}
+          <div style={{ 
+            display: 'flex', 
+            gap: `${gap}px`,
+            flexWrap: 'nowrap',
+            maxWidth: '100%'
+          }}>
+            {contributionData.slice(0, 53).map((week, weekIndex) => (
+              <div key={weekIndex} style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: `${gap}px`,
+                flexShrink: 0
+              }}>
+                {week.slice(0, 7).map((count, dayIndex) => {
+                  const level = getColorLevel(count);
+                  return (
+                    <div
+                      key={`${weekIndex}-${dayIndex}`}
+                      className="contribution-square"
+                      style={{
+                        width: `${squareSize}px`,
+                        height: `${squareSize}px`,
+                        backgroundColor: colors[level],
+                        borderRadius: '4px',
+                        cursor: 'pointer'
+                      }}
+                      title={`${count} contributions`}
+                    />
+                  );
+                })}
               </div>
             ))}
           </div>
@@ -130,9 +216,10 @@ const ContributionCalendar = memo(({ username, isDark }) => {
           alignItems: 'center',
           justifyContent: 'flex-end',
           marginTop: '16px',
-          gap: '8px',
-          fontSize: '12px',
-          color: 'rgba(234, 179, 8, 0.7)'
+          gap: `${gap + 2}px`,
+          fontSize: `${squareSize > 10 ? '12px' : '10px'}`,
+          color: 'rgba(234, 179, 8, 0.7)',
+          paddingRight: '4px'
         }}>
           <span>Less</span>
           {colors.map((color, index) => (
@@ -142,7 +229,8 @@ const ContributionCalendar = memo(({ username, isDark }) => {
                 width: `${squareSize}px`,
                 height: `${squareSize}px`,
                 backgroundColor: color,
-                borderRadius: '3px'
+                borderRadius: '3px',
+                flexShrink: 0
               }}
             />
           ))}
