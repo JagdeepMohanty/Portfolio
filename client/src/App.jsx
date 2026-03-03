@@ -105,7 +105,7 @@ function App() {
       `}</style>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
       <Suspense fallback={<LoadingScreen />}>
-        <main style={{ paddingTop: '80px' }} role="main" aria-label="Main content">
+        <main style={{ paddingTop: 'clamp(80px, 10vh, 110px)' }} role="main" aria-label="Main content">
           <HomeSection theme={theme} />
           <AboutSection theme={theme} />
           <ProjectsSection theme={theme} />

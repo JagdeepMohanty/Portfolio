@@ -6,19 +6,19 @@ const CONTACT_INFO = [
   {
     icon: FaEnvelope,
     label: 'Email',
-    value: 'jagdeepmohanty1807@gmail.com',
+    value: '',
     link: 'mailto:jagdeepmohanty1807@gmail.com'
   },
   {
     icon: FaLinkedin,
     label: 'LinkedIn',
-    value: 'Connect with me',
+    value: '',
     link: 'https://www.linkedin.com/in/jagdeepmohanty'
   },
   {
     icon: FaGithub,
     label: 'GitHub',
-    value: '@JagdeepMohanty',
+    value: '',
     link: 'https://github.com/JagdeepMohanty'
   },
   {
@@ -203,16 +203,18 @@ const ContactSection = memo(({ theme }) => {
                     }}>
                       {info.label}
                     </div>
-                    <div style={{
-                      fontSize: '0.875rem',
-                      color: isDark ? '#FAFAFA' : '#1A1A1A',
-                      fontWeight: 500,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
-                    }}>
-                      {info.value}
-                    </div>
+                    {info.value && (
+                      <div style={{
+                        fontSize: '0.875rem',
+                        color: isDark ? '#FAFAFA' : '#1A1A1A',
+                        fontWeight: 500,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        {info.value}
+                      </div>
+                    )}
                   </div>
                 </motion.a>
               ))}

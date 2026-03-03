@@ -1,6 +1,6 @@
 import { useState, useEffect, memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaStar, FaCodeBranch, FaBook, FaUsers, FaUserFriends } from 'react-icons/fa';
+import { FaGithub, FaStar, FaBook, FaUsers } from 'react-icons/fa';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import githubService from '../services/githubService';
@@ -101,9 +101,15 @@ const GitHubSection = memo(({ theme }) => {
   const isDark = theme === 'dark';
 
   const languageStats = useMemo(() => {
-    if (repos.length === 0) return { languagesByRepo: [], languagesByUsage: [] };
-    return githubService.getLanguageStats(repos);
+    if (repos.length === 0) return { languagesByRepo: [], languagesByUsage: [], primaryLanguage: 'JavaScript' };
+    const stats = githubService.getLanguageStats(repos);
+    const primaryLanguage = stats.languagesByUsage.length > 0 ? stats.languagesByUsage[0][0] : 'JavaScript';
+    return { ...stats, primaryLanguage };
   }, [repos]);
+
+  const developerStatus = useMemo(() => {
+    return profile && profile.publicRepos > 20 ? 'Active Open Source Contributor' : 'Passionate Developer';
+  }, [profile]);
 
   const totalStars = useMemo(() => repos.reduce((sum, repo) => sum + repo.stargazers_count, 0), [repos]);
   const totalForks = useMemo(() => repos.reduce((sum, repo) => sum + repo.forks_count, 0), [repos]);
@@ -235,9 +241,9 @@ const GitHubSection = memo(({ theme }) => {
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
             borderRadius: '16px',
-            padding: '20px',
+            padding: '16px',
             border: '1px solid rgba(234, 179, 8, 0.2)',
-            marginBottom: '24px',
+            marginBottom: '20px',
             display: 'flex',
             flexDirection: window.innerWidth < 768 ? 'column' : 'row',
             gap: '20px',
@@ -261,23 +267,19 @@ const GitHubSection = memo(({ theme }) => {
             </h3>
           </div>
 
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '18px', width: '100%' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
+              gridTemplateColumns: 'repeat(2, 1fr)',
               gap: '16px'
             }}>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{profile.publicRepos}</div>
-                <div style={{ fontSize: '0.9rem', color: isDark ? '#A3A3A3' : '#666' }}>Public Repos</div>
+                <div style={{ fontSize: '1.6rem', color: '#EAB308', fontWeight: 700 }}>{languageStats.primaryLanguage}</div>
+                <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>Primary Language</div>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{profile.followers}</div>
-                <div style={{ fontSize: '0.9rem', color: isDark ? '#A3A3A3' : '#666' }}>Followers</div>
-              </div>
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700 }}>{profile.following}</div>
-                <div style={{ fontSize: '0.9rem', color: isDark ? '#A3A3A3' : '#666' }}>Following</div>
+                <div style={{ fontSize: '1rem', color: '#EAB308', fontWeight: 700, lineHeight: 1.3 }}>{developerStatus}</div>
+                <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>Status</div>
               </div>
             </div>
             
@@ -394,8 +396,8 @@ const GitHubSection = memo(({ theme }) => {
                   maxWidth: '100%',
                   height: 'auto',
                   display: 'block',
-                  filter: isDark ? 'invert(0.92) hue-rotate(180deg) brightness(0.85) contrast(1.1)' : 'none',
-                  background: isDark ? '#0a0a0a' : 'transparent',
+                  filter: isDark ? 'invert(0.95) hue-rotate(185deg) brightness(0.8) contrast(1.2) saturate(1.3)' : 'none',
+                  background: isDark ? '#0f0f0f' : 'transparent',
                   borderRadius: '8px',
                   padding: '8px'
                 }}
@@ -410,7 +412,7 @@ const GitHubSection = memo(({ theme }) => {
           viewport={{ once: true }}
           style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth < 768 ? 'repeat(2, 1fr)' : window.innerWidth < 1024 ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+            gridTemplateColumns: window.innerWidth < 768 ? 'repeat(2, 1fr)' : window.innerWidth < 1024 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
             gap: '16px',
             marginBottom: '24px'
           }}
@@ -418,8 +420,7 @@ const GitHubSection = memo(({ theme }) => {
           {[
             { icon: FaBook, value: profile.publicRepos, label: 'Total Repositories' },
             { icon: FaStar, value: totalStars, label: 'Total Stars' },
-            { icon: FaUsers, value: profile.followers, label: 'Followers' },
-            { icon: FaUserFriends, value: profile.following, label: 'Following' }
+            { icon: FaUsers, value: profile.followers, label: 'Followers' }
           ].map((stat, index) => (
             <motion.div
               key={index}
