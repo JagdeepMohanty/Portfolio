@@ -4,6 +4,7 @@ import { FaGithub, FaStar, FaBook, FaUsers, FaCode, FaBriefcase } from 'react-ic
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import githubService from '../services/githubService';
+import ContributionCalendar from '../components/ContributionCalendar';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -375,39 +376,20 @@ const GitHubSection = memo(({ theme }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           style={{
-            background: isDark ? 'rgba(26, 26, 26, 0.6)' : 'rgba(255, 255, 255, 0.6)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '16px',
-            padding: '18px',
-            border: '1px solid rgba(234, 179, 8, 0.2)',
+            background: 'rgba(26, 26, 26, 0.55)',
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
+            borderRadius: '18px',
+            padding: '24px',
+            border: '1px solid rgba(234, 179, 8, 0.25)',
             marginBottom: '24px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            overflow: 'hidden'
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)'
           }}
         >
-          <div style={{ width: '100%', maxWidth: '900px' }}>
-            <h3 style={{ fontSize: '1.1rem', color: '#EAB308', marginBottom: '16px', fontWeight: 600, textAlign: 'center' }}>
-              Contribution Calendar
-            </h3>
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', overflow: 'hidden' }}>
-              <img
-                src={`https://ghchart.rshah.org/EAB308/${username}`}
-                alt="Contribution Calendar"
-                style={{
-                  width: '100%',
-                  maxWidth: '100%',
-                  height: 'auto',
-                  display: 'block',
-                  filter: isDark ? 'invert(0.95) hue-rotate(185deg) brightness(0.8) contrast(1.2) saturate(1.3)' : 'none',
-                  background: isDark ? '#0f0f0f' : 'transparent',
-                  borderRadius: '8px',
-                  padding: '8px'
-                }}
-              />
-            </div>
-          </div>
+          <h3 style={{ fontSize: '1.2rem', color: '#EAB308', marginBottom: '20px', fontWeight: 600, textAlign: 'center' }}>
+            Contribution Calendar
+          </h3>
+          <ContributionCalendar username={username} isDark={isDark} />
         </motion.div>
 
         <motion.div
