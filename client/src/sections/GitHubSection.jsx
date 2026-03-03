@@ -9,8 +9,10 @@ import ContributionCalendar from '../components/ContributionCalendar';
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const LanguageChart = memo(({ data, title, isDark, isMobile }) => {
-  const chartData = useMemo(() => ({\n    labels: data.map(([label]) => label),
-    datasets: [{\n      data: data.map(([, value]) => value),
+  const chartData = useMemo(() => ({
+    labels: data.map(([label]) => label),
+    datasets: [{
+      data: data.map(([, value]) => value),
       backgroundColor: isDark ? ['#EAB308', '#F59E0B', '#FCD34D', '#FDE68A', '#FEF3C7'] : ['#d97706', '#f59e0b', '#facc15', '#fde68a', '#fef3c7'],
       borderColor: isDark ? '#0C0C0C' : '#F5F5F5',
       borderWidth: 2
