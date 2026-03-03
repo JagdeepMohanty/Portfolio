@@ -4,6 +4,7 @@ import { getContributionData } from '../services/githubService';
 const ContributionCalendar = memo(({ username, isDark }) => {
   const [weeks, setWeeks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [maxContributions, setMaxContributions] = useState(0);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
@@ -16,11 +17,14 @@ const ContributionCalendar = memo(({ username, isDark }) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      setError(false);
       const data = await getContributionData(username);
-      setWeeks(data.weeks);
       
-      if (data.weeks.length > 0) {
-        const max = Math.max(...data.weeks.flatMap(w => w.contributionDays.map(d => d.contributionCount)));
+      if (data.weeks.length === 0) {
+        setError(true);
+      } else {
+        setWeeks(data.weeks);
+        const max = Math.max(...data.weeks.flat().map(d => d.count || 0));
         setMaxContributions(max);
       }
       
@@ -70,8 +74,8 @@ const ContributionCalendar = memo(({ username, isDark }) => {
     let lastMonth = null;
 
     displayWeeks.forEach((week, weekIndex) => {
-      if (week.contributionDays.length > 0) {
-        const date = new Date(week.contributionDays[0].date);
+      if (week.length > 0 && week[0].date) {
+        const date = new Date(week[0].date);
         const month = date.toLocaleString('default', { month: 'short' });
         
         if (month !== lastMonth) {
@@ -92,10 +96,10 @@ const ContributionCalendar = memo(({ username, isDark }) => {
     );
   }
 
-  if (weeks.length === 0) {
+  if (error || weeks.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '40px', color: isDark ? 'rgba(234, 179, 8, 0.7)' : 'rgba(146, 64, 14, 0.7)' }}>
-        No contribution data available
+        Unable to load contribution data
       </div>
     );
   }
@@ -145,18 +149,17 @@ const ContributionCalendar = memo(({ username, isDark }) => {
             {/* Contribution Grid - 7 rows x N columns */}
             <div style={{ display: 'grid', gridAutoFlow: 'column', gridTemplateRows: 'repeat(7, 1fr)', gap: `${gap}px`, justifyContent: 'center' }}>
               {displayWeeks.flatMap((week, weekIndex) =>
-                week.contributionDays.slice(0, 7).map((day, dayIndex) => (
+                week.slice(0, 7).map((day, dayIndex) => (
                   <div
                     key={`${weekIndex}-${dayIndex}`}
                     className="contribution-cell"
                     style={{
                       width: `${cellSize}px`,
                       height: `${cellSize}px`,
-                      backgroundColor: colors[getColorLevel(day.contributionCount)],
+                      backgroundColor: colors[getColorLevel(day.count || 0)],
                       borderRadius: '2px',
                       border: `1px solid ${isDark ? '#30363d' : '#d0d7de'}`
                     }}
-                    title={`${day.contributionCount} contributions on ${day.date}`}
                   />
                 ))
               )}

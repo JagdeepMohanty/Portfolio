@@ -1,4 +1,4 @@
-const GRAPHQL_URL = 'https://api.github.com/graphql';
+const CONTRIBUTIONS_API = 'https://github-contributions-api.jogruber.de/v4';
 const CACHE_DURATION = 10 * 60 * 1000;
 const cache = new Map();
 
@@ -21,39 +21,8 @@ export const getContributionData = async (username) => {
   const cached = getFromCache(cacheKey);
   if (cached) return cached;
 
-  const token = import.meta.env.VITE_GITHUB_TOKEN;
-  
-  if (!token) {
-    console.warn('VITE_GITHUB_TOKEN not set');
-    return { weeks: [], totalContributions: 0 };
-  }
-
   try {
-    const query = `
-      query {
-        user(login: "${username}") {
-          contributionsCollection {
-            contributionCalendar {
-              totalContributions
-              weeks {
-                contributionDays {
-                  contributionCount
-                  date
-                }
-              }
-            }
-          }
-        }
-      }
-    `;
-
-    const response = await fetch(GRAPHQL_URL, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ query }),
+    const response = await fetch(`${CONTRIBUTIONS_API}/${username}?y=last`, {
       cache: 'no-store'
     });
 
@@ -61,17 +30,19 @@ export const getContributionData = async (username) => {
     
     const data = await response.json();
     
-    if (data.errors) {
-      console.error('GraphQL error:', data.errors);
-      return { weeks: [], totalContributions: 0 };
+    if (!data.contributions || data.contributions.length === 0) {
+      throw new Error('No contribution data');
     }
 
-    const calendar = data.data?.user?.contributionsCollection?.contributionCalendar;
-    if (!calendar) return { weeks: [], totalContributions: 0 };
+    // Transform flat array into weeks (7 days per week)
+    const weeks = [];
+    for (let i = 0; i < data.contributions.length; i += 7) {
+      weeks.push(data.contributions.slice(i, i + 7));
+    }
 
     const result = {
-      weeks: calendar.weeks || [],
-      totalContributions: calendar.totalContributions || 0
+      weeks,
+      totalContributions: data.contributions.reduce((sum, day) => sum + (day.count || 0), 0)
     };
 
     setCache(cacheKey, result);
