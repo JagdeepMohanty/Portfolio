@@ -1,7 +1,6 @@
 const BASE_URL = 'https://api.github.com';
-const CACHE_DURATION = 15 * 60 * 1000;
-const MAX_RETRIES = 2;
-const RETRY_DELAY = 800;
+const GRAPHQL_URL = 'https://api.github.com/graphql';
+const CACHE_DURATION = 10 * 60 * 1000;
 
 const cache = new Map();
 
@@ -19,16 +18,16 @@ const setCache = (key, data) => {
   cache.set(key, { data, timestamp: Date.now() });
 };
 
-const fetchWithRetry = async (url, retries = MAX_RETRIES) => {
+const fetchWithRetry = async (url, options = {}, retries = 2) => {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { ...options, cache: 'no-store' });
     if (response.status === 403) throw new Error('Rate limit');
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return await response.json();
   } catch (error) {
     if (retries > 0) {
-      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-      return fetchWithRetry(url, retries - 1);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      return fetchWithRetry(url, options, retries - 1);
     }
     throw error;
   }
@@ -83,9 +82,68 @@ export const getContributions = async (username) => {
   const cached = getFromCache(cacheKey);
   if (cached) return cached;
 
+  const token = import.meta.env.VITE_GITHUB_TOKEN;
+  
+  if (!token) {
+    console.warn('VITE_GITHUB_TOKEN not set, using fallback API');
+    return getFallbackContributions(username);
+  }
+
   try {
-    const response = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`);
-    if (!response.ok) throw new Error('API failed');
+    const query = `
+      query {
+        user(login: "${username}") {
+          contributionsCollection {
+            contributionCalendar {
+              totalContributions
+              weeks {
+                contributionDays {
+                  contributionCount
+                  date
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+
+    const response = await fetchWithRetry(GRAPHQL_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query })
+    });
+
+    if (response.errors) {
+      console.error('GraphQL error:', response.errors);
+      return getFallbackContributions(username);
+    }
+
+    const weeks = response.data?.user?.contributionsCollection?.contributionCalendar?.weeks || [];
+    
+    if (weeks.length === 0) {
+      return getFallbackContributions(username);
+    }
+
+    const processedWeeks = weeks.map(week => 
+      week.contributionDays.map(day => day.contributionCount)
+    );
+
+    setCache(cacheKey, processedWeeks);
+    return processedWeeks;
+  } catch (error) {
+    console.error('GraphQL fetch failed:', error);
+    return getFallbackContributions(username);
+  }
+};
+
+const getFallbackContributions = async (username) => {
+  try {
+    const response = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}?y=last`, { cache: 'no-store' });
+    if (!response.ok) throw new Error('Fallback API failed');
     
     const data = await response.json();
     if (!data.contributions || data.contributions.length === 0) throw new Error('No data');
@@ -101,10 +159,9 @@ export const getContributions = async (username) => {
       }
     });
     
-    setCache(cacheKey, weeks);
     return weeks;
   } catch (error) {
-    console.error('Contribution fetch failed:', error);
+    console.error('Fallback API failed:', error);
     return [];
   }
 };

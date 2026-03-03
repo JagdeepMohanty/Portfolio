@@ -4,6 +4,7 @@ import githubService from '../services/githubService';
 const ContributionCalendar = memo(({ username, isDark, theme }) => {
   const [weeks, setWeeks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [maxContributions, setMaxContributions] = useState(0);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
 
   useEffect(() => {
@@ -17,6 +18,12 @@ const ContributionCalendar = memo(({ username, isDark, theme }) => {
       setLoading(true);
       const data = await githubService.getContributions(username);
       setWeeks(data);
+      
+      if (data.length > 0) {
+        const max = Math.max(...data.flat());
+        setMaxContributions(max);
+      }
+      
       setLoading(false);
     };
     fetchData();
@@ -25,19 +32,25 @@ const ContributionCalendar = memo(({ username, isDark, theme }) => {
   const isMobile = windowWidth < 640;
   const isTablet = windowWidth < 1024;
 
-  const colors = useMemo(() => isDark 
-    ? ['#0d0d0d', '#2a2000', '#5c4500', '#a67c00', '#eab308']
-    : ['#f3f4f6', '#fde68a', '#facc15', '#f59e0b', '#d97706'], [isDark]);
+  const colorMap = useMemo(() => ({
+    dark: ['#0d0d0d', '#2a2000', '#5c4500', '#a67c00', '#eab308'],
+    light: ['#f3f4f6', '#fde68a', '#facc15', '#f59e0b', '#d97706']
+  }), []);
+
+  const colors = isDark ? colorMap.dark : colorMap.light;
 
   const getColorLevel = useCallback((count) => {
     if (count === 0) return 0;
-    if (count <= 2) return 1;
-    if (count <= 5) return 2;
-    if (count <= 9) return 3;
+    if (maxContributions === 0) return 0;
+    
+    const ratio = count / maxContributions;
+    if (ratio <= 0.25) return 1;
+    if (ratio <= 0.5) return 2;
+    if (ratio <= 0.75) return 3;
     return 4;
-  }, []);
+  }, [maxContributions]);
 
-  const { displayWeeks, squareSize, gap } = useMemo(() => {
+  const { displayWeeks, squareSize, gap, columnCount } = useMemo(() => {
     let size, spacing;
     
     if (isMobile) {
@@ -51,9 +64,14 @@ const ContributionCalendar = memo(({ username, isDark, theme }) => {
       spacing = 3;
     }
 
-    const display = isMobile && weeks.length > 12 ? weeks.slice(-12) : weeks.slice(0, 53);
+    const display = isMobile && weeks.length > 12 ? weeks.slice(-12) : weeks;
     
-    return { displayWeeks: display, squareSize: size, gap: spacing };
+    return { 
+      displayWeeks: display, 
+      squareSize: size, 
+      gap: spacing,
+      columnCount: display.length
+    };
   }, [weeks, isMobile, isTablet]);
 
   if (loading) {
@@ -99,8 +117,8 @@ const ContributionCalendar = memo(({ username, isDark, theme }) => {
               ))}
             </div>
 
-            {/* Contribution Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${displayWeeks.length}, ${squareSize}px)`, gap: `${gap}px`, justifyContent: 'center' }}>
+            {/* Contribution Grid - Chronological order */}
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${columnCount}, ${squareSize}px)`, gap: `${gap}px`, justifyContent: 'center' }}>
               {displayWeeks.flatMap((week, weekIndex) =>
                 week.slice(0, 7).map((count, dayIndex) => (
                   <div
