@@ -1,6 +1,6 @@
 import { useState, useEffect, memo, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaStar, FaBook, FaUsers } from 'react-icons/fa';
+import { FaGithub, FaStar, FaBook, FaUsers, FaCode, FaBriefcase } from 'react-icons/fa';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import githubService from '../services/githubService';
@@ -270,16 +270,20 @@ const GitHubSection = memo(({ theme }) => {
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
+              gridTemplateColumns: 'repeat(3, 1fr)',
               gap: '16px'
             }}>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1.6rem', color: '#EAB308', fontWeight: 700 }}>{languageStats.primaryLanguage}</div>
-                <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>Primary Language</div>
+                <div style={{ fontSize: '1.6rem', color: '#EAB308', fontWeight: 700 }}>{profile.publicRepos}</div>
+                <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>Public Repos</div>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '1rem', color: '#EAB308', fontWeight: 700, lineHeight: 1.3 }}>{developerStatus}</div>
-                <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>Status</div>
+                <div style={{ fontSize: '1.6rem', color: '#EAB308', fontWeight: 700 }}>{profile.followers}</div>
+                <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>Followers</div>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '1.6rem', color: '#EAB308', fontWeight: 700 }}>{profile.following}</div>
+                <div style={{ fontSize: '0.85rem', color: isDark ? '#A3A3A3' : '#666' }}>Following</div>
               </div>
             </div>
             
@@ -412,7 +416,7 @@ const GitHubSection = memo(({ theme }) => {
           viewport={{ once: true }}
           style={{
             display: 'grid',
-            gridTemplateColumns: window.innerWidth < 768 ? 'repeat(2, 1fr)' : window.innerWidth < 1024 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+            gridTemplateColumns: window.innerWidth < 768 ? 'repeat(2, 1fr)' : window.innerWidth < 1024 ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
             gap: '16px',
             marginBottom: '24px'
           }}
@@ -420,7 +424,8 @@ const GitHubSection = memo(({ theme }) => {
           {[
             { icon: FaBook, value: profile.publicRepos, label: 'Total Repositories' },
             { icon: FaStar, value: totalStars, label: 'Total Stars' },
-            { icon: FaUsers, value: profile.followers, label: 'Followers' }
+            { icon: FaCode, value: languageStats.primaryLanguage, label: 'Primary Language', isText: true },
+            { icon: FaBriefcase, value: developerStatus, label: 'Status', isText: true }
           ].map((stat, index) => (
             <motion.div
               key={index}
@@ -439,7 +444,7 @@ const GitHubSection = memo(({ theme }) => {
               onMouseLeave={(e) => e.currentTarget.style.boxShadow = '0 4px 15px rgba(234, 179, 8, 0.1)'}
             >
               <stat.icon style={{ fontSize: '2rem', color: '#EAB308', marginBottom: '10px' }} />
-              <div style={{ fontSize: '1.8rem', color: '#EAB308', fontWeight: 700, marginBottom: '6px' }}>{stat.value}</div>
+              <div style={{ fontSize: stat.isText ? '1.1rem' : '1.8rem', color: '#EAB308', fontWeight: 700, marginBottom: '6px', lineHeight: stat.isText ? 1.3 : 1 }}>{stat.value}</div>
               <div style={{ fontSize: '0.8rem', color: isDark ? '#A3A3A3' : '#666' }}>{stat.label}</div>
             </motion.div>
           ))}
