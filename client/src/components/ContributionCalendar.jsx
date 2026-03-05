@@ -54,14 +54,14 @@ const ContributionCalendar = memo(({ username, isDark }) => {
     let size, spacing;
     
     if (isMobile) {
-      size = 7;
-      spacing = 1;
+      size = 'clamp(8px, 2vw, 12px)';
+      spacing = 'clamp(2px, 0.3vw, 4px)';
     } else if (isTablet) {
-      size = 10;
-      spacing = 2;
+      size = 'clamp(12px, 1.8vw, 16px)';
+      spacing = 'clamp(3px, 0.4vw, 5px)';
     } else {
-      size = 13;
-      spacing = 2;
+      size = 'clamp(14px, 1.5vw, 18px)';
+      spacing = 'clamp(4px, 0.5vw, 6px)';
     }
 
     const display = isMobile && weeks.length > 16 ? weeks.slice(-16) : weeks;
@@ -110,6 +110,8 @@ const ContributionCalendar = memo(({ username, isDark }) => {
         .contribution-cell {
           transition: all 0.2s ease;
           cursor: pointer;
+          width: 100%;
+          height: 100%;
         }
         .contribution-cell:hover {
           transform: scale(1.15);
@@ -117,16 +119,37 @@ const ContributionCalendar = memo(({ username, isDark }) => {
           z-index: 10;
           position: relative;
         }
+        .calendar-grid {
+          display: grid;
+          grid-auto-flow: column;
+          grid-template-rows: repeat(7, ${cellSize});
+          gap: ${gap};
+          justify-content: center;
+        }
+        .month-labels {
+          display: grid;
+          grid-template-columns: repeat(${displayWeeks.length}, ${cellSize});
+          gap: ${gap};
+          width: fit-content;
+          padding-left: 32px;
+        }
+        .day-labels {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          padding-right: 8px;
+          height: calc((${cellSize} + ${gap}) * 7 - ${gap});
+        }
       `}</style>
 
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
         {/* Month labels */}
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', paddingLeft: '32px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${displayWeeks.length}, ${cellSize}px)`, gap: `${gap}px`, width: 'fit-content' }}>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+          <div className="month-labels">
             {displayWeeks.map((_, weekIndex) => {
               const label = monthLabels.find(l => l.weekIndex === weekIndex);
               return (
-                <div key={weekIndex} style={{ fontSize: '11px', color: isDark ? '#8b949e' : '#57606a', height: '20px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+                <div key={weekIndex} style={{ fontSize: '11px', color: isDark ? '#8b949e' : '#57606a', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
                   {label ? label.month : ''}
                 </div>
               );
@@ -136,26 +159,24 @@ const ContributionCalendar = memo(({ username, isDark }) => {
 
         {/* Calendar Grid */}
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', overflow: 'hidden' }}>
-          <div style={{ display: 'flex', gap: `${gap}px`, alignItems: 'flex-start' }}>
+          <div style={{ display: 'flex', gap: gap, alignItems: 'flex-start' }}>
             {/* Day labels */}
-            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-around', paddingRight: '8px', height: `${(cellSize + gap) * 7 - gap}px` }}>
+            <div className="day-labels">
               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, idx) => (
-                <div key={day} style={{ fontSize: '11px', color: isDark ? '#8b949e' : '#57606a', height: `${cellSize}px`, display: 'flex', alignItems: 'center' }}>
+                <div key={day} style={{ fontSize: '11px', color: isDark ? '#8b949e' : '#57606a', display: 'flex', alignItems: 'center' }}>
                   {idx % 2 === 0 ? day.slice(0, 1) : ''}
                 </div>
               ))}
             </div>
 
             {/* Contribution Grid - 7 rows x N columns */}
-            <div style={{ display: 'grid', gridAutoFlow: 'column', gridTemplateRows: 'repeat(7, 1fr)', gap: `${gap}px`, justifyContent: 'center' }}>
+            <div className="calendar-grid">
               {displayWeeks.flatMap((week, weekIndex) =>
                 week.slice(0, 7).map((day, dayIndex) => (
                   <div
                     key={`${weekIndex}-${dayIndex}`}
                     className="contribution-cell"
                     style={{
-                      width: `${cellSize}px`,
-                      height: `${cellSize}px`,
                       backgroundColor: colors[getColorLevel(day.count || 0)],
                       borderRadius: '2px',
                       border: `1px solid ${isDark ? '#30363d' : '#d0d7de'}`
@@ -170,9 +191,12 @@ const ContributionCalendar = memo(({ username, isDark }) => {
         {/* Legend */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px', fontSize: '12px', color: isDark ? '#8b949e' : '#57606a', width: '100%', paddingRight: '32px' }}>
           <span>Less</span>
-          {colors.map((color, index) => (
-            <div key={index} style={{ width: `${cellSize - 2}px`, height: `${cellSize - 2}px`, backgroundColor: color, borderRadius: '2px', border: `1px solid ${isDark ? '#30363d' : '#d0d7de'}` }} />
-          ))}
+          {colors.map((color, index) => {
+            const squareSize = `calc(${cellSize} - 2px)`;
+            return (
+              <div key={index} style={{ width: squareSize, height: squareSize, backgroundColor: color, borderRadius: '2px', border: `1px solid ${isDark ? '#30363d' : '#d0d7de'}` }} />
+            );
+          })}
           <span>More</span>
         </div>
 
