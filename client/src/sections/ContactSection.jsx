@@ -60,31 +60,30 @@ const ContactSection = memo(({ theme }) => {
     setError('');
   }, []);
 
-  const handleSubmit = useCallback(async (e) => {
+  const handleSubmit = useCallback((e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+      const { name, email, message } = formData;
 
-      const data = await response.json();
+      const subject = encodeURIComponent(`Portfolio Contact: ${name}`);
+      const body = encodeURIComponent(
+        `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+      );
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to send message');
-      }
+      window.location.href = `mailto:jagdeepmohanty1807@gmail.com?subject=${subject}&body=${body}`;
 
       setIsSuccess(true);
       setFormData({ name: '', email: '', subject: '', message: '' });
-      setTimeout(() => setIsSuccess(false), 3000);
+      setTimeout(() => {
+        setIsSuccess(false);
+        setIsSubmitting(false);
+      }, 2000);
     } catch (err) {
       console.error('Submit error:', err);
-      setError(err.message || 'Failed to send message. Please try again.');
-    } finally {
+      setError('Failed to open email client. Please try again.');
       setIsSubmitting(false);
     }
   }, [formData]);
