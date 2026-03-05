@@ -1,11 +1,9 @@
 import { useState, useEffect, memo, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaStar, FaBook, FaUsers, FaCode, FaBriefcase } from 'react-icons/fa';
+import { FaGithub, FaStar, FaBook, FaCode, FaBriefcase } from 'react-icons/fa';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import githubService from '../services/githubService';
-import ContributionCalendar from '../components/ContributionCalendar';
-import GitHubContributionCalendar from '../components/GitHubContributionCalendar';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -388,27 +386,6 @@ const GitHubSection = memo(({ theme }) => {
             alt="Contribution Graph"
             style={{ width: '100%', borderRadius: '8px', display: 'block' }}
           />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          style={{
-            background: 'rgba(26, 26, 26, 0.55)',
-            backdropFilter: 'blur(14px)',
-            WebkitBackdropFilter: 'blur(14px)',
-            borderRadius: '18px',
-            padding: '24px',
-            border: '1px solid rgba(234, 179, 8, 0.25)',
-            marginBottom: '24px',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)'
-          }}
-        >
-          <h3 style={{ fontSize: '1.2rem', color: '#EAB308', marginBottom: '20px', fontWeight: 600, textAlign: 'center' }}>
-            Contribution Calendar
-          </h3>
-          <GitHubContributionCalendar isDark={isDark} />
         </motion.div>
 
         <motion.div
