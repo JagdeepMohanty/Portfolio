@@ -5,6 +5,7 @@ import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Lege
 import { Bar } from 'react-chartjs-2';
 import githubService from '../services/githubService';
 import ContributionCalendar from '../components/ContributionCalendar';
+import GitHubContributionCalendar from '../components/GitHubContributionCalendar';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -407,7 +408,7 @@ const GitHubSection = memo(({ theme }) => {
           <h3 style={{ fontSize: '1.2rem', color: '#EAB308', marginBottom: '20px', fontWeight: 600, textAlign: 'center' }}>
             Contribution Calendar
           </h3>
-          <ContributionCalendar username={username} isDark={isDark} theme={theme} />
+          <GitHubContributionCalendar isDark={isDark} />
         </motion.div>
 
         <motion.div
