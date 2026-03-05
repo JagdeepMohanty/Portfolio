@@ -16,15 +16,6 @@ const CertificateCard = memo(({ certificate, theme, index }) => {
     }
   }, [showModal]);
 
-  const isHackathon = certificate.title.toLowerCase().includes('hackathon') || 
-                      certificate.issuer.toLowerCase().includes('hackathon');
-  const isTechnology = certificate.title.toLowerCase().includes('python') || 
-                       certificate.title.toLowerCase().includes('power bi') ||
-                       certificate.title.toLowerCase().includes('data');
-  
-  const badgeType = isHackathon ? 'Hackathon' : isTechnology ? 'Technology' : 'Achievement';
-  const badgeColor = isHackathon ? '#F59E0B' : isTechnology ? '#EAB308' : '#10B981';
-
   return (
     <>
       <motion.div
@@ -55,23 +46,6 @@ const CertificateCard = memo(({ certificate, theme, index }) => {
         }}
         onClick={() => setShowModal(true)}
       >
-        {/* Badge */}
-        <div style={{
-          position: 'absolute',
-          top: '16px',
-          right: '16px',
-          background: badgeColor,
-          color: '#000',
-          padding: '4px 12px',
-          borderRadius: '6px',
-          fontSize: '11px',
-          fontWeight: 600,
-          textTransform: 'uppercase',
-          letterSpacing: '0.5px'
-        }}>
-          {badgeType}
-        </div>
-
         {/* Image */}
         <div style={{
           width: '100%',
