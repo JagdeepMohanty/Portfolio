@@ -123,7 +123,7 @@ const AboutSection = memo(({ theme }) => {
             marginBottom: 'clamp(35px, 6vw, 50px)'
           }}>
             <motion.a
-              href="/resume.pdf"
+              href="Jagdeep_Mohanty_internship_resume_hvxpuq"
               download
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
