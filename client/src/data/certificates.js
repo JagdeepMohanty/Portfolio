@@ -57,7 +57,7 @@ export const technicalCertificates = [
   },
   {
     id: 9,
-    title: "Data Visualization with Python",
+    title: "Data Analysis with Python",
     issuer: "Cognitive Class powered by IBM",
     date: "28th March 2026",
     image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1774958198/Data_Analysis_with_python_ez70yr.png"
