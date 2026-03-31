@@ -40,61 +40,82 @@ export const technicalCertificates = [
     issuer: "Rai School of Engineering",
     date: "15th September 2023",
     image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098316/ENGINEERS_DAY_qust2r.jpg"
+  },
+  {
+    id: 7,
+    title: "Python For Data Science ",
+    issuer: "Cognitive Class powered by IBM ",
+    date: "29th March 2026",
+    image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1774958230/Python_for_Data_Science_k2lpfs.png"
+  },
+  {
+    id: 8,
+    title: "Data Visualization with Python ",
+    issuer: "Cognitive Class powered by IBM",
+    date: "28th March 2026",
+    image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1774958217/Data_Visualisation_with_python_sh0asl.png"
+  },
+  {
+    id: 9,
+    title: "Data Visualization with Python",
+    issuer: "Cognitive Class powered by IBM",
+    date: "28th March 2026",
+    image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1774958198/Data_Analysis_with_python_ez70yr.png"
   }
 ];
 
 export const otherCertificates = [
    {
-    id: 7,
+    id: 10,
     title: "Gujarat Youth Parliament",
     issuer: "Swami Vivekanand Gujarat Rajya Yuva Board",
     date: "9th March 2024",
     image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098321/YP_STATE_LEVEL_l0fz6a.jpg"
   },
   {
-    id: 8,
+    id: 11,
     title: "Science Day ",
     issuer: "Rai School of Sciences",
     date: "28th Febryary 2024",
     image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098318/SCIENCE_DAY_yj98mv.jpg"
   },
   {
-    id: 9,
+    id: 12,
     title: "Techwar - Debate Competition ",
     issuer: "Rai School of Engineering ",
     date: "28th September 2024",
     image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098225/TECHWAR_DEBATE_e9wzxl.jpg"
   },
   {
-    id: 10,
+    id: 13,
     title: "Youth Parliament Rai University",
     issuer: "IQAC,Rai University Ahmedabad",
     date: "12th August 2024",
     image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098319/YP_RAI_mev5ck.jpg"
   },
   {
-    id: 11,
+    id: 14,
     title: "TechWar -Letter of Appreciation",
     issuer: "Rai School of Engineering ",
     date: "28th September 2024",
     image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098320/TECHWAR_LOA_vobv6f.jpg"
   },
   {
-    id: 12,
+    id: 15,
     title: "International Day ,Rai University -LOA",
     issuer: "IQAC,Rai University Ahmedabad",
     date: "12th August 2024",
     image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098317/LOA_YP_RAI_ayh5kn.jpg"
   },
   {
-    id: 13,
+    id: 16,
     title: "Run Bhoomi , Rai University - LOA",
     issuer: "Warrior Club,Rai University Ahmedabad",
     date: " 1st December ,2023",
     image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098316/LOA_RUN_BHOOMI_o34sp0.jpg"
   },
   {
-    id: 14,
+    id: 17,
     title: "RSE Digilat NewsLetter",
     issuer: "Rai School of Engineering ",
     date: " Acedemic Year 2024-2025",
