@@ -93,7 +93,7 @@ export const otherCertificates = [
     image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098320/TECHWAR_LOA_vobv6f.jpg"
   },
   {
-    title: "International Day ,Rai University -LOA",
+    title: "International Youth Day ,Rai University -LOA",
     issuer: "IQAC,Rai University Ahmedabad",
     date: "12th August 2024",
     image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1772098317/LOA_YP_RAI_ayh5kn.jpg"
