@@ -123,7 +123,7 @@ const AboutSection = memo(({ theme }) => {
             marginBottom: 'clamp(35px, 6vw, 50px)'
           }}>
             <motion.a
-              href="https://drive.google.com/file/d/1Sui_6Yj2yLVtdrqysl3JeW6dV6MhCxrH/view?usp=drive_link"
+              href="https://drive.google.com/file/d/1mFGEvqzAGL5TyVS6kR6CuobXCljSI89L/view?usp=sharing"
               download
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
