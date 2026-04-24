@@ -1,5 +1,11 @@
 export const technicalCertificates = [
   {
+    title: "CRAFTATHON - NATIONAL LEVEL HACKATHON 2026",
+    issuer: "GANDHINAGAR UNIVERSITY ",
+    date: "3RD & 4th November 2026",
+    image_url: "https://res.cloudinary.com/dybzmpwaq/image/upload/v1777020129/GU_HACKATHON_zwhlu9.jpg"
+  },
+  {
     title: "NEW INDIA VIBRANT HACKATHON-2023",
     issuer: "SSIP GUJARAT",
     date: "4th November 2023",
